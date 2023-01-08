@@ -1,7 +1,9 @@
 package com.payten.FoodRest.repository;
-
+import java.util.List;
 import com.payten.FoodRest.model.Users;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Aggregation;
+import org.springframework.data.mongodb.repository.Query;
 
 public interface UsersRepository extends MongoRepository<Users, String> {
     @Aggregation(pipeline = { "{ '$group': { '_id' : '$location' } }" })
