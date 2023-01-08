@@ -30,6 +30,15 @@ public class UsersController {
         Optional<Users> userData = usersRepository.findById(id);
         return userData.map(users -> new ResponseEntity<>(users, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+    @GetMapping("/getLocation/{location}")
+    public ResponseEntity<List<Users>> fetchLocation(@PathVariable(value = "location") String location){
+        return ResponseEntity.ok(usersRepository.findByLocation(location));
+    }
+
+    @GetMapping("/getAllLocations")
+    public ResponseEntity<List<String>> findAllLocations(){
+        return ResponseEntity.ok(usersRepository.findDistinctLocations());
+    }    
     @PostMapping("/addUser")
     //@RolesAllowed({"user", "admin"})
     public ResponseEntity<Users> save(@RequestBody Users users){
