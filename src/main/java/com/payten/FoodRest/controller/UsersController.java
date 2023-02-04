@@ -30,7 +30,7 @@ public class UsersController {
         Optional<Users> userData = usersRepository.findById(id);
         return userData.map(users -> new ResponseEntity<>(users, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-    @GetMapping("/getLocation/{location}")
+    @GetMapping("/getUsersByLocation/{location}")
     public ResponseEntity<List<Users>> fetchLocation(@PathVariable(value = "location") String location){
         return ResponseEntity.ok(usersRepository.findByLocation(location));
     }
