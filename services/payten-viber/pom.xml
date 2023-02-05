@@ -41,6 +41,7 @@
 	</dependencies>
 
 	<build>
+	<finalName>viberbot</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
