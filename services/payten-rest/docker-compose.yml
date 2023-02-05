@@ -15,7 +15,7 @@ services:
         - nginx-net
     food-mongo:
       image: mongo:4.2.0
-      command: mongod --port 27055      
+      command: mongod --port 27055
       ports:
         - "27055:27055"
       environment:
@@ -30,7 +30,7 @@ services:
         timeout: 10s
         retries: 3
       networks:
-        - nginx-net 
+        - nginx-net
     food-nginx:
       depends_on:
         - food-rest
@@ -38,7 +38,7 @@ services:
       container_name: nginx
       restart: always
       networks:
-        - nginx-net 
+        - nginx-net
       ports:
         - 80:80
         - 443:443
@@ -46,7 +46,7 @@ services:
         - /opt/usluge/nginx/conf/:/etc/nginx/conf.d/:ro
         - /opt/usluge/nginx/certbot/www:/var/www/certbot/:ro
         - /opt/usluge/nginx/certbot/conf/:/etc/nginx/ssl/:ro
-      
+
 volumes:
   mongodb_data_container:
 networks:
