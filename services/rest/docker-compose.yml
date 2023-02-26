@@ -16,6 +16,7 @@ services:
         - nginx-net
     food-mongo:
       image: mongo:4.2.0
+      container_name: food-mongo
       command: mongod --port 27055
       ports:
         - "27055:27055"
