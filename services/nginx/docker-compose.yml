@@ -12,8 +12,8 @@ services:
         - 80:80
         - 443:443
       volumes:
-        - /conf/:/etc/nginx/conf.d/:ro        
-        - /certbot/conf/:/etc/nginx/ssl/:ro
+        - ./conf/:/etc/nginx/conf.d/:ro        
+        - ./certbot/conf/:/etc/nginx/ssl/:ro
 networks:
   nginx-net:
     external: true        
