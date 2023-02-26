@@ -23,11 +23,11 @@ echo '~~~~~~ STARTING DOCKER SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~ 1. STARTING NGINX ~~~~~~'
-docker-compose ./nginx down
-docker-compose ./nginx up -d
+docker-compose -f ./nginx/docker-compose.yml down
+docker-compose -f ./nginx/docker-compose.yml up -d
 echo '~~~~~~ 2. STARTING REST ~~~~~~'
-docker-compose ./rest down
-docker-compose ./rest up -d
+docker-compose -f ./rest/docker-compose.yml down
+docker-compose -f ./rest/docker-compose.yml up -d
 echo '~~~~~~ 3. STARTING VIBER-BOT ~~~~~~'
-docker-compose ./viber-bot down
-docker-compose ./viber-bot up -d
+docker-compose -f ./viber-bot/docker-compose.yml down
+docker-compose -f ./viber-bot/docker-compose.yml up -d

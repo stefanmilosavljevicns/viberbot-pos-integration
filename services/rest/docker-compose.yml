@@ -3,6 +3,7 @@ services:
     food-rest:
       image: foodrest.jar:latest
       restart: on-failure
+      container_name: rest
       environment:
         - "spring.data.mongodb.uri=mongodb://root:test@food-mongo:27055/test?authSource=admin&authMechanism=SCRAM-SHA-1"
       ports:
