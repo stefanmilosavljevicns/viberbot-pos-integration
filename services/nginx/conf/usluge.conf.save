@@ -1,0 +1,44 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name trebam.me www.trebam.me;
+    server_tokens off;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+          
+    }
+}
+
+server {
+    listen 443 default_server ssl http2;
+    listen [::]:443 ssl http2;
+
+    server_name trebam.me;
+
+    ssl_certificate /etc/nginx/ssl/live/trebam.me/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/trebam.me/privkey.pem;
+    
+    location /auth/ {
+
+        proxy_http_version 1.1;
+        proxy_read_timeout 90;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+           proxy_pass https://food-rest:9097/;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    location / {
+           proxy_pass https://food-rest:9097/;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+    }
+
+}

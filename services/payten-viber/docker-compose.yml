@@ -1,9 +1,0 @@
-version: "3.3"
-services:
-    viber-bot:
-      image: viberbot.jar:latest
-      restart: on-failure
-      ports:
-        - "9943:9943"
-      stdin_open: true
-      tty: true
