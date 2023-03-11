@@ -267,25 +267,25 @@ public class Controller {
         }
 
         private ViberKeyboard createStartKeyboard() {
-            return (ViberKeyboard) new ViberKeyboard().setButtonsGroupColumns(2).setButtonsGroupRows(3).
+            return (ViberKeyboard) new ViberKeyboard().setButtonsGroupColumns(2).setButtonsGroupRows(2).
                     addButton(
                             new ViberButton("1").
-                            setText("Pice").setBgMedia("pice.png")).
+                            setText("<br><font color=\"#494E67\"><b>PREGLEDI</b></font>").setBgMedia("pice.png").setRows(2).setColumns(2).setBgColor("#7eceea")).
                     addButton(
                             new ViberButton("2").
-                            setText("Burgeri").setBgMedia("burgeri.png")).
+                            setText("<br><font color=\"#494E67\"><b>BOLESTI ZUBA</b></font>").setBgMedia("burgeri.png").setRows(2).setColumns(2).setBgColor("#7eceea")).
                     addButton(
                             new ViberButton("3").
-                            setText("Dezerti").setBgMedia("dezerti.png")).
+                            setText("<br><font color=\"#494E67\"><b>IZABRANE USLUGE</b></font>").setBgMedia("dezerti.png").setRows(2).setColumns(2).setBgColor("#a8aaba")).
                     addButton(
                                 new ViberButton("4").
-                                setText("Specijaliteti").setBgMedia("specijaliteti.png")).                            
+                                setText("<br><font color=\"#494E67\"><b>ORALNA HIRURGIJA</b></font>").setBgMedia("specijaliteti.png").setRows(2).setColumns(2).setBgColor("#7eceea")).
                     addButton(
                             new ViberButton("5").
-                            setText("Pregled racuna").setBgMedia("izmeni.png")).
+                            setText("<br><font color=\"#494E67\"><b>DEČIJA STOMATOLOGIJA</b></font>").setBgMedia("izmeni.png").setRows(2).setColumns(2).setBgColor("#7eceea")).
                     addButton(
                             new ViberButton("6").
-                            setText("Platite").setBgMedia("plati.png"));                            
+                            setText("<br><font color=\"#494E67\"><b>ZAVRŠITE REZERVACIJU</b></font>").setBgMedia("plati.png").setRows(2).setColumns(2).setBgColor("#a8aaba"));
         }
     }
         

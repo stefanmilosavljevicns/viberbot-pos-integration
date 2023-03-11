@@ -25,9 +25,11 @@ echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~ 1. STARTING NGINX ~~~~~~'
 docker-compose -f ./nginx/docker-compose.yml down
 docker-compose -f ./nginx/docker-compose.yml up -d
+sleep 15
 echo '~~~~~~ 2. STARTING REST ~~~~~~'
 docker-compose -f ./rest/docker-compose.yml down
 docker-compose -f ./rest/docker-compose.yml up -d
+sleep 15
 echo '~~~~~~ 3. STARTING VIBER-BOT ~~~~~~'
 docker-compose -f ./viber-bot/docker-compose.yml down
 docker-compose -f ./viber-bot/docker-compose.yml up -d

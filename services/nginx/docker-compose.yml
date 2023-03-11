@@ -12,6 +12,7 @@ services:
       volumes:
         - ./conf/:/etc/nginx/conf.d/:ro        
         - ./certbot/conf/:/etc/nginx/ssl/:ro
+        - /var/www/html/images:/usr/share/nginx/html/images
 networks:
   nginx-net:
     external: true        
