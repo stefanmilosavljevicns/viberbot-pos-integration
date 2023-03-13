@@ -1,4 +1,5 @@
 package com.payten.FoodRest.controller;
+import com.payten.FoodRest.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.payten.FoodRest.model.Menu;
 import com.payten.FoodRest.repository.MenuRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -14,6 +16,11 @@ import java.util.List;
 public class MenuController {
     @Autowired
     private MenuRepository menuRepository;
+
+    @PostMapping("/addMenuItem")
+    public ResponseEntity<Menu> save(@RequestBody Menu menu){
+        return ResponseEntity.ok(menuRepository.save(menu));
+    }
 
     @GetMapping("/getWholeMenu")
     public ResponseEntity<List<Menu>> findAll(){
