@@ -77,6 +77,7 @@ public class Application implements ApplicationListener<ApplicationReadyEvent> {
         logger.info("User country: {}", userDet.getCountry());
         logger.info("User device: {}", userDet.getDeviceType());
 
+
         // Sending answer example
 
         if (StringUtils.equals("1", messageText)) {

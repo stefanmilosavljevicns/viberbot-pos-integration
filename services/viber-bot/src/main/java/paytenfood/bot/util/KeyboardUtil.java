@@ -33,7 +33,7 @@ public class KeyboardUtil {
                                 setText("<br><font color=\"#494E67\"><b>Izabrane usluge</b></font>").setImage("https://sputnik-it.rs/images/Izabrane usluge.png").setRows(2).setColumns(2).setBgColor("#a8aaba").setTextSize(ViberButton.TextSize.LARGE).setTextHAlign(ViberButton.TextAlign.MIDDLE).setTextVAlign(ViberButton.TextAlign.MIDDLE));
             }
                 mainMenu.addButton(
-                        new ViberButton("1").
+                        new ViberButton(String.format("LIST%s",categoriesTitle.get(i))).
                                 setText(String.format("<br><font color=\"#494E67\"><b>%s</b></font>",categoriesTitle.get(i))).setImage(String.format("https://sputnik-it.rs/images/%s.png",categoriesTitle.get(i))).setRows(2).setColumns(2).setBgColor("#7eceea").setTextSize(ViberButton.TextSize.LARGE).setTextHAlign(ViberButton.TextAlign.MIDDLE).setTextVAlign(ViberButton.TextAlign.MIDDLE));
                 ;
         }

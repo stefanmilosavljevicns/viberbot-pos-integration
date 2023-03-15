@@ -85,27 +85,17 @@ public class Controller {
                 ViberKeyboard keyboard = createStartKeyboard();
                 bot.messageForUser(userId).postText("Povratak na glavni meni.", keyboard);
             }
-            else if (StringUtils.equals("1", messageText)) {
+            else if (StringUtils.equals("LIST", messageText.substring(0,4))) {
                 ViberKeyboard keyboard = createPizzaMenu();
                 bot.messageForUser(userId).postText("Prikazujem listu usluga pregleda.", keyboard);
             }
-            else if (StringUtils.equals("2", messageText)) {
-                ViberKeyboard keyboard = createBurgerMenu();
-                bot.messageForUser(userId).postText("Prikazujem listu usluga bolesti zuba.", keyboard);
-            }
-            else if (StringUtils.equals("3", messageText)) {
 
-                ViberKeyboard keyboard = changeOrder();
-                bot.messageForUser(userId).postText("Prikazujem listu izabranih usluga.", keyboard);
-            }
-            else if (StringUtils.equals("4", messageText)) {
-                ViberKeyboard keyboard = createSpecial();
-                bot.messageForUser(userId).postText("Prikazujem listu usluga oralne hirurgije.", keyboard);
-            }
-            else if (StringUtils.equals("5", messageText)) {
-                ViberKeyboard keyboard = createDesertMenu();
-                bot.messageForUser(userId).postText("Prikazujem listu usluga decije stomatologije.", keyboard);
-            }
+
+
+
+
+
+
             else if (StringUtils.equals("6", messageText)) {
                 ViberKeyboard keyboard = createFinish();
                 bot.messageForUser(userId).postText("Zavrsite porudzbinu.", keyboard);

@@ -34,6 +34,11 @@ public class BotApplication  implements ApplicationListener<ApplicationReadyEven
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
         try {
+            logger.info(httpUtil.getList("Pregledi").get(0).getName());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        try {
             httpUtil.setCategories();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

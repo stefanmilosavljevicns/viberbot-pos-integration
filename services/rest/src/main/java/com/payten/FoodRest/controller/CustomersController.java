@@ -17,14 +17,14 @@ public class CustomersController {
     @Autowired
     private CustomersRepository customersRepository;
 
-    @PostMapping("/myendpoint")
-    public Customers addItem(@RequestParam String itemId, @RequestParam String newItem) {
-            Customers doc = customersRepository.findById(itemId,Customers.class);
-        if (doc == null) {
-            doc = new Customers(new ArrayList<>());
-        }
-        doc.getCurrentOrder().add(newItem);
-        customersRepository.save(doc);
-        return doc;
-    }
+    //@PostMapping("/myendpoint")
+    //public Customers addItem(@RequestParam String itemId, @RequestParam String newItem) {
+            //Customers doc = customersRepository.findById(itemId,Customers.class);
+        //if (doc == null) {
+          //  doc = new Customers(new ArrayList<>());
+        //}
+        //doc.getCurrentOrder().add(newItem);
+        //customersRepository.save(doc);
+        //return doc;
+    //}
 }
