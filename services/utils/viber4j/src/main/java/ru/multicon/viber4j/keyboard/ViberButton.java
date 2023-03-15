@@ -250,7 +250,7 @@ public class ViberButton {
      * Enum with text alignment types (for properties TextVAlign, TextHAlign)
      */
     public enum TextAlign {
-        LEFT, MIDDLE, RIGHT
+        LEFT, MIDDLE, RIGHT, TOP, BOTTOM
     }
 
     public enum BgMediaType {
