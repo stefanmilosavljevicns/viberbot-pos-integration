@@ -16,5 +16,7 @@ public class Customers {
     private String id;
     private ArrayList<String> currentOrder;
     private ArrayList<String> archievedOrder;
+    private Double totalSpent;
     private String token;
+    private Double currentPrice;
 }

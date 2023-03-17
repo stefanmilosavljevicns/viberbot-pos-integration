@@ -37,6 +37,7 @@ public class HttpUtil {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayList<ListModel> listModels = objectMapper.readValue(responseBody, new TypeReference<ArrayList<ListModel>>(){});
+        logger.info(String.format("Successfully obtained menuItems from  %s",menuItem));
         return listModels;
     }
 

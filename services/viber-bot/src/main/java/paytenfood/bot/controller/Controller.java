@@ -86,7 +86,8 @@ public class Controller {
                 bot.messageForUser(userId).postText("Povratak na glavni meni.", keyboard);
             }
             else if (StringUtils.equals("LIST", messageText.substring(0,4))) {
-                ViberKeyboard keyboard = createPizzaMenu();
+                ViberKeyboard keyboard = keyboardUtil.setListMenu(messageText.substring(4));
+                logger.info(String.format("Showing listMenu for %s", messageText.substring(4)));
                 bot.messageForUser(userId).postText("Prikazujem listu usluga pregleda.", keyboard);
             }
 
