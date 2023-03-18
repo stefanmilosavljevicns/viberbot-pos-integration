@@ -9,6 +9,9 @@ public interface MenuRepository extends MongoRepository<Menu, String> {
     @Aggregation(pipeline = { "{ '$group': { '_id' : '$category' } }" })
     List<String> findDistinctCategories();
 
+    @Query(value = "{ 'name' : ?0 }")
+    Menu findPriceByName(String name);
+
     @Query(fields = "{'category': 0}")
     List<Menu> findByCategory(String location);
 }
