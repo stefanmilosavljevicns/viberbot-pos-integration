@@ -27,7 +27,8 @@ public class HttpUtil {
     private final String addItems = "http://rest:9097/api/v1/addListItem";
     private final String rmvItems = "http://rest:9097/api/v1/removeListItem";
     private final String findPrice = "http://rest:9097/api/v1/getPriceByName/";
-    private final String checkCart = "http://rest:9097/api/v1/getListByViberId?viberId=";
+    private final String getCart = "http://rest:9097/api/v1/getListByViberId?viberId=";
+    private final String checkCart = "http://rest:9097/api/v1/getActiveOrders?viberId=";
     private ArrayList<String> categories;
 
     public ArrayList<String> getCategories() {
@@ -48,7 +49,7 @@ public class HttpUtil {
     public ArrayList<String> getCartList(String viberId) throws JsonProcessingException {
         ArrayList<String> cartList;
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.getForEntity(checkCart.concat(viberId), String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(getCart.concat(viberId), String.class);
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         cartList = objectMapper.readValue(responseBody, new TypeReference<ArrayList<String>>() {
@@ -56,12 +57,15 @@ public class HttpUtil {
         return cartList;
     }
 
-    public HttpStatus statusChecker(String viberId) {
-        HttpStatus status;
+    public Boolean statusChecker(String viberId) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.getForEntity(checkCart.concat(viberId), String.class);
-        status = (HttpStatus) response.getStatusCode();
-        return status;
+        Boolean status = Boolean.valueOf(response.getBody());
+        if(status){
+            return true;
+        }
+        return false;
+
     }
     public void removeCartItem(String viberId,String itemName) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
@@ -90,6 +94,7 @@ public class HttpUtil {
         logger.info(String.format("Successfully obtained menuItems from  %s", menuItem));
         return listModels;
     }
+
     public double getPriceOfItem(String itemName){
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.getForEntity(findPrice.concat(itemName), String.class);
