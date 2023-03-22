@@ -69,6 +69,7 @@ public class ViberConstants {
     public static final String BTN_GROUP_ROWS = "ButtonsGroupRows";
 
     /* Buttons properties */
+    public static final String BTN_SILENT = "Silent";
     public static final String BTN_ACTION_BODY = "ActionBody";
     public static final String BTN_ROWS = "Rows";
     public static final String BTN_COLUMNS = "Columns";

@@ -22,6 +22,7 @@ public class ViberButton {
     private BgMediaType bgMediaType;
     private String bgMedia;
     private Boolean bgLoop;
+    private String silent;
     private BtnActionType actionType;
     private String actionBody;
     private String image;
@@ -64,6 +65,11 @@ public class ViberButton {
      */
     public ViberButton setBgLoop(Boolean bgLoop) {
         this.bgLoop = bgLoop;
+        return this;
+    }
+
+    public ViberButton setSilent(String silent) {
+        this.silent = silent;
         return this;
     }
 
@@ -203,6 +209,8 @@ public class ViberButton {
             button.addProperty(ViberConstants.BTN_BG_MEDIA, bgMedia);
         if (bgLoop != null)
             button.addProperty(ViberConstants.BTN_BG_LOOP, bgLoop);
+        if (silent != null)
+            button.addProperty(ViberConstants.BTN_SILENT, silent);
         if(actionType != null)
             button.addProperty(ViberConstants.BTN_ACTION_TYPE, actionType.actionName());
         if (StringUtils.isNotEmpty(image))

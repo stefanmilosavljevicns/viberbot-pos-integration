@@ -42,12 +42,18 @@ public class CustomersController {
     public ResponseEntity<List<String>> findByViber(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
-        if(customers.isEmpty()){
-            return ResponseEntity.notFound().build();
-            }
         response = customers.get().getCurrentOrder();
         response.add("Ukupno za uplatu: "+ customers.get().getCurrentPrice());
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    //Used for checking if user added some of services to cart
+    @GetMapping("/getActiveOrders")
+    public ResponseEntity<Boolean> checkCurrentOrder(@RequestParam String viberId) {
+        if(customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getCurrentOrder().size() > 0){
+            return new ResponseEntity<>(true,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK);
     }
 
 }

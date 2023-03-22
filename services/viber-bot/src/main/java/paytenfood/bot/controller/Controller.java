@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static paytenfood.bot.util.StringUtils.*;
 
 @RestController
 public class Controller {
@@ -49,6 +50,7 @@ public class Controller {
     private HttpUtil httpUtil;
     @Autowired
     private KeyboardUtil keyboardUtil;
+    String finishMsg;
     private final ArrayList<String> orderedItems = new ArrayList<>();
     private int price = 0;
 
@@ -79,12 +81,9 @@ public class Controller {
         logger.info("User device: {}", userDet.getDeviceType());
 
 
-        if (StringUtils.equals("start", messageText)) {
+         if (StringUtils.equals("0", messageText)) {
             ViberKeyboard keyboard = createStartKeyboard();
-            bot.messageForUser(userId).postText("Dobrodošli u Viber bot Dental Care ordinacije! Možete zakazati naše usluge praćenjem upustva na ekranu.", keyboard);
-        } else if (StringUtils.equals("0", messageText)) {
-            ViberKeyboard keyboard = createStartKeyboard();
-            bot.messageForUser(userId).postText("Povratak na glavni meni.", keyboard);
+            bot.messageForUser(userId).postText(RETURN_MENU, keyboard);
         } else if (StringUtils.equals("LIST", messageText.substring(0, 4))) {
             ViberKeyboard keyboard = keyboardUtil.setListMenu(messageText.substring(4));
             logger.info(String.format("Showing listMenu for %s", messageText.substring(4)));
@@ -97,28 +96,58 @@ public class Controller {
             bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno dodat na listu.", keyboard);
         } else if (StringUtils.equals("CART", messageText)) {
             ViberKeyboard keyboard;
-            if (httpUtil.statusChecker(userId).equals(HttpStatus.OK)) {
+            if (httpUtil.statusChecker(userId)) {
                 keyboard = keyboardUtil.setCartList(userId);
                 bot.messageForUser(userId).postText("Prikazujem izabrane usluge.", keyboard);
             } else {
                 keyboard = createStartKeyboard();
-                bot.messageForUser(userId).postText("Molim Vas da prvo izabrate bar jednu uslugu.", keyboard);
+                bot.messageForUser(userId).postText(ERROR_CART, keyboard);
             }
-        }
-        else if (StringUtils.equals("RMV", messageText.substring(0, 3))) {
+        } else if (StringUtils.equals("FINISH", messageText)) {
+            ViberKeyboard keyboard;
+            //TODO Prebaci ovo u StringUtil kada ga napravis
+            if (httpUtil.statusChecker(userId)) {
+                finishMsg = CHECK_CART;
+                for (String element : httpUtil.getCartList(userId)) {
+                    finishMsg+= element + "\n";
+                }
+                keyboard = keyboardUtil.setYesNo();
+                bot.messageForUser(userId).postText(finishMsg, keyboard);
+            } else {
+                keyboard = createStartKeyboard();
+                bot.messageForUser(userId).postText(ERROR_CART, keyboard);
+            }
+        } else if (StringUtils.equals("PAYMENT", messageText)) {
+             ViberKeyboard keyboard;
+             logger.info("USAO SAM");
+             //TODO Prebaci ovo u StringUtil kada ga napravis
+             if (httpUtil.statusChecker(userId)) {
+                 logger.info("USAO SAM I OVDE");
+                 keyboard = keyboardUtil.setPaymentOption();
+                 logger.info("USAO SAM I OVDE OVDE");
+                 bot.messageForUser(userId).postText(CHECK_PAYMENT, keyboard);
+             } else {
+                 keyboard = createStartKeyboard();
+                 bot.messageForUser(userId).postText(ERROR_CART, keyboard);
+             }
+         } else if (StringUtils.equals("TIME", messageText)) {
+             bot.messageForUser(userId).postText(CHECK_TIME);
+         } else if (StringUtils.equals("RMV", messageText.substring(0, 3))) {
             logger.info("Trying to remove: " + messageText.substring(3));
             httpUtil.removeCartItem(userId, messageText.substring(3));
             ViberKeyboard keyboard = keyboardUtil.setCartList(userId);;
             bot.messageForUser(userId).postText(messageText.substring(3)+" je uspešno uklonjena.", keyboard);
+        } else {
+             if(!StringUtils.equals("IGNORE",messageText)){
+                 ViberKeyboard keyboard = createStartKeyboard();
+                 bot.messageForUser(userId).postText(WELCOME_MESSAGE, keyboard);
+             }
         }
 
         return ResponseEntity.ok().build();
     }
 
 
-    private ViberKeyboard createFinish() {
-        return (ViberKeyboard) new ViberKeyboard().setButtonsGroupColumns(2).setButtonsGroupRows(3).addButton(new ViberButton("15").setText("Izaberite vreme!")).addButton(new ViberButton("0").setText("Povratak na glavni meni"));
-    }
 
     private ViberKeyboard createStartKeyboard() {
         return keyboardUtil.getMainMenu();
