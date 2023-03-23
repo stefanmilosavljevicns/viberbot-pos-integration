@@ -19,4 +19,6 @@ public class Customers {
     private Double totalSpent;
     private String token;
     private Double currentPrice;
+    private Double durationMin;
+    private Boolean isPaying;
 }

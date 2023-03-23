@@ -10,7 +10,7 @@ public interface MenuRepository extends MongoRepository<Menu, String> {
     List<String> findDistinctCategories();
 
     @Query(value = "{ 'name' : ?0 }")
-    Menu findPriceByName(String name);
+    Menu findByName(String name);
 
     @Query(fields = "{'category': 0}")
     List<Menu> findByCategory(String location);

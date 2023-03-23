@@ -20,24 +20,42 @@ public class CustomersController {
     private CustomersRepository customersRepository;
 
     @PutMapping("/addListItem")
-    public ResponseEntity<Customers> addItem(@RequestParam String viberId, @RequestParam String newItem, @RequestParam Double price) {
+    public ResponseEntity<Customers> addItem(@RequestParam String viberId, @RequestParam String newItem, @RequestParam Double price, @RequestParam Double duration) {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if (doc.isEmpty()) {
-            doc = Optional.of(new Customers(viberId, new ArrayList<>(), new ArrayList<>(), 0.0, null, 0.0));
+            doc = Optional.of(new Customers(viberId, new ArrayList<>(), new ArrayList<>(), 0.0, null, 0.0,0.0,false));
         }
         doc.get().setCurrentPrice(doc.get().getCurrentPrice() + price);
+        doc.get().setDurationMin(doc.get().getDurationMin() + duration);
         doc.get().getCurrentOrder().add(newItem);
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
 
     @DeleteMapping("/removeListItem")
-    public ResponseEntity<Customers> removeListItem(@RequestParam String viberId, @RequestParam String newItem, @RequestParam Double price) {
+    public ResponseEntity<Customers> removeListItem(@RequestParam String viberId, @RequestParam String newItem, @RequestParam Double price, @RequestParam Double duration) {
         Optional<Customers> doc = customersRepository.findById(viberId);
         doc.get().setCurrentPrice(doc.get().getCurrentPrice() - price);
+        doc.get().setDurationMin(doc.get().getDurationMin() - duration);
         doc.get().getCurrentOrder().remove(newItem);
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
-
+    @PutMapping("/changePayingStatus")
+    public ResponseEntity<Customers> changePayingStatus(@RequestParam String viberId, @RequestParam Boolean payingStatus){
+        Optional<Customers> doc = customersRepository.findById(viberId);
+        doc.get().setIsPaying(payingStatus);
+        return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
+    }
+    @GetMapping("/getIsPayingStatus/{viberId}")
+    public ResponseEntity<Boolean> getIsPayingStatus(@PathVariable(value = "viberId") String viberId) {
+        if (customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getIsPaying().equals(true)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK);
+    }
+    @GetMapping("/getTotalTime/{viberId}")
+    public ResponseEntity<Double> getTotalTime(@PathVariable(value = "viberId") String viberId) {
+            return new ResponseEntity<>(customersRepository.findById(viberId).get().getDurationMin(), HttpStatus.OK);
+    }
     @GetMapping("/getListByViberId")
     public ResponseEntity<List<String>> findByViber(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);

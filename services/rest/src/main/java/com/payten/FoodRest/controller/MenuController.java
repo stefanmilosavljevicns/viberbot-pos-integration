@@ -31,10 +31,14 @@ public class MenuController {
 
     @GetMapping("/getPriceByName/{name}")
     public ResponseEntity<Double> fetchPriceByName(@PathVariable(value = "name") String name) {
-        Menu menu = menuRepository.findPriceByName(name);
+        Menu menu = menuRepository.findByName(name);
         return ResponseEntity.ok(menu.getPrice());
     }
-
+    @GetMapping("/getDurationByName/{name}")
+    public ResponseEntity<Double> fetchDurationByName(@PathVariable(value = "name") String name) {
+        Menu menu = menuRepository.findByName(name);
+        return ResponseEntity.ok(menu.getTime());
+    }
     @GetMapping("/getCategoryItems/{category}")
     public ResponseEntity<List<Menu>> fetchLocation(@PathVariable(value = "category") String category) {
         return ResponseEntity.ok(menuRepository.findByCategory(category));
