@@ -30,20 +30,5 @@ public class StringUtils {
     public static final String changePayingStatus = "http://rest:9097/api/v1/changePayingStatus";
     public static final String findTotalTime = "http://rest:9097/api/v1/getTotalTime";
     public static final String checkIfTimeIsAvailable = "http://rest:9097/api/v1/checkAvailability";
-    private static final Logger logger = LoggerFactory.getLogger(StringUtils.class);
 
-
-    //Used for converting user input of time in format 14.02/15:53 into localdatetime
-    public LocalDateTime parseUserInput(String userInput) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM/HH:mm");
-        try {
-            return LocalDateTime.parse(userInput, formatter);
-        } catch (DateTimeParseException e) {
-            logger.info("Failure, please choose correct form");
-            return null;
-        }
-    }
-    public LocalDateTime setEndDate(LocalDateTime startDate,double minutes) {
-        return startDate.plusMinutes((long) minutes);
-    }
 }
