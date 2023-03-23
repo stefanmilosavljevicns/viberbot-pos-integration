@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import paytenfood.bot.util.DateUtil;
 import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
 import ru.multicon.viber4j.ViberBot;
@@ -40,7 +41,7 @@ public class Controller {
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
-    private paytenfood.bot.util.StringUtils stringUtils;
+    private DateUtil dateUtil;
     @Autowired
     private KeyboardUtil keyboardUtil;
 
@@ -72,7 +73,7 @@ public class Controller {
 
         //FIRST WE NEED TO CHECK IF USER IS AT LAST STAGE OF RESERVATION
         if (httpUtil.getIsPayingStatus(userId)) {
-            LocalDateTime startTime = stringUtils.parseUserInput(messageText);
+            LocalDateTime startTime = dateUtil.parseUserInput(messageText);
             ViberKeyboard keyboard = createStartKeyboard();
             //CHECKING IF USER INPUT IS IN CORRECT FORM DAY.MONTH/HOUR:MIN
             if (startTime == null) {
@@ -82,7 +83,7 @@ public class Controller {
             else{
                 //IF FORM IS CORRECT CHECKING IF TIMESLOT IS AVAILABLE
                 Double totalMinutes = httpUtil.getTotalTime(userId);
-                LocalDateTime endTime = stringUtils.setEndDate(startTime,totalMinutes);
+                LocalDateTime endTime = dateUtil.setEndDate(startTime,totalMinutes);
                 bot.messageForUser(userId).postText(httpUtil.checkIfTimeIsAvailable(startTime,endTime), keyboard);
                 httpUtil.changeIsPayingStatus(userId, false);
             }
