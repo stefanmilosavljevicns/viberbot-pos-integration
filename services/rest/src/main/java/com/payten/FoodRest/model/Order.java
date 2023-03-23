@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
@@ -14,10 +15,10 @@ import java.time.LocalDateTime;
 public class Order {
     @Id
     private String id;
-    private String description;
+    private ArrayList<String> description;
     private Double price;
-    private LocalDateTime pickupTime; 
-    private LocalDateTime creationTime; 
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private OrderState state;
     private String viberID;
 }

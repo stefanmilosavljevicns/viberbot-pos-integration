@@ -19,11 +19,7 @@ public class KeyboardUtil {
     int maxCategories;
     @Autowired
     private HttpUtil httpUtil;
-    private ArrayList<String> categoriesTitle;
-    private ArrayList<ListModel> listModels;
     private ViberKeyboard mainMenu;
-    private ViberKeyboard listMenu;
-    private ViberKeyboard cartList;
     private ViberKeyboard confirmationKeyboard;
 
     public ViberKeyboard getMainMenu() {
@@ -31,13 +27,12 @@ public class KeyboardUtil {
     }
 
     public ViberKeyboard setListMenu(String listName) throws JsonProcessingException {
-        listModels = httpUtil.getServiceList(listName);
-        logger.info(String.format("List name %s", listName));
-        listMenu = new ViberKeyboard();
+        ArrayList<ListModel> listModels = httpUtil.getServiceList(listName);
+        ViberKeyboard listMenu = new ViberKeyboard();
         for (int i = 0; i < listModels.size(); i++) {
             listMenu.addButton(new ViberButton("IGNORE").setBgColor("#FFFFFF").setText(String.format("<font color=\"#494E67\"><b>%s</b><br><b>OPIS</b>: %s. <br><b>CENA</b>: %s RSD", listModels.get(i).getName(), listModels.get(i).getDescription(), listModels.get(i).getPrice())).setColumns(4).setRows(2).setTextSize(ViberButton.TextSize.MEDIUM).setTextHAlign(ViberButton.TextAlign.LEFT)).addButton(new ViberButton(String.format("ADD%s", listModels.get(i).getName())).setImage("https://sputnik-it.rs/images/check-mark-final.png").setText("<br><br><br><font color=\"#494E67\"><b>REZERVIŠI</b></font>").setSilent("true").setColumns(2).setRows(2).setTextSize(ViberButton.TextSize.MEDIUM).setTextHAlign(ViberButton.TextAlign.MIDDLE).setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
-        listMenu.addButton(new ViberButton("0").setText(String.format("<b><font color=\"#494E67\">%s</b>",RETURN_MENU)).setTextSize(ViberButton.TextSize.LARGE).setBgColor("#7eceea"));
+        listMenu.addButton(new ViberButton("returnToStart").setText(String.format("<b><font color=\"#494E67\">%s</b>",RETURN_MENU)).setTextSize(ViberButton.TextSize.LARGE).setBgColor("#7eceea"));
         return listMenu;
     }
 
@@ -58,17 +53,18 @@ public class KeyboardUtil {
 
         ArrayList<String> currentCart = httpUtil.getCartList(viberId);
 
-        cartList = new ViberKeyboard();
+        ViberKeyboard cartList = new ViberKeyboard();
         for (int i = 0; i < currentCart.size() - 1; i++) {
-            cartList.addButton(new ViberButton("").setBgColor("#FFFFFF").setText(String.format("<b><font color=\"#494E67\">%s</b>", currentCart.get(i))).setColumns(4).setRows(2).setTextSize(ViberButton.TextSize.MEDIUM).setTextHAlign(ViberButton.TextAlign.LEFT)).addButton(new ViberButton(String.format("RMV%s", currentCart.get(i))).setImage("https://sputnik-it.rs/images/remove-mark-final.png").setText("<br><br><font color=\"#494E67\"><b>UKLONI</b></font>").setColumns(2).setRows(2).setTextSize(ViberButton.TextSize.MEDIUM).setSilent("true").setTextHAlign(ViberButton.TextAlign.MIDDLE).setTextVAlign(ViberButton.TextAlign.MIDDLE));
+            cartList.addButton(new ViberButton("IGNORE").setBgColor("#FFFFFF").setText(String.format("<b><font color=\"#494E67\">%s</b>", currentCart.get(i))).setColumns(4).setRows(2).setTextSize(ViberButton.TextSize.MEDIUM).setTextHAlign(ViberButton.TextAlign.LEFT)).addButton(new ViberButton(String.format("RMV%s", currentCart.get(i))).setImage("https://sputnik-it.rs/images/remove-mark-final.png").setText("<br><br><font color=\"#494E67\"><b>UKLONI</b></font>").setColumns(2).setRows(2).setTextSize(ViberButton.TextSize.MEDIUM).setSilent("true").setTextHAlign(ViberButton.TextAlign.MIDDLE).setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
-        cartList.addButton(new ViberButton("").setText(String.format("<b><font color=\"#494E67\">%s RSD</b>", currentCart.get(currentCart.size() - 1))).setTextSize(ViberButton.TextSize.LARGE).setBgColor("#a8aaba").setTextSize(ViberButton.TextSize.LARGE));
-        cartList.addButton(new ViberButton("0").setText(String.format("<b><font color=\"#494E67\">%s</b>",RETURN_MENU)).setTextSize(ViberButton.TextSize.LARGE).setBgColor("#7eceea"));
+        cartList.addButton(new ViberButton("IGNORE").setText(String.format("<b><font color=\"#494E67\">%s RSD</b>", currentCart.get(currentCart.size() - 1))).setTextSize(ViberButton.TextSize.LARGE).setBgColor("#a8aaba").setTextSize(ViberButton.TextSize.LARGE));
+        cartList.addButton(new ViberButton("returnToStart").setText(String.format("<b><font color=\"#494E67\">%s</b>",RETURN_MENU)).setTextSize(ViberButton.TextSize.LARGE).setBgColor("#7eceea"));
         return cartList;
     }
 
+    //Generating Main Menu this is once per lifecycle call (at beginning of service) where we are loading singleton mainMenu with components
     public void setMainMenu() {
-        categoriesTitle = httpUtil.getCategories();
+        ArrayList<String> categoriesTitle = httpUtil.getCategories();
         maxCategories = categoriesTitle.size();
         mainMenu = new ViberKeyboard();
         for (int i = 0; i < maxCategories; i++) {

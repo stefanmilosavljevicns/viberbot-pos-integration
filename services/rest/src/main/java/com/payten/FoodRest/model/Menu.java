@@ -13,6 +13,6 @@ public class Menu {
     private String name;
     private Double price;
     private String description;
-    private Integer time;
+    private Double time;
     private String category;
 }
