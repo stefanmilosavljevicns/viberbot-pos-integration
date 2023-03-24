@@ -9,6 +9,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import paytenfood.bot.model.ListModel;
+import paytenfood.bot.model.Order;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -101,6 +102,19 @@ public class HttpUtil {
         return objectMapper.readValue(responseBody, new TypeReference<ArrayList<ListModel>>() {
         });
     }
+    public ArrayList<String> getCurrentList(String viberId) throws JsonProcessingException {
+        ArrayList<String> cartList;
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(getCurrentList.concat(viberId), String.class);
+        String responseBody = responseEntity.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        cartList = objectMapper.readValue(responseBody, new TypeReference<ArrayList<String>>() {
+        });
+        logger.info("Calling endpoint: " + getCurrentList);
+        logger.info("Response status: " + responseEntity.getStatusCode());
+        logger.info("Response body: " + responseEntity.getBody());
+        return cartList;
+    }
     public String checkIfTimeIsAvailable(LocalDateTime startDate,LocalDateTime endDate) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(checkIfTimeIsAvailable+ "?start=" + URLEncoder.encode(String.valueOf(startDate), StandardCharsets.UTF_8)
@@ -133,6 +147,17 @@ public class HttpUtil {
         return time;
 
     }
+
+    public Double getTotalPrice(String viberId) {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(findTotalPrice.concat(viberId), String.class);
+        Double price = Double.valueOf(Objects.requireNonNull(responseEntity.getBody()));
+        logger.info("Calling endpoint: " + findTotalPrice);
+        logger.info("Response status: " + responseEntity.getStatusCode());
+        logger.info("Response body: " + responseEntity.getBody());
+        return price;
+
+    }
     public void changeIsPayingStatus(String viberId, Boolean payingStatus) throws URISyntaxException, UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(changePayingStatus + "?payingStatus=" + URLEncoder.encode(String.valueOf(payingStatus), StandardCharsets.UTF_8)
@@ -142,9 +167,23 @@ public class HttpUtil {
         HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
 
-        logger.info("Calling endpoint: " + addItems);
+        logger.info("Calling endpoint: " + changePayingStatus);
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
+    }
+    public void sendOrder(Order order, String viberId) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Order> requestEntity = new HttpEntity<>(order, headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(sendOrder, HttpMethod.POST, requestEntity, String.class);
+        if(responseEntity.getStatusCode().equals(HttpStatus.OK)){
+            restTemplate = new RestTemplate();
+            URI uri = new URI(completeOrder + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+            HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
+            ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
+
+        }
     }
     public double getPriceOfItem(String itemName){
         RestTemplate restTemplate = new RestTemplate();
@@ -163,6 +202,7 @@ public class HttpUtil {
         logger.info("Response body: " + responseEntity.getBody());
         return Double.parseDouble(Objects.requireNonNull(responseEntity.getBody()));
     }
+
     //Inserting selected service to DB in case User doesn't have field in DB here we create it.
     public void addServiceToCart(String viberId, String itemName) throws URISyntaxException, UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();

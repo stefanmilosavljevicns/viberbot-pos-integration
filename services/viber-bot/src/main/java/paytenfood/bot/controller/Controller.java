@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import paytenfood.bot.model.Order;
 import paytenfood.bot.util.DateUtil;
 import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
@@ -73,6 +74,7 @@ public class Controller {
 
         //FIRST WE NEED TO CHECK IF USER IS AT LAST STAGE OF RESERVATION
         if (httpUtil.getIsPayingStatus(userId)) {
+
             LocalDateTime startTime = dateUtil.parseUserInput(messageText);
             ViberKeyboard keyboard = createStartKeyboard();
             //CHECKING IF USER INPUT IS IN CORRECT FORM DAY.MONTH/HOUR:MIN
@@ -84,19 +86,27 @@ public class Controller {
                 //IF FORM IS CORRECT CHECKING IF TIMESLOT IS AVAILABLE
                 Double totalMinutes = httpUtil.getTotalTime(userId);
                 LocalDateTime endTime = dateUtil.setEndDate(startTime,totalMinutes);
-                bot.messageForUser(userId).postText(httpUtil.checkIfTimeIsAvailable(startTime,endTime), keyboard);
-                httpUtil.changeIsPayingStatus(userId, false);
+                String checkTime = httpUtil.checkIfTimeIsAvailable(startTime,endTime);
+                if(checkTime.equals("Time slot is available.")){
+                    Order sendOrder = new Order(httpUtil.getCurrentList(userId),httpUtil.getTotalPrice(userId),startTime,endTime,"PENDING",userId);
+                    httpUtil.sendOrder(sendOrder,userId);
+                    bot.messageForUser(userId).postText("Uspešno ste završili rezervaciju!",keyboard);
+                    httpUtil.changeIsPayingStatus(userId, false);
+                }
+                else{
+                    bot.messageForUser(userId).postText(checkTime);
+                }
             }
 
-        } else if (StringUtils.equals("LIST", messageText.substring(0, 4))) {
-            ViberKeyboard keyboard = keyboardUtil.setListMenu(messageText.substring(4));
-            bot.messageForUser(userId).postText("Prikazujem listu " + messageText.substring(4), keyboard);
-            logger.info(String.format("Showing category list for %s", messageText.substring(4)));
+        } else if (StringUtils.equals("LST", messageText.substring(0, 3))) {
+            logger.info(String.format("Showing category list for %s", messageText.substring(3)));
+            ViberKeyboard keyboard = keyboardUtil.setListMenu(messageText.substring(3));
+            bot.messageForUser(userId).postText("Prikazujem listu " + messageText.substring(3), keyboard);
         } else if (StringUtils.equals("ADD", messageText.substring(0, 3))) {
+            logger.info("Adding to cart: " + messageText.substring(3));
             httpUtil.addServiceToCart(userId, messageText.substring(3));
             ViberKeyboard keyboard = createStartKeyboard();
             bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno dodat na listu.", keyboard);
-            logger.info("Adding to cart: " + messageText.substring(3));
         } else if (StringUtils.equals("CART", messageText)) {
             ViberKeyboard keyboard;
             if (httpUtil.cartChecker(userId)) {
@@ -145,7 +155,11 @@ public class Controller {
             httpUtil.removeCartItem(userId, messageText.substring(3));
             ViberKeyboard keyboard = keyboardUtil.setCartList(userId);
             bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno uklonjena.", keyboard);
-        } else {
+        }else if (StringUtils.equals("RETURNTOSTART",messageText)){
+            ViberKeyboard keyboard = createStartKeyboard();
+            bot.messageForUser(userId).postText(RETURN_MENU, keyboard);
+        }
+        else {
             if (!StringUtils.equals("IGNORE", messageText)) {
                 ViberKeyboard keyboard = createStartKeyboard();
                 bot.messageForUser(userId).postText(WELCOME_MESSAGE, keyboard);

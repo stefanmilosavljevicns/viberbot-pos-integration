@@ -54,16 +54,16 @@ public class OrderController {
                 }
             }
             if (nextAvailableStart != null && nextAvailableEnd != null) {
-                return ResponseEntity.ok("Time slot is not available. Next available time slot is from "
-                        + nextAvailableStart.toString() + " to " + nextAvailableEnd.toString());
+                return ResponseEntity.ok("Termin nije dostupan. Sledeći dostupni termin je od "
+                        + nextAvailableStart.getHour()+ ":" +nextAvailableStart.getMinute() + " do " + nextAvailableEnd.getHour()+ ":" +nextAvailableEnd.getMinute());
             } else if (nextAvailableStart != null) {
-                return ResponseEntity.ok("Time slot is not available. Next available time slot is after "
-                        + nextAvailableStart.toString());
+                return ResponseEntity.ok("Termin nije dostupan. Sledeći dostupni termin je posle "
+                        + nextAvailableStart.getHour()+ ":" +nextAvailableStart.getMinute());
             } else if (nextAvailableEnd != null) {
-                return ResponseEntity.ok("Time slot is not available. Next available time slot is before "
-                        + nextAvailableEnd.toString());
+                return ResponseEntity.ok("Termin nije dostupan. Sledeći dostupni termin je pre "
+                        + nextAvailableEnd.getHour()+ ":" +nextAvailableEnd.getMinute());
             } else {
-                return ResponseEntity.ok("Time slot is not available. There are no available time slots.");
+                return ResponseEntity.ok("Termin nije dostupan. Nažalost nemamo slobodnih termina za ovaj dan.");
             }
         }
     }

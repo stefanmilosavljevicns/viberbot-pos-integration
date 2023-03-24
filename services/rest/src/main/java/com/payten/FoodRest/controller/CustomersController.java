@@ -45,6 +45,16 @@ public class CustomersController {
         doc.get().setIsPaying(payingStatus);
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
+    @PutMapping("/completeOrder")
+    public ResponseEntity<Customers> completeOrder(@RequestParam String viberId){
+        Optional<Customers> doc = customersRepository.findById(viberId);
+        doc.get().getArchievedOrder().addAll(doc.get().getCurrentOrder());
+        doc.get().setTotalSpent(doc.get().getTotalSpent()+doc.get().getCurrentPrice());
+        doc.get().setCurrentOrder(new ArrayList<>());
+        doc.get().setCurrentPrice(0.0);
+        doc.get().setDurationMin(0.0);
+        return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
+    }
     @GetMapping("/getIsPayingStatus/{viberId}")
     public ResponseEntity<Boolean> getIsPayingStatus(@PathVariable(value = "viberId") String viberId) {
         if (customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getIsPaying().equals(true)) {
@@ -55,6 +65,17 @@ public class CustomersController {
     @GetMapping("/getTotalTime/{viberId}")
     public ResponseEntity<Double> getTotalTime(@PathVariable(value = "viberId") String viberId) {
             return new ResponseEntity<>(customersRepository.findById(viberId).get().getDurationMin(), HttpStatus.OK);
+    }
+    @GetMapping("/getTotalPrice/{viberId}")
+    public ResponseEntity<Double> getTotalPrice(@PathVariable(value = "viberId") String viberId) {
+        return new ResponseEntity<>(customersRepository.findById(viberId).get().getCurrentPrice(), HttpStatus.OK);
+    }
+    @GetMapping("/getListForOrderByViberId/{viberId}")
+    public ResponseEntity<List<String>> getListForOrderByViberId(@PathVariable(value = "viberId") String viberId) {
+        Optional<Customers> customers = customersRepository.findById(viberId);
+        ArrayList<String> response = new ArrayList<>();
+        response = customers.get().getCurrentOrder();
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
     @GetMapping("/getListByViberId")
     public ResponseEntity<List<String>> findByViber(@RequestParam String viberId) {
