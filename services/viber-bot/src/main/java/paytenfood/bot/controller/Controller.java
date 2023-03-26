@@ -1,5 +1,6 @@
 package paytenfood.bot.controller;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +21,11 @@ import ru.multicon.viber4j.incoming.Incoming;
 import ru.multicon.viber4j.incoming.IncomingImpl;
 import ru.multicon.viber4j.keyboard.ViberKeyboard;
 
+import javax.print.DocFlavor;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static paytenfood.bot.util.StringUtils.*;
@@ -50,30 +53,35 @@ public class Controller {
     ResponseEntity<?> callbackHandle(@RequestBody String text) throws IOException, InterruptedException, URISyntaxException {
         logger.info("Received messageForUser {}", text);
         // Processing incoming messageForUser
+        ViberBot bot = ViberBotManager.viberBot(botToken);
         Incoming incoming = IncomingImpl.fromString(text);
         String eventType = incoming.getEvent();
         logger.info("Event type {}", eventType);
-        if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
-            return ResponseEntity.ok().build();
-
+        //
+        // getting info about user
+        //
         String userName = incoming.getSenderName();
         String userId = incoming.getSenderId();
         String messageText = incoming.getMessageText();
         logger.info("Message text: {}", messageText);
-        //
-        // Viber bot instance
-        //
-        ViberBot bot = ViberBotManager.viberBot(botToken);
 
-        //
-        // getting info about user
-        //
+        if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
+            return ResponseEntity.ok().build();
+
         UserDetails userDet = bot.getUserDetails(userId);
         logger.info("User country: {}", userDet.getCountry());
         logger.info("User device: {}", userDet.getDeviceType());
-
+        //Checking if this is the user first time openning bot, if that is true we want to show him immediately welcome message with main menu. Incoming class will not work in this case because user did not send any message instead we are going to parse user ViberID from default Viber log
+        if(StringUtils.equals(incoming.getEvent(),START_MSG_EVENT)){
+            Gson gson = new Gson();
+            Map jsonMap = gson.fromJson(text, Map.class);
+            Map<String, String> userMap = (Map<String, String>) jsonMap.get("user");
+            ViberKeyboard keyboard = createStartKeyboard();
+            bot.messageForUser(userMap.get("id")).postText(WELCOME_MESSAGE, keyboard);
+            return ResponseEntity.ok().build();
+        }
         //FIRST WE NEED TO CHECK IF USER IS AT LAST STAGE OF RESERVATION
-        if (httpUtil.getIsPayingStatus(userId)) {
+        else if (httpUtil.getIsPayingStatus(userId)) {
 
             LocalDateTime startTime = dateUtil.parseUserInput(messageText);
             ViberKeyboard keyboard = createStartKeyboard();
@@ -98,11 +106,11 @@ public class Controller {
                 }
             }
 
-        } else if (StringUtils.equals("LST", messageText.substring(0, 3))) {
+        } else if (messageText.length() > 3 && StringUtils.equals("LST", messageText.substring(0, 3)))  {
             logger.info(String.format("Showing category list for %s", messageText.substring(3)));
             ViberKeyboard keyboard = keyboardUtil.setListMenu(messageText.substring(3));
             bot.messageForUser(userId).postText("Prikazujem listu " + messageText.substring(3), keyboard);
-        } else if (StringUtils.equals("ADD", messageText.substring(0, 3))) {
+        } else if (messageText.length() > 3 && StringUtils.equals("ADD", messageText.substring(0, 3))) {
             logger.info("Adding to cart: " + messageText.substring(3));
             httpUtil.addServiceToCart(userId, messageText.substring(3));
             ViberKeyboard keyboard = createStartKeyboard();
@@ -150,7 +158,7 @@ public class Controller {
         } else if (StringUtils.equals("TIME", messageText)) {
             bot.messageForUser(userId).postText(CHECK_TIME);
             httpUtil.changeIsPayingStatus(userId, true);
-        } else if (StringUtils.equals("RMV", messageText.substring(0, 3))) {
+        } else if (messageText.length() > 3 && StringUtils.equals("RMV", messageText.substring(0, 3))) {
             logger.info("Trying to remove: " + messageText.substring(3));
             httpUtil.removeCartItem(userId, messageText.substring(3));
             ViberKeyboard keyboard = keyboardUtil.setCartList(userId);

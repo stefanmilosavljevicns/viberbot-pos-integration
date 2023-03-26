@@ -120,7 +120,7 @@ public class HttpUtil {
         URI uri = new URI(checkIfTimeIsAvailable+ "?start=" + URLEncoder.encode(String.valueOf(startDate), StandardCharsets.UTF_8)
                 + "&end=" + URLEncoder.encode(String.valueOf(endDate), StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri,String.class);
-        logger.info("Calling endpoint: " + checkPayingStatus);
+        logger.info("Calling endpoint: " + checkIfTimeIsAvailable);
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
         return responseEntity.getBody();

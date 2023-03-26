@@ -8,6 +8,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class StringUtils {
+    //COLORS AND TEXT STYLING FOR VIBER BOT
+    public static final String textColor = "<font color=\"#494E67\">";
+    public static final String primarilyColor = "#7eceea";
+    public static final String secondarilyColor = "#a8aaba";
+    public static final String whiteColor = "#FFFFFF";
+
     //DEFAULT MESSAGES FOR VIBER BOT
     public static final String ERROR_CART = "Molim Vas da prvo izaberete bar jednu uslugu.";
     public static final String RETURN_MENU = "Povratak na glavni meni";
