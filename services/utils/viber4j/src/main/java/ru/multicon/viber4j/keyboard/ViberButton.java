@@ -22,7 +22,7 @@ public class ViberButton {
     private BgMediaType bgMediaType;
     private String bgMedia;
     private Boolean bgLoop;
-    private String silent;
+    private Boolean silent;
     private BtnActionType actionType;
     private String actionBody;
     private String image;
@@ -68,7 +68,7 @@ public class ViberButton {
         return this;
     }
 
-    public ViberButton setSilent(String silent) {
+    public ViberButton setSilent(Boolean silent) {
         this.silent = silent;
         return this;
     }

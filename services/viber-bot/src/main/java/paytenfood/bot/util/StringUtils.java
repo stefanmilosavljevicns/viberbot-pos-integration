@@ -8,11 +8,24 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class StringUtils {
+    //KEY NAMES FOR MAPPING ACTION STATES FOR VIBER
+    public static final String navigateToCartMenu = "CRT";
+    public static final String startFinishProcess = "FNH";
+    public static final String startPaymentProcess = "PYT";
+    public static final String selectDeliveryTime = "TIM";
+    public static final String selectItemFromList = "LST";
+    public static final String navigateToMainMenu = "RTS";
+    public static final String ignoreUserInput = "IGR";
+    public static final String addingItemToCart = "ADD";
+    public static final String removingItemFromCart = "RMV";
     //COLORS AND TEXT STYLING FOR VIBER BOT
     public static final String textColor = "<font color=\"#494E67\">";
     public static final String primarilyColor = "#7eceea";
     public static final String secondarilyColor = "#a8aaba";
     public static final String whiteColor = "#FFFFFF";
+    public static final String yesButtonFormat = "<b><font color=\"#494E67\">DA</b>";
+    public static final String noButtonFormat = "<b><font color=\"#494E67\">NE</b>";
+    public static final String standardTextFormat = "<b><font color=\"#494E67\">%s</b>";
 
     //DEFAULT MESSAGES FOR VIBER BOT
     public static final String ERROR_CART = "Molim Vas da prvo izaberete bar jednu uslugu.";

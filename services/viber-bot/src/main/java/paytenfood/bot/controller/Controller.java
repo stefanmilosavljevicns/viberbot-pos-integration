@@ -67,11 +67,11 @@ public class Controller {
 
         if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
             return ResponseEntity.ok().build();
-
         UserDetails userDet = bot.getUserDetails(userId);
         logger.info("User country: {}", userDet.getCountry());
         logger.info("User device: {}", userDet.getDeviceType());
-        //Checking if this is the user first time openning bot, if that is true we want to show him immediately welcome message with main menu. Incoming class will not work in this case because user did not send any message instead we are going to parse user ViberID from default Viber log
+        //Checking if this is the user first time openning bot, if that is true we want to show him immediately welcome message with main menu.
+        // Incoming class will not work in this case because user did not send any message instead we are going to parse user ViberID from default Viber log
         if(StringUtils.equals(incoming.getEvent(),START_MSG_EVENT)){
             Gson gson = new Gson();
             Map jsonMap = gson.fromJson(text, Map.class);
@@ -82,7 +82,6 @@ public class Controller {
         }
         //FIRST WE NEED TO CHECK IF USER IS AT LAST STAGE OF RESERVATION
         else if (httpUtil.getIsPayingStatus(userId)) {
-
             LocalDateTime startTime = dateUtil.parseUserInput(messageText);
             ViberKeyboard keyboard = createStartKeyboard();
             //CHECKING IF USER INPUT IS IN CORRECT FORM DAY.MONTH/HOUR:MIN
@@ -106,27 +105,27 @@ public class Controller {
                 }
             }
 
-        } else if (messageText.length() > 3 && StringUtils.equals("LST", messageText.substring(0, 3)))  {
+        } else if (messageText.length() > 3 && StringUtils.equals(selectItemFromList, messageText.substring(0, 3)))  {
             logger.info(String.format("Showing category list for %s", messageText.substring(3)));
             ViberKeyboard keyboard = keyboardUtil.setListMenu(messageText.substring(3));
-            bot.messageForUser(userId).postText("Prikazujem listu " + messageText.substring(3), keyboard);
-        } else if (messageText.length() > 3 && StringUtils.equals("ADD", messageText.substring(0, 3))) {
+            bot.messageForUser(userId).postKeyboard(keyboard);
+        } else if (messageText.length() > 3 && StringUtils.equals(addingItemToCart, messageText.substring(0, 3))) {
             logger.info("Adding to cart: " + messageText.substring(3));
             httpUtil.addServiceToCart(userId, messageText.substring(3));
             ViberKeyboard keyboard = createStartKeyboard();
             bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno dodat na listu.", keyboard);
-        } else if (StringUtils.equals("CART", messageText)) {
+        } else if (StringUtils.equals(navigateToCartMenu, messageText)) {
             ViberKeyboard keyboard;
             if (httpUtil.cartChecker(userId)) {
                 keyboard = keyboardUtil.setCartList(userId);
-                bot.messageForUser(userId).postText("Prikazujem izabrane usluge.", keyboard);
+                bot.messageForUser(userId).postKeyboard(keyboard);
                 logger.info("Showing current cart.");
             } else {
                 keyboard = createStartKeyboard();
                 bot.messageForUser(userId).postText(ERROR_CART, keyboard);
                 logger.info("Unable to show current cart.");
             }
-        } else if (StringUtils.equals("FINISH", messageText)) {
+        } else if (StringUtils.equals(startFinishProcess, messageText)) {
             ViberKeyboard keyboard;
             //TODO Prebaci ovo u StringUtil kada ga napravis
             if (httpUtil.cartChecker(userId)) {
@@ -142,35 +141,36 @@ public class Controller {
                 bot.messageForUser(userId).postText(ERROR_CART, keyboard);
                 logger.info("Unable to show current cart.");
             }
-        } else if (StringUtils.equals("PAYMENT", messageText)) {
+        } else if (StringUtils.equals(startPaymentProcess, messageText)) {
             ViberKeyboard keyboard;
             //TODO Prebaci ovo u StringUtil kada ga napravis
             //Sending user to double check his CART before proceeding to chose time and payment method
             if (httpUtil.cartChecker(userId)) {
                 keyboard = keyboardUtil.setPaymentOption();
                 bot.messageForUser(userId).postText(CHECK_PAYMENT, keyboard);
+
                 logger.info("Asking user if he agrees with his cart.");
             } else {
                 keyboard = createStartKeyboard();
                 bot.messageForUser(userId).postText(ERROR_CART, keyboard);
                 logger.info("Unable to show current cart.");
             }
-        } else if (StringUtils.equals("TIME", messageText)) {
+        } else if (StringUtils.equals(selectDeliveryTime, messageText)) {
             bot.messageForUser(userId).postText(CHECK_TIME);
             httpUtil.changeIsPayingStatus(userId, true);
-        } else if (messageText.length() > 3 && StringUtils.equals("RMV", messageText.substring(0, 3))) {
+        } else if (messageText.length() > 3 && StringUtils.equals(removingItemFromCart, messageText.substring(0, 3))) {
             logger.info("Trying to remove: " + messageText.substring(3));
             httpUtil.removeCartItem(userId, messageText.substring(3));
             ViberKeyboard keyboard = keyboardUtil.setCartList(userId);
             bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno uklonjena.", keyboard);
-        }else if (StringUtils.equals("RETURNTOSTART",messageText)){
+        }else if (StringUtils.equals(navigateToMainMenu,messageText)){
             ViberKeyboard keyboard = createStartKeyboard();
-            bot.messageForUser(userId).postText(RETURN_MENU, keyboard);
+            bot.messageForUser(userId).postKeyboard(keyboard);
         }
         else {
-            if (!StringUtils.equals("IGNORE", messageText)) {
+            if (!StringUtils.equals(ignoreUserInput, messageText)) {
                 ViberKeyboard keyboard = createStartKeyboard();
-                bot.messageForUser(userId).postText(WELCOME_MESSAGE, keyboard);
+                bot.messageForUser(userId).postKeyboard(keyboard);
             }
         }
 

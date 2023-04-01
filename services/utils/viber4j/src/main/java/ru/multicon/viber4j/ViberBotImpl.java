@@ -51,6 +51,8 @@ class ViberBotImpl implements ViberBot {
     public boolean setWebHook(String webHookUrl, List<CallbackEvent> events) {
         JsonObject message = new JsonObject();
         message.addProperty("url", webHookUrl);
+        //Adding this to ensure we have silent and input_field_state
+        message.addProperty("min_api_version", 7);
         JsonArray eventsArray = new JsonArray();
         Stream.of(CallbackEvent.values()).forEach(
                 viberEvent -> eventsArray.add(viberEvent.name()));

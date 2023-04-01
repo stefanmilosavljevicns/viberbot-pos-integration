@@ -8,7 +8,6 @@ import ru.multicon.viber4j.http.ViberClient;
 import ru.multicon.viber4j.keyboard.RichMedia;
 import ru.multicon.viber4j.keyboard.ViberKeyboard;
 import ru.multicon.viber4j.utils.ViberConstants;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +17,7 @@ import java.util.Optional;
  *
  * @author n.zvyagintsev
  */
-public class OutgoingImpl implements Outgoing {
-
+public class OutgoingImpl implements Outgoing {    
     private final ViberClient viberClient;
     private final JsonObject message;
 
@@ -30,7 +28,7 @@ public class OutgoingImpl implements Outgoing {
         this.message = message;
         this.viberClient = viberClient;
         // default min_api_version
-        message.addProperty(ViberConstants.MIN_API_VERSION, 1);
+        message.addProperty(ViberConstants.MIN_API_VERSION, 7);
         if (sender != null)
             message.add(ViberConstants.SENDER, sender.toJson());
         this.sendingUrl = sendingUrl;
@@ -180,7 +178,8 @@ public class OutgoingImpl implements Outgoing {
     @Override
     public boolean postCarousel(RichMedia richMedia) {
         setMessageType(MessageType.CAROUSEL);
-        message.addProperty(ViberConstants.MIN_API_VERSION, 2);
+        //DO NOT SET THIS LOWER THAN 4 BECAUSE RICH MEDIA PARAMETERS WILL NOT WORK
+        message.addProperty(ViberConstants.MIN_API_VERSION, 7);
         //message.addProperty(MessageType.CAROUSEL.getKeyName(), text);
         Optional.ofNullable(richMedia).
                 map(rm -> rm.toJson()).
@@ -189,9 +188,9 @@ public class OutgoingImpl implements Outgoing {
     }
 
     private boolean sendMessage() {
-        try {
+        try {          
             String response = viberClient.post(
-                    message.toString(), sendingUrl);
+                    message.toString(), sendingUrl);                              
             return StringUtils.isNotEmpty(response);
         } catch (IOException e) {
             return false;
@@ -201,5 +200,13 @@ public class OutgoingImpl implements Outgoing {
     private void setMessageType(MessageType type) {
         message.addProperty(
                 ViberConstants.ATTACHMENT_TYPE, type.getKeyName());
+    }
+
+    @Override
+    public boolean postKeyboard(ViberKeyboard keyboard) {                                
+        Optional.ofNullable(keyboard).
+                map(viberKeyboard -> viberKeyboard.toJson()).
+                ifPresent(jsonObject -> message.add(ViberConstants.KEYBOARD, jsonObject));
+        return sendMessage();
     }
 }

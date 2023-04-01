@@ -16,7 +16,7 @@ public class ViberConstants {
 
     /* Viber messages properties */
     public static final String ID = "id";
-    public static final String STATUS = "status";
+    public static final String STATUS = "status";    
     public static final String STATUS_MESSAGE = "status_message";
     public static final String ONLINE_STATUS = "online_status";
     public static final String ONLINE_STATUS_MESSAGE = "online_status_message";

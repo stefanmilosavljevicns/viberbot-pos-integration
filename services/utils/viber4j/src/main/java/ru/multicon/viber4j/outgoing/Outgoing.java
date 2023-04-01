@@ -23,6 +23,7 @@ public interface Outgoing {
      * @return true if messageForUser received successful
      */
     boolean postText(String text, ViberKeyboard keyboard);
+    boolean postKeyboard(ViberKeyboard keyboard);
 
     boolean postPicture(String pictureUrl, String description);
 

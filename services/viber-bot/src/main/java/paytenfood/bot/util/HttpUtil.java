@@ -182,7 +182,9 @@ public class HttpUtil {
             URI uri = new URI(completeOrder + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
             HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
             ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
-
+            logger.info("Calling endpoint: " + completeOrder);
+            logger.info("Response status: " + responseEntityPut.getStatusCode());
+            logger.info("Response body: " + responseEntityPut.getBody());
         }
     }
     public double getPriceOfItem(String itemName){

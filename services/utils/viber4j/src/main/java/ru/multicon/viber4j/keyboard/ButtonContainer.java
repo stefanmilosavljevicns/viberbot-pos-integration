@@ -4,7 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+
 import ru.multicon.viber4j.utils.ViberConstants;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,7 @@ public class ButtonContainer {
     private Integer buttonsGroupColumns;
     private Integer buttonsGroupRows;
     private Integer heightScale;
-    private InputFieldState state;
-
+    private String state;    
     /**
      * Adds button to container.
      *
@@ -38,6 +39,17 @@ public class ButtonContainer {
         buttons.add(button);
         return this;
     }
+    
+    /**
+     *
+     * @param bgColor background color code
+     * @return this container instance
+     */
+    public ButtonContainer setType(String type) {
+        this.type = type;
+        return this;
+    }
+
 
     /**
      *
@@ -108,14 +120,12 @@ public class ButtonContainer {
      * @param state Customize the keyboard input field. regular- display regular size input field
      * @return this container instance
      */
-    public ButtonContainer setInputFieldState(InputFieldState state) {
+    public ButtonContainer setInputFieldState(String state) {
         this.state = state;
         return this;
     }
 
-    enum InputFieldState {
-        REGULAR, MINIMIZED, HIDDEN;
-    }
+
 
     /**
      * Creates JsonObject with keyboard properties for sending to Viber
@@ -143,7 +153,7 @@ public class ButtonContainer {
         if(heightScale != null)
             keyboard.addProperty("HeightScale", heightScale);
         if(state != null)
-        keyboard.addProperty("InputFieldState", state.name().toLowerCase());
+        keyboard.addProperty("InputFieldState", state);
         JsonArray buttonsArray = new JsonArray();
         for (ViberButton button : buttons) {
             buttonsArray.add(button.toJson());
