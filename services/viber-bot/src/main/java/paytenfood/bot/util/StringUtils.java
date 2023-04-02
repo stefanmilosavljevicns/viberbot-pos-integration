@@ -13,7 +13,7 @@ public class StringUtils {
     public static final String startFinishProcess = "FNH";
     public static final String startPaymentProcess = "PYT";
     public static final String selectDeliveryTime = "TIM";
-    public static final String selectItemFromList = "LST";
+    public static final String selectCategoryFromMainMenu = "LST";
     public static final String navigateToMainMenu = "RTS";
     public static final String ignoreUserInput = "IGR";
     public static final String addingItemToCart = "ADD";
@@ -26,6 +26,11 @@ public class StringUtils {
     public static final String yesButtonFormat = "<b><font color=\"#494E67\">DA</b>";
     public static final String noButtonFormat = "<b><font color=\"#494E67\">NE</b>";
     public static final String standardTextFormat = "<b><font color=\"#494E67\">%s</b>";
+    //IMAGES
+    public static final String removeItemIcon = "https://sputnik-it.rs/images/remove-mark-final.png";
+    public static final String cartMenuIcon = "https://sputnik-it.rs/images/Izabrane usluge.png";
+    public static final String finishOrderMenuIcon = "https://sputnik-it.rs/images/Zavrsi rezervaciju.png";
+    public static final String categoryMenuIcon = "https://sputnik-it.rs/images/%s.png";
 
     //DEFAULT MESSAGES FOR VIBER BOT
     public static final String ERROR_CART = "Molim Vas da prvo izaberete bar jednu uslugu.";
@@ -35,6 +40,7 @@ public class StringUtils {
     public static final String CHECK_CART = "Prikazujem listu izabranih usluga, ako se slažete sa listom pritisnite DA, ukoliko želite da izmenite listu pritisnite NE: \n";
     public static final String CHECK_TIME = "Izaberite vreme rezervacije u formatu:\nDAN.MESEC SAT:MIn\nPRIMER: 22.03 14:30";
     public static final String ERROR_TIME = "Pogrešan format vremena. Molim da izaberete vreme u formatu: \nDAN.MESEC SAT:MIn\nPRIMER: 22.03 14:30\n Pokrenite proces naručivaja ponovo. ";
+    public static final String SUCCESS_RESERVATION = "Uspešno ste završili rezervaciju!";
 
     //ENDPOINTS FROM INTERNAL REST
     public static final String urlMenu = "http://rest:9097/api/v1/getallCategories";

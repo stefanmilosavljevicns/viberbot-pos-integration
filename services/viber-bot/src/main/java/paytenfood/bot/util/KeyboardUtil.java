@@ -39,6 +39,7 @@ public class KeyboardUtil {
                     .setText(String.format("<font color=\"#494E67\"><b>%s</b><br><b>OPIS</b>: %s. <br><b>CENA</b>: %s RSD", listModels.get(i).getName(), listModels.get(i).getDescription(), listModels.get(i).getPrice()))
                     .setColumns(4)
                     .setRows(2)
+                    .setSilent(true)
                     .setTextSize(ViberButton.TextSize.MEDIUM)
                     .setTextHAlign(ViberButton.TextAlign.LEFT))
                     .addButton(new ViberButton(String.format(addingItemToCart+"%s", listModels.get(i).getName()))
@@ -51,7 +52,11 @@ public class KeyboardUtil {
                             .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                             .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
-        listMenu.addButton(new ViberButton(navigateToMainMenu).setText(String.format(standardTextFormat,RETURN_MENU)).setTextSize(ViberButton.TextSize.LARGE).setBgColor(primarilyColor));
+        listMenu.addButton(new ViberButton(navigateToMainMenu)
+                    .setText(String.format(standardTextFormat,RETURN_MENU))
+                    .setTextSize(ViberButton.TextSize.LARGE)
+                    .setBgColor(primarilyColor)
+                    .setSilent(true));
         return listMenu;
     }
 
@@ -64,11 +69,13 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(primarilyColor)
                 .setColumns(3)
+                .setSilent(true)
                 .setRows(2));
         confirmationKeyboard.addButton(new ViberButton(navigateToCartMenu)
                 .setText(noButtonFormat)
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(secondarilyColor)
+                .setSilent(true)
                 .setColumns(3)
                 .setRows(2));
         return confirmationKeyboard;
@@ -83,11 +90,13 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(primarilyColor)
                 .setColumns(3)
+                .setSilent(true)
                 .setRows(2));
         confirmationKeyboard.addButton(new ViberButton(selectDeliveryTime)
                 .setText(noButtonFormat)
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(secondarilyColor)
+                .setSilent(true)
                 .setColumns(3)
                 .setRows(2));
         return confirmationKeyboard;
@@ -106,13 +115,15 @@ public class KeyboardUtil {
                     .setText(String.format(standardTextFormat, currentCart.get(i)))
                     .setColumns(4)
                     .setRows(2)
+                    .setSilent(true)
                     .setTextSize(ViberButton.TextSize.MEDIUM)
                     .setTextHAlign(ViberButton.TextAlign.LEFT))
                     .addButton(new ViberButton(String.format(removingItemFromCart+"%s", currentCart.get(i)))
-                            .setImage("https://sputnik-it.rs/images/remove-mark-final.png")
+                            .setImage(removeItemIcon)
                             .setText("<br><br><font color=\"#494E67\"><b>UKLONI</b></font>")
                             .setColumns(2)
                             .setRows(2)
+                            .setSilent(true)
                             .setTextSize(ViberButton.TextSize.MEDIUM).setSilent(true)
                             .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                             .setTextVAlign(ViberButton.TextAlign.MIDDLE));
@@ -121,10 +132,12 @@ public class KeyboardUtil {
                 .setText(String.format("<b><font color=\"#494E67\">%s RSD</b>", currentCart.get(currentCart.size() - 1)))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(secondarilyColor)
+                .setSilent(true)
                 .setTextSize(ViberButton.TextSize.LARGE));
         cartList.addButton(new ViberButton(navigateToMainMenu)
                 .setText(String.format(standardTextFormat,RETURN_MENU))
                 .setTextSize(ViberButton.TextSize.LARGE)
+                .setSilent(true)
                 .setBgColor(primarilyColor));
         return cartList;
     }
@@ -141,18 +154,20 @@ public class KeyboardUtil {
             if (i == 2) {
                 mainMenu.addButton(new ViberButton(navigateToCartMenu)
                         .setText("<br><font color=\"#494E67\"><b>Izabrane usluge</b></font>")
-                        .setImage("https://sputnik-it.rs/images/Izabrane usluge.png")
+                        .setImage(cartMenuIcon)
                         .setRows(2)
                         .setColumns(2)
+                        .setSilent(true)
                         .setBgColor(secondarilyColor)
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                         .setTextVAlign(ViberButton.TextAlign.MIDDLE));
             }
-            mainMenu.addButton(new ViberButton(String.format(selectItemFromList+"%s", categoriesTitle.get(i)))
+            mainMenu.addButton(new ViberButton(String.format(selectCategoryFromMainMenu+"%s", categoriesTitle.get(i)))
                     .setText(String.format("<br><font color=\"#494E67\"><b>%s</b></font>", categoriesTitle.get(i)))
-                    .setImage(String.format("https://sputnik-it.rs/images/%s.png", categoriesTitle.get(i)))
+                    .setImage(String.format(categoryMenuIcon, categoriesTitle.get(i)))
                     .setRows(2)
+                    .setSilent(true)
                     .setColumns(2)
                     .setBgColor(primarilyColor)
                     .setTextSize(ViberButton.TextSize.LARGE)
@@ -160,8 +175,9 @@ public class KeyboardUtil {
                     .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
         mainMenu.addButton(new ViberButton(startFinishProcess).setText("<br><font color=\"#494E67\"><b>Završi rezervaciju</b></font>")
-                .setImage("https://sputnik-it.rs/images/Zavrsi rezervaciju.png")
+                .setImage(finishOrderMenuIcon)
                 .setRows(2)
+                .setSilent(true)
                 .setColumns(2)
                 .setBgColor(secondarilyColor)
                 .setTextSize(ViberButton.TextSize.LARGE)

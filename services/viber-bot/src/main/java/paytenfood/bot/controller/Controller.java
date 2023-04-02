@@ -19,9 +19,7 @@ import ru.multicon.viber4j.ViberBotManager;
 import ru.multicon.viber4j.account.UserDetails;
 import ru.multicon.viber4j.incoming.Incoming;
 import ru.multicon.viber4j.incoming.IncomingImpl;
-import ru.multicon.viber4j.keyboard.ViberKeyboard;
 
-import javax.print.DocFlavor;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
@@ -72,115 +70,106 @@ public class Controller {
         logger.info("User device: {}", userDet.getDeviceType());
         //Checking if this is the user first time openning bot, if that is true we want to show him immediately welcome message with main menu.
         // Incoming class will not work in this case because user did not send any message instead we are going to parse user ViberID from default Viber log
-        if(StringUtils.equals(incoming.getEvent(),START_MSG_EVENT)){
+        if (StringUtils.equals(incoming.getEvent(), START_MSG_EVENT)) {
             Gson gson = new Gson();
             Map jsonMap = gson.fromJson(text, Map.class);
             Map<String, String> userMap = (Map<String, String>) jsonMap.get("user");
-            ViberKeyboard keyboard = createStartKeyboard();
-            bot.messageForUser(userMap.get("id")).postText(WELCOME_MESSAGE, keyboard);
+            bot.messageForUser(userMap.get("id")).postText(WELCOME_MESSAGE, keyboardUtil.getMainMenu());
+            logger.info("Showing welcome message.");
             return ResponseEntity.ok().build();
         }
         //FIRST WE NEED TO CHECK IF USER IS AT LAST STAGE OF RESERVATION
         else if (httpUtil.getIsPayingStatus(userId)) {
             LocalDateTime startTime = dateUtil.parseUserInput(messageText);
-            ViberKeyboard keyboard = createStartKeyboard();
             //CHECKING IF USER INPUT IS IN CORRECT FORM DAY.MONTH/HOUR:MIN
             if (startTime == null) {
-                bot.messageForUser(userId).postText(ERROR_TIME, keyboard);
+                bot.messageForUser(userId).postText(ERROR_TIME, keyboardUtil.getMainMenu());
                 httpUtil.changeIsPayingStatus(userId, false);
-            }
-            else{
+                logger.info("User failed to enter time in right format.");
+            } else {
                 //IF FORM IS CORRECT CHECKING IF TIMESLOT IS AVAILABLE
                 Double totalMinutes = httpUtil.getTotalTime(userId);
-                LocalDateTime endTime = dateUtil.setEndDate(startTime,totalMinutes);
-                String checkTime = httpUtil.checkIfTimeIsAvailable(startTime,endTime);
-                if(checkTime.equals("Time slot is available.")){
-                    Order sendOrder = new Order(httpUtil.getCurrentList(userId),httpUtil.getTotalPrice(userId),startTime,endTime,"PENDING",userId);
-                    httpUtil.sendOrder(sendOrder,userId);
-                    bot.messageForUser(userId).postText("Uspešno ste završili rezervaciju!",keyboard);
+                LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
+                String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
+                if (checkTime.equals("Time slot is available.")) {
+                    Order sendOrder = new Order(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
+                    httpUtil.sendOrder(sendOrder, userId);
+                    bot.messageForUser(userId).postText(SUCCESS_RESERVATION, keyboardUtil.getMainMenu());
                     httpUtil.changeIsPayingStatus(userId, false);
-                }
-                else{
+                    logger.info("Finishing reservation.");
+                } else {
                     bot.messageForUser(userId).postText(checkTime);
+                    logger.info("Time slot is not available giving user another chance to reserve.");
                 }
             }
-
-        } else if (messageText.length() > 3 && StringUtils.equals(selectItemFromList, messageText.substring(0, 3)))  {
-            logger.info(String.format("Showing category list for %s", messageText.substring(3)));
-            ViberKeyboard keyboard = keyboardUtil.setListMenu(messageText.substring(3));
-            bot.messageForUser(userId).postKeyboard(keyboard);
-        } else if (messageText.length() > 3 && StringUtils.equals(addingItemToCart, messageText.substring(0, 3))) {
-            logger.info("Adding to cart: " + messageText.substring(3));
-            httpUtil.addServiceToCart(userId, messageText.substring(3));
-            ViberKeyboard keyboard = createStartKeyboard();
-            bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno dodat na listu.", keyboard);
-        } else if (StringUtils.equals(navigateToCartMenu, messageText)) {
-            ViberKeyboard keyboard;
-            if (httpUtil.cartChecker(userId)) {
-                keyboard = keyboardUtil.setCartList(userId);
-                bot.messageForUser(userId).postKeyboard(keyboard);
-                logger.info("Showing current cart.");
-            } else {
-                keyboard = createStartKeyboard();
-                bot.messageForUser(userId).postText(ERROR_CART, keyboard);
-                logger.info("Unable to show current cart.");
+        //If user is not in finishing phase we will go through bot menu flow
+        } else if (messageText.length() > 3) {
+            switch (messageText.substring(0, 3)) {
+                case selectCategoryFromMainMenu:
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
+                    logger.info(String.format("Showing category list for %s", messageText.substring(3)));
+                    break;
+                case addingItemToCart:
+                    httpUtil.addServiceToCart(userId, messageText.substring(3));
+                    bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno dodat na listu.", keyboardUtil.getMainMenu());
+                    logger.info("Adding to cart: " + messageText.substring(3));
+                    break;
+                case navigateToCartMenu:
+                    if (httpUtil.cartChecker(userId)) {
+                        bot.messageForUser(userId).postKeyboard(keyboardUtil.setCartList(userId));
+                        logger.info("Showing current cart.");
+                    } else {
+                        bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
+                        logger.info("Unable to show current cart.");
+                    }
+                    break;
+                case startFinishProcess:
+                    if (httpUtil.cartChecker(userId)) {
+                        StringBuilder finishMsg = new StringBuilder(CHECK_CART);
+                        for (String element : httpUtil.getCartList(userId)) {
+                            finishMsg.append(element).append("\n");
+                        }
+                        bot.messageForUser(userId).postText(finishMsg.toString(), keyboardUtil.setYesNo());
+                        logger.info("User have enough cart items to proceed with reservation.");
+                    } else {
+                        bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
+                        logger.info("Unable to show current cart.");
+                    }
+                    break;
+                case startPaymentProcess:
+                    if (httpUtil.cartChecker(userId)) {
+                        bot.messageForUser(userId).postText(CHECK_PAYMENT, keyboardUtil.setPaymentOption());
+                        logger.info("Asking user if he agrees with his cart.");
+                    } else {
+                        bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
+                        logger.info("Unable to show current cart.");
+                    }
+                    break;
+                case selectDeliveryTime:
+                    bot.messageForUser(userId).postText(CHECK_TIME);
+                    httpUtil.changeIsPayingStatus(userId, true);
+                    logger.info("User selecting time.");
+                    break;
+                case removingItemFromCart:
+                    httpUtil.removeCartItem(userId, messageText.substring(3));
+                    bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno uklonjena.", keyboardUtil.setCartList(userId));
+                    logger.info("Trying to remove: " + messageText.substring(3));
+                    break;
+                case navigateToMainMenu:
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                    logger.info("Navigating to main menu.");
+                    break;
             }
-        } else if (StringUtils.equals(startFinishProcess, messageText)) {
-            ViberKeyboard keyboard;
-            //TODO Prebaci ovo u StringUtil kada ga napravis
-            if (httpUtil.cartChecker(userId)) {
-                String finishMsg = CHECK_CART;
-                for (String element : httpUtil.getCartList(userId)) {
-                    finishMsg += element + "\n";
-                }
-                keyboard = keyboardUtil.setYesNo();
-                bot.messageForUser(userId).postText(finishMsg, keyboard);
-                logger.info("User have enough cart items to proceed with reservation.");
-            } else {
-                keyboard = createStartKeyboard();
-                bot.messageForUser(userId).postText(ERROR_CART, keyboard);
-                logger.info("Unable to show current cart.");
-            }
-        } else if (StringUtils.equals(startPaymentProcess, messageText)) {
-            ViberKeyboard keyboard;
-            //TODO Prebaci ovo u StringUtil kada ga napravis
-            //Sending user to double check his CART before proceeding to chose time and payment method
-            if (httpUtil.cartChecker(userId)) {
-                keyboard = keyboardUtil.setPaymentOption();
-                bot.messageForUser(userId).postText(CHECK_PAYMENT, keyboard);
-
-                logger.info("Asking user if he agrees with his cart.");
-            } else {
-                keyboard = createStartKeyboard();
-                bot.messageForUser(userId).postText(ERROR_CART, keyboard);
-                logger.info("Unable to show current cart.");
-            }
-        } else if (StringUtils.equals(selectDeliveryTime, messageText)) {
-            bot.messageForUser(userId).postText(CHECK_TIME);
-            httpUtil.changeIsPayingStatus(userId, true);
-        } else if (messageText.length() > 3 && StringUtils.equals(removingItemFromCart, messageText.substring(0, 3))) {
-            logger.info("Trying to remove: " + messageText.substring(3));
-            httpUtil.removeCartItem(userId, messageText.substring(3));
-            ViberKeyboard keyboard = keyboardUtil.setCartList(userId);
-            bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno uklonjena.", keyboard);
-        }else if (StringUtils.equals(navigateToMainMenu,messageText)){
-            ViberKeyboard keyboard = createStartKeyboard();
-            bot.messageForUser(userId).postKeyboard(keyboard);
-        }
-        else {
+        } else {
             if (!StringUtils.equals(ignoreUserInput, messageText)) {
-                ViberKeyboard keyboard = createStartKeyboard();
-                bot.messageForUser(userId).postKeyboard(keyboard);
+                bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                logger.info("Navigating to main menu.");
             }
         }
 
         return ResponseEntity.ok().build();
     }
 
-
-    private ViberKeyboard createStartKeyboard() {
-        return keyboardUtil.getMainMenu();
-    }
 
 }
         
