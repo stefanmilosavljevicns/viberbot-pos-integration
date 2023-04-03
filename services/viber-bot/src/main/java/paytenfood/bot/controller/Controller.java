@@ -153,8 +153,8 @@ public class Controller {
                     logger.info("User selecting time.");
                     break;
                 case removingItemFromCart:
-                    logger.info("OVO JE USER POSLAO "+messageText);
-                    ListModel rmvList = httpUtil.getItemByName(messageText.substring(3));
+                    int newlineIndex = messageText.indexOf('\n', 3);
+                    ListModel rmvList = httpUtil.getItemByName(messageText.substring(3,newlineIndex));
                     logger.info("GET NAME "+rmvList.getName());
                     httpUtil.removeCartItem(userId, rmvList);
                     bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno uklonjena.", keyboardUtil.setCartList(userId));
