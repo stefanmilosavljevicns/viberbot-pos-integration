@@ -153,7 +153,8 @@ public class Controller {
                     logger.info("User selecting time.");
                     break;
                 case removingItemFromCart:
-                    httpUtil.removeCartItem(userId, messageText.substring(3));
+                    ListModel rmvList = httpUtil.getItemByName(messageText.substring(3));
+                    httpUtil.removeCartItem(userId, rmvList);
                     bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno uklonjena.", keyboardUtil.setCartList(userId));
                     logger.info("Trying to remove: " + messageText.substring(3));
                     break;

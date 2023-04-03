@@ -76,10 +76,12 @@ public class CustomersController {
         return new ResponseEntity<>(totalPrice, HttpStatus.OK);
     }
     @GetMapping("/getListForOrderByViberId/{viberId}")
-    public ResponseEntity<List<Menu>> getListForOrderByViberId(@PathVariable(value = "viberId") String viberId) {
+    public ResponseEntity<List<String>> getListForOrderByViberId(@PathVariable(value = "viberId") String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
-        ArrayList<Menu> response = new ArrayList<>();
-        response = customers.get().getCurrentOrder();
+        ArrayList<String> response = new ArrayList<>();
+        for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
+            response.add(menu.getName());
+        }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
     @GetMapping("/getListByViberId")

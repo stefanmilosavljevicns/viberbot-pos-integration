@@ -47,8 +47,6 @@ public class StringUtils {
     public static final String urlItems = "http://rest:9097/api/v1/getCategoryItems/";
     public static final String addItems = "http://rest:9097/api/v1/addListItem";
     public static final String rmvItems = "http://rest:9097/api/v1/removeListItem";
-    public static final String findPrice = "http://rest:9097/api/v1/getPriceByName/";
-    public static final String findDuration = "http://rest:9097/api/v1/getDurationByName/";
     public static final String getCart = "http://rest:9097/api/v1/getListByViberId?viberId=";
     public static final String checkCart = "http://rest:9097/api/v1/getActiveOrders?viberId=";
     public static final String checkPayingStatus = "http://rest:9097/api/v1/getIsPayingStatus/";
