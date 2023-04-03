@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import paytenfood.bot.model.ListModel;
 import paytenfood.bot.model.Order;
 
+import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,6 +19,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static paytenfood.bot.util.StringUtils.*;
@@ -204,21 +206,27 @@ public class HttpUtil {
         logger.info("Response body: " + responseEntity.getBody());
         return Double.parseDouble(Objects.requireNonNull(responseEntity.getBody()));
     }
+    public ListModel getItemByName(String itemName){
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<ListModel> responseEntity = restTemplate.getForEntity(findItem.concat(itemName), ListModel.class);
+        logger.info("Calling endpoint: " + findItem);
+        logger.info("Response status: " + responseEntity.getStatusCode());
+        logger.info("Response body: " + responseEntity.getBody());
+        ListModel model = responseEntity.getBody();
+        return model;
+    }
 
     //Inserting selected service to DB in case User doesn't have field in DB here we create it.
-    public void addServiceToCart(String viberId, String itemName) throws URISyntaxException, UnsupportedEncodingException {
+    public void addServiceToCart(String viberId, ListModel itemName) throws URISyntaxException, UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(addItems + "?newItem=" + URLEncoder.encode(itemName, StandardCharsets.UTF_8)
-                + "&price=" + URLEncoder.encode(Double.toString(getPriceOfItem(itemName)), StandardCharsets.UTF_8)
-                + "&duration=" + URLEncoder.encode(Double.toString(getDurationOfItem(itemName)), StandardCharsets.UTF_8)
-                + "&viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI("&viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
+        HttpEntity<ListModel> requestEntity = new HttpEntity<>(itemName, headers);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
+        ResponseEntity<ListModel> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, ListModel.class);
 
         logger.info("Calling endpoint: " + addItems);
         logger.info("Response status: " + responseEntity.getStatusCode());

@@ -43,7 +43,7 @@ public class KeyboardUtil {
                     .setTextSize(ViberButton.TextSize.MEDIUM)
                     .setTextHAlign(ViberButton.TextAlign.LEFT))
                     .addButton(new ViberButton(String.format(addingItemToCart+"%s", listModels.get(i).getName()))
-                            .setImage("https://sputnik-it.rs/images/check-mark-final.png")
+                            .setImage(reserveItemIcon)
                             .setText("<br><br><br><font color=\"#494E67\"><b>REZERVIŠI</b></font>")
                             .setSilent(true)
                             .setColumns(2)

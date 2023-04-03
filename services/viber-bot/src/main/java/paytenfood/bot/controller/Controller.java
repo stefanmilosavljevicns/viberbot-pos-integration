@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import paytenfood.bot.model.ListModel;
 import paytenfood.bot.model.Order;
 import paytenfood.bot.util.DateUtil;
 import paytenfood.bot.util.HttpUtil;
@@ -110,7 +111,8 @@ public class Controller {
                     logger.info(String.format("Showing category list for %s", messageText.substring(3)));
                     break;
                 case addingItemToCart:
-                    httpUtil.addServiceToCart(userId, messageText.substring(3));
+                    ListModel addList = httpUtil.getItemByName(messageText.substring(3));
+                    httpUtil.addServiceToCart(userId, addList);
                     bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno dodat na listu.", keyboardUtil.getMainMenu());
                     logger.info("Adding to cart: " + messageText.substring(3));
                     break;
