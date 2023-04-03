@@ -1,6 +1,7 @@
 package com.payten.FoodRest.controller;
 
 import com.payten.FoodRest.model.Customers;
+import com.payten.FoodRest.model.Menu;
 import com.payten.FoodRest.repository.CustomersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,24 +21,23 @@ public class CustomersController {
     private CustomersRepository customersRepository;
 
     @PutMapping("/addListItem")
-    public ResponseEntity<Customers> addItem(@RequestParam String viberId, @RequestParam String newItem, @RequestParam Double price, @RequestParam Double duration) {
+    public ResponseEntity<Customers> addItem(@RequestParam String viberId, @RequestBody Menu newItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if (doc.isEmpty()) {
-            doc = Optional.of(new Customers(viberId, new ArrayList<>(), new ArrayList<>(), 0.0, null, 0.0,0.0,false));
+            doc = Optional.of(new Customers(viberId, new ArrayList<>(),new ArrayList<>(), null,false));
         }
-        doc.get().setCurrentPrice(doc.get().getCurrentPrice() + price);
-        doc.get().setDurationMin(doc.get().getDurationMin() + duration);
         doc.get().getCurrentOrder().add(newItem);
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
 
     @DeleteMapping("/removeListItem")
-    public ResponseEntity<Customers> removeListItem(@RequestParam String viberId, @RequestParam String newItem, @RequestParam Double price, @RequestParam Double duration) {
+    public ResponseEntity<Customers> removeListItem(@RequestParam String viberId, @RequestBody Menu removeItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
-        doc.get().setCurrentPrice(doc.get().getCurrentPrice() - price);
-        doc.get().setDurationMin(doc.get().getDurationMin() - duration);
-        doc.get().getCurrentOrder().remove(newItem);
-        return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
+        if(doc.get().getCurrentOrder().contains(removeItem)){
+            doc.get().getCurrentOrder().remove(removeItem);
+            return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
     @PutMapping("/changePayingStatus")
     public ResponseEntity<Customers> changePayingStatus(@RequestParam String viberId, @RequestParam Boolean payingStatus){
@@ -49,10 +49,7 @@ public class CustomersController {
     public ResponseEntity<Customers> completeOrder(@RequestParam String viberId){
         Optional<Customers> doc = customersRepository.findById(viberId);
         doc.get().getArchievedOrder().addAll(doc.get().getCurrentOrder());
-        doc.get().setTotalSpent(doc.get().getTotalSpent()+doc.get().getCurrentPrice());
         doc.get().setCurrentOrder(new ArrayList<>());
-        doc.get().setCurrentPrice(0.0);
-        doc.get().setDurationMin(0.0);
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
     @GetMapping("/getIsPayingStatus/{viberId}")
@@ -63,26 +60,40 @@ public class CustomersController {
         return new ResponseEntity<>(false, HttpStatus.OK);
     }
     @GetMapping("/getTotalTime/{viberId}")
-    public ResponseEntity<Double> getTotalTime(@PathVariable(value = "viberId") String viberId) {
-            return new ResponseEntity<>(customersRepository.findById(viberId).get().getDurationMin(), HttpStatus.OK);
+    public ResponseEntity<Integer> getTotalTime(@PathVariable(value = "viberId") String viberId) {
+            Integer totalTime = 0;
+            for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
+                totalTime += menu.getTime();
+            }
+            return new ResponseEntity<>(totalTime, HttpStatus.OK);
     }
     @GetMapping("/getTotalPrice/{viberId}")
     public ResponseEntity<Double> getTotalPrice(@PathVariable(value = "viberId") String viberId) {
-        return new ResponseEntity<>(customersRepository.findById(viberId).get().getCurrentPrice(), HttpStatus.OK);
+        Double totalPrice = 0.0;
+        for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
+            totalPrice += menu.getPrice();
+        }
+        return new ResponseEntity<>(totalPrice, HttpStatus.OK);
     }
     @GetMapping("/getListForOrderByViberId/{viberId}")
     public ResponseEntity<List<String>> getListForOrderByViberId(@PathVariable(value = "viberId") String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
-        response = customers.get().getCurrentOrder();
+        for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
+            response.add(menu.getName());
+        }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
     @GetMapping("/getListByViberId")
     public ResponseEntity<List<String>> findByViber(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
-        response = customers.get().getCurrentOrder();
-        response.add("Ukupno za uplatu: "+ customers.get().getCurrentPrice());
+        Double totalPrice = 0.0;
+        for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
+            response.add(menu.getName()+"\n"+"CENA: "+ menu.getPrice());
+            totalPrice += menu.getPrice();
+        }
+        response.add("Ukupno za uplatu: "+ totalPrice);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 

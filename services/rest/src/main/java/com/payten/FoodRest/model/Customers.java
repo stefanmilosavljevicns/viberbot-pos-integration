@@ -14,11 +14,8 @@ import java.util.ArrayList;
 public class Customers {
     @Id
     private String id;
-    private ArrayList<String> currentOrder;
-    private ArrayList<String> archievedOrder;
-    private Double totalSpent;
+    private ArrayList<Menu> currentOrder;
+    private ArrayList<Menu> archievedOrder;
     private String token;
-    private Double currentPrice;
-    private Double durationMin;
     private Boolean isPaying;
 }

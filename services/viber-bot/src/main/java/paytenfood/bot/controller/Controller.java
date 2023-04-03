@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import paytenfood.bot.model.ListModel;
 import paytenfood.bot.model.Order;
 import paytenfood.bot.util.DateUtil;
 import paytenfood.bot.util.HttpUtil;
@@ -110,7 +111,8 @@ public class Controller {
                     logger.info(String.format("Showing category list for %s", messageText.substring(3)));
                     break;
                 case addingItemToCart:
-                    httpUtil.addServiceToCart(userId, messageText.substring(3));
+                    ListModel addList = httpUtil.getItemByName(messageText.substring(3));
+                    httpUtil.addServiceToCart(userId, addList);
                     bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno dodat na listu.", keyboardUtil.getMainMenu());
                     logger.info("Adding to cart: " + messageText.substring(3));
                     break;
@@ -151,8 +153,10 @@ public class Controller {
                     logger.info("User selecting time.");
                     break;
                 case removingItemFromCart:
-                    httpUtil.removeCartItem(userId, messageText.substring(3));
-                    bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno uklonjena.", keyboardUtil.setCartList(userId));
+                    int newlineIndex = messageText.indexOf('\n', 3);
+                    ListModel rmvList = httpUtil.getItemByName(messageText.substring(3,newlineIndex));
+                    httpUtil.removeCartItem(userId, rmvList);
+                    bot.messageForUser(userId).postText(messageText.substring(3,newlineIndex) + " je uspešno uklonjena.", keyboardUtil.setCartList(userId));
                     logger.info("Trying to remove: " + messageText.substring(3));
                     break;
                 case navigateToMainMenu:
