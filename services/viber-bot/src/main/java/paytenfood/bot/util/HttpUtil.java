@@ -108,7 +108,7 @@ public class HttpUtil {
     public void removeCartItem(String viberId,ListModel itemName) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(rmvItems+"?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-
+        logger.info("OVAKO IZGLEDA ENDPOINT "+uri.toString());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
