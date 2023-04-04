@@ -37,7 +37,7 @@ public class CustomersController {
     }
 
     @GetMapping("/checkItemInCart")
-    public ResponseEntity<Boolean> checkItemInCart(@PathVariable(value = "viberId") String viberId, @RequestBody Menu checkItem) {
+    public ResponseEntity<Boolean> checkItemInCart(@RequestParam String viberId, @RequestBody Menu checkItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if (doc.get().getCurrentOrder().contains(checkItem)) {
             return new ResponseEntity<>(true, HttpStatus.OK);

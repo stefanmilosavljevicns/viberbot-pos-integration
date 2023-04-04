@@ -126,9 +126,9 @@ public class HttpUtil {
 
         HttpEntity<ListModel> requestEntity = new HttpEntity<>(itemName, headers);
 
-        ResponseEntity<ListModel> responseEntity = restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, ListModel.class);
+        ResponseEntity<ListModel> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ListModel.class);
         Boolean status = Boolean.valueOf(String.valueOf(responseEntity.getBody()));
-        logger.info("Calling endpoint: " + rmvItems);
+        logger.info("Calling endpoint: " + checkItem);
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
         return status;
