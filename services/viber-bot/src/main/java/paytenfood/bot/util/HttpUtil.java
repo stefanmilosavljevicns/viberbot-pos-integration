@@ -118,23 +118,6 @@ public class HttpUtil {
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
     }
-    public boolean checkItem(String viberId,ListModel itemName) throws URISyntaxException {
-        logger.info(viberId);
-        logger.info(itemName.getName());
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(checkItem+"?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<ListModel> requestEntity = new HttpEntity<>(itemName, headers);
-
-        ResponseEntity<ListModel> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, ListModel.class);
-        Boolean status = Boolean.valueOf(String.valueOf(responseEntity.getBody()));
-        logger.info("Calling endpoint: " + checkItem);
-        logger.info("Response status: " + responseEntity.getStatusCode());
-        logger.info("Response body: " + responseEntity.getBody());
-        return status;
-    }
     //Gathering items for selected category from menu
     public ArrayList<ListModel> getServiceList(String menuItem) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
