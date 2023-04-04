@@ -155,9 +155,11 @@ public class Controller {
                 case removingItemFromCart:
                     int newlineIndex = messageText.indexOf('\n', 3);
                     ListModel rmvList = httpUtil.getItemByName(messageText.substring(3,newlineIndex));
-                    httpUtil.removeCartItem(userId, rmvList);
-                    bot.messageForUser(userId).postText(messageText.substring(3,newlineIndex) + " je uspešno uklonjena.", keyboardUtil.setCartList(userId));
-                    logger.info("Trying to remove: " + messageText.substring(3));
+                    if(httpUtil.checkItem(userId,rmvList)){
+                        httpUtil.removeCartItem(userId, rmvList);
+                        bot.messageForUser(userId).postText(messageText.substring(3,newlineIndex) + " je uspešno uklonjena.", keyboardUtil.setCartList(userId));
+                        logger.info("Trying to remove: " + messageText.substring(3));
+                    }
                     break;
                 case navigateToMainMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
