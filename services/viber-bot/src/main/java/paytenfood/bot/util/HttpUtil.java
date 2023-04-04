@@ -119,6 +119,8 @@ public class HttpUtil {
         logger.info("Response body: " + responseEntity.getBody());
     }
     public boolean checkItem(String viberId,ListModel itemName) throws URISyntaxException {
+        logger.info(viberId);
+        logger.info(itemName.getName());
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(checkItem+"?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         HttpHeaders headers = new HttpHeaders();
