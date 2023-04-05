@@ -17,6 +17,7 @@ public class StringUtils {
     public static final String navigateToMainMenu = "RTS";
     public static final String ignoreUserInput = "IGR";
     public static final String addingItemToCart = "ADD";
+    public static final String startOnlinePayment = "SOP";
     public static final String removingItemFromCart = "RMV";
     //COLORS AND TEXT STYLING FOR VIBER BOT
     public static final String textColor = "<font color=\"#494E67\">";
@@ -56,6 +57,8 @@ public class StringUtils {
     public static final String getCurrentList = "http://rest:9097/api/v1/getListForOrderByViberId/";
     public static final String findItem = "http://rest:9097/api/v1/getItemByName/";
     public static final String completeOrder = "http://rest:9097/api/v1/completeOrder";
+    public static final String assecoPayingOnline ="https://entegrasyon.asseco-see.com.tr/msu/api/v2";
+    public static final String assecoGetCurrentCart = "http://rest:9097/api/v1/getCustomerCartByViberId";
 
     public static final String checkIfTimeIsAvailable = "http://rest:9097/api/v1/checkAvailability";
     public static final String sendOrder = "http://rest:9097/api/v1/addOrder";

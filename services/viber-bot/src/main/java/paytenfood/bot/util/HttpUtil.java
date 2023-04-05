@@ -103,6 +103,12 @@ public class HttpUtil {
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
     }
+    //We are using this for generating Asecco landing page
+    public String generatePaymentId(String viberId) throws URISyntaxException {
+        RestTemplate getRestTemplate = new RestTemplate();
+        URI getURI = new URI(assecoGetCurrentCart+"?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+    return "BAD";
+    }
     //REMOVING ITEM FROM CART
     public void removeCartItem(String viberId,ListModel itemName) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();

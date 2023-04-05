@@ -85,7 +85,7 @@ public class KeyboardUtil {
         confirmationKeyboard = new ViberKeyboard();
         confirmationKeyboard.setInputFieldState("hidden");
         confirmationKeyboard.setType("keyboard");
-        confirmationKeyboard.addButton(new ViberButton(selectDeliveryTime)
+        confirmationKeyboard.addButton(new ViberButton(startOnlinePayment)
                 .setText(yesButtonFormat)
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(primarilyColor)

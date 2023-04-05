@@ -113,7 +113,7 @@ public class Controller {
                 case addingItemToCart:
                     ListModel addList = httpUtil.getItemByName(messageText.substring(3));
                     httpUtil.addServiceToCart(userId, addList);
-                    bot.messageForUser(userId).postText(messageText.substring(3) + " je uspešno dodat na listu.", keyboardUtil.getMainMenu());
+                    bot.messageForUser(userId).postText("Dodajem na listu "+messageText.substring(3), keyboardUtil.getMainMenu());
                     logger.info("Adding to cart: " + messageText.substring(3));
                     break;
                 case navigateToCartMenu:
@@ -152,11 +152,14 @@ public class Controller {
                     httpUtil.changeIsPayingStatus(userId, true);
                     logger.info("User selecting time.");
                     break;
+                case startOnlinePayment:
+
+                    break;
                 case removingItemFromCart:
                     int newlineIndex = messageText.indexOf('\n', 3);
                     ListModel rmvList = httpUtil.getItemByName(messageText.substring(3,newlineIndex));
                     httpUtil.removeCartItem(userId, rmvList);
-                    bot.messageForUser(userId).postText(messageText.substring(3,newlineIndex) + " je uspešno uklonjena.", keyboardUtil.setCartList(userId));
+                    bot.messageForUser(userId).postText("Uklanjam "+messageText.substring(3,newlineIndex), keyboardUtil.setCartList(userId));
                     logger.info("Trying to remove: " + messageText.substring(3));
                     break;
                 case navigateToMainMenu:
