@@ -109,17 +109,27 @@ public class HttpUtil {
     public String generatePaymentId(String viberId, String merchantUser, String merchantPw, String merchant, String returnUrl) throws URISyntaxException, JsonProcessingException {
         RestTemplate getRestTemplate = new RestTemplate();
         URI getURI = new URI(assecoGetCurrentCart+"?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<ArrayList<MenuItem>> responseEntity = getRestTemplate.getForEntity(getURI);
-        Double totalPrice = getTotalPrice(viberId);
-        ArrayList<MenuItem> menuItem = responseEntity.getBody();
-        ArrayList<OrderAsseco> orderAsseco = new ArrayList<>();
-        String orderJson = null;
+        ResponseEntity<String> responseEntity = getRestTemplate.getForEntity(getURI,String.class);
         ObjectMapper objectMapper = new ObjectMapper();
+        ArrayList<MenuItem> menuItemRead = objectMapper.readValue(responseEntity.getBody(), new TypeReference<ArrayList<MenuItem>>() {});
+        ArrayList<OrderAsseco> orderAsseco = new ArrayList<>();
+        for (MenuItem menuItem : menuItemRead) {
+            OrderAsseco orderItem = new OrderAsseco();
+            orderItem.setCode(menuItem.getName());
+            orderItem.setName(menuItem.getName());
+            orderItem.setDescription(menuItem.getDescription());
+            orderItem.setQuantity(1);
+            orderItem.setPrice(menuItem.getPrice());
+            orderAsseco.add(orderItem);
+        }
+        String orderJson = null;
+        ObjectMapper objectMapperOrder = new ObjectMapper();
         try {
-            orderJson = objectMapper.writeValueAsString(orderAsseco);
+            orderJson = objectMapperOrder.writeValueAsString(orderAsseco);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Double totalPrice = getTotalPrice(viberId);
         //Generating Form body for obtaining token
         MultiValueMap<String, Object> map= new LinkedMultiValueMap<>();
         map.add("ACTION","SESSIONTOKEN");
@@ -141,17 +151,11 @@ public class HttpUtil {
         if(response.getStatusCode() == HttpStatus.OK){
             ObjectMapper objectMapperAsecco = new ObjectMapper();
             JsonNode rootNode = objectMapperAsecco.readTree(response.getBody());
-            String sessionToken = rootNode.get("sessionToken").asText();
             return rootNode.get("sessionToken").asText();
         }
         else{
             return null;
         }
-        logger.info("Calling endpoint: " + assecoPayingOnline);
-        logger.info("Response status: " + response.getStatusCode());
-        logger.info("Response body: " + response.getBody());
-
-    return "BAD";
     }
     //REMOVING ITEM FROM CART
     public void removeCartItem(String viberId, MenuItem itemName) throws URISyntaxException {

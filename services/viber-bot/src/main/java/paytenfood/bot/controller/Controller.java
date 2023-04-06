@@ -153,7 +153,14 @@ public class Controller {
                     logger.info("User selecting time.");
                     break;
                 case startOnlinePayment:
-
+                    String startOnlinePayment = httpUtil.generatePaymentId(userId,"api.test@payten.com","Hephr=R4SKNycaLf","chipcardtest01","www.google.com");
+                    if(startOnlinePayment != null){
+                        bot.messageForUser(userId).postText(startOnlinePayment,keyboardUtil.getMainMenu());
+                    }
+                    else{
+                        bot.messageForUser(userId).postText("Plaćanje nije uspelo, molim pokušajte ponovo!",keyboardUtil.getMainMenu());
+                        logger.info("Navigating to main menu.");
+                    }
                     break;
                 case removingItemFromCart:
                     int newlineIndex = messageText.indexOf('\n', 3);
