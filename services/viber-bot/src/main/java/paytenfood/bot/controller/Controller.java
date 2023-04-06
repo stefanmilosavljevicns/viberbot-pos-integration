@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import paytenfood.bot.model.ListModel;
-import paytenfood.bot.model.Order;
+import paytenfood.bot.model.MenuItem;
+import paytenfood.bot.model.OrderPOS;
 import paytenfood.bot.util.DateUtil;
 import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
@@ -93,8 +93,8 @@ public class Controller {
                 LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
                 String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
                 if (checkTime.equals("Time slot is available.")) {
-                    Order sendOrder = new Order(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
-                    httpUtil.sendOrder(sendOrder, userId);
+                    OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
+                    httpUtil.sendOrder(sendOrderPOS, userId);
                     bot.messageForUser(userId).postText(SUCCESS_RESERVATION, keyboardUtil.getMainMenu());
                     httpUtil.changeIsPayingStatus(userId, false);
                     logger.info("Finishing reservation.");
@@ -111,7 +111,7 @@ public class Controller {
                     logger.info(String.format("Showing category list for %s", messageText.substring(3)));
                     break;
                 case addingItemToCart:
-                    ListModel addList = httpUtil.getItemByName(messageText.substring(3));
+                    MenuItem addList = httpUtil.getItemByName(messageText.substring(3));
                     httpUtil.addServiceToCart(userId, addList);
                     bot.messageForUser(userId).postText("Dodajem na listu "+messageText.substring(3), keyboardUtil.getMainMenu());
                     logger.info("Adding to cart: " + messageText.substring(3));
@@ -157,7 +157,7 @@ public class Controller {
                     break;
                 case removingItemFromCart:
                     int newlineIndex = messageText.indexOf('\n', 3);
-                    ListModel rmvList = httpUtil.getItemByName(messageText.substring(3,newlineIndex));
+                    MenuItem rmvList = httpUtil.getItemByName(messageText.substring(3,newlineIndex));
                     httpUtil.removeCartItem(userId, rmvList);
                     bot.messageForUser(userId).postText("Uklanjam "+messageText.substring(3,newlineIndex), keyboardUtil.setCartList(userId));
                     logger.info("Trying to remove: " + messageText.substring(3));

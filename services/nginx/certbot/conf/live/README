@@ -7,7 +7,7 @@ This directory contains your keys and certificates.
                  without reading further documentation (see link below).
 
 WARNING: DO NOT MOVE OR RENAME THESE FILES!
-         Certbot expects these files to remain in this location in order
+         Certbot expects these files to remain in this location in orderPOS
          to function properly!
 
 We recommend not moving these files. For more information, see the Certbot

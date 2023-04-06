@@ -5,8 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import paytenfood.bot.model.ListModel;
-import ru.multicon.viber4j.keyboard.ButtonContainer;
+import paytenfood.bot.model.MenuItem;
 import ru.multicon.viber4j.keyboard.ViberButton;
 import ru.multicon.viber4j.keyboard.ViberKeyboard;
 
@@ -29,20 +28,20 @@ public class KeyboardUtil {
     }
 
     public ViberKeyboard setListMenu(String listName) throws JsonProcessingException {
-        ArrayList<ListModel> listModels = httpUtil.getServiceList(listName);
+        ArrayList<MenuItem> menuItems = httpUtil.getServiceList(listName);
         ViberKeyboard listMenu = new ViberKeyboard();
         listMenu.setInputFieldState("hidden");
         listMenu.setType("keyboard");
-        for (int i = 0; i < listModels.size(); i++) {
+        for (int i = 0; i < menuItems.size(); i++) {
             listMenu.addButton(new ViberButton(ignoreUserInput)
                     .setBgColor(whiteColor)
-                    .setText(String.format("<font color=\"#494E67\"><b>%s</b><br><b>OPIS</b>: %s. <br><b>CENA</b>: %s RSD", listModels.get(i).getName(), listModels.get(i).getDescription(), listModels.get(i).getPrice()))
+                    .setText(String.format("<font color=\"#494E67\"><b>%s</b><br><b>OPIS</b>: %s. <br><b>CENA</b>: %s RSD", menuItems.get(i).getName(), menuItems.get(i).getDescription(), menuItems.get(i).getPrice()))
                     .setColumns(4)
                     .setRows(2)
                     .setSilent(true)
                     .setTextSize(ViberButton.TextSize.MEDIUM)
                     .setTextHAlign(ViberButton.TextAlign.LEFT))
-                    .addButton(new ViberButton(String.format(addingItemToCart+"%s", listModels.get(i).getName()))
+                    .addButton(new ViberButton(String.format(addingItemToCart+"%s", menuItems.get(i).getName()))
                             .setImage(reserveItemIcon)
                             .setText("<br><br><br><font color=\"#494E67\"><b>REZERVIŠI</b></font>")
                             .setSilent(true)

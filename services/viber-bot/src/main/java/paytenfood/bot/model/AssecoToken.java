@@ -1,6 +1,6 @@
 package paytenfood.bot.model;
 
-public class AssecoModel {
+public class AssecoToken {
     private String action;
     private String merchantUser;
     private String merchantPassword;

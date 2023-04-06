@@ -2,16 +2,19 @@ package paytenfood.bot.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import paytenfood.bot.model.ListModel;
-import paytenfood.bot.model.Order;
+import paytenfood.bot.model.MenuItem;
+import paytenfood.bot.model.OrderAsseco;
+import paytenfood.bot.model.OrderPOS;
 
-import java.awt.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,7 +22,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static paytenfood.bot.util.StringUtils.*;
@@ -61,7 +63,7 @@ public class HttpUtil {
         logger.info("Response body: " + responseEntity.getBody());
         return cartList;
     }
-    //Repacking current list into Strings so we can send it according to Order model, field: Description
+    //Repacking current list into Strings so we can send it according to OrderPOS model, field: Description
     public ArrayList<String> getCurrentList(String viberId) throws JsonProcessingException {
         ArrayList<String> cartList;
         RestTemplate restTemplate = new RestTemplate();
@@ -89,43 +91,85 @@ public class HttpUtil {
         return false;
     }
     //Inserting selected service to DB in case User doesn't have field in DB here we create it.
-    public void addServiceToCart(String viberId, ListModel itemName) throws URISyntaxException, UnsupportedEncodingException {
+    public void addServiceToCart(String viberId, MenuItem itemName) throws URISyntaxException, UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(addItems+"?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<ListModel> requestEntity = new HttpEntity<>(itemName, headers);
+        HttpEntity<MenuItem> requestEntity = new HttpEntity<>(itemName, headers);
 
-        ResponseEntity<ListModel> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, ListModel.class);
+        ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, MenuItem.class);
 
         logger.info("Calling endpoint: " + addItems);
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
     }
     //We are using this for generating Asecco landing page
-    public String generatePaymentId(String viberId) throws URISyntaxException {
+    public String generatePaymentId(String viberId, String merchantUser, String merchantPw, String merchant, String returnUrl) throws URISyntaxException, JsonProcessingException {
         RestTemplate getRestTemplate = new RestTemplate();
         URI getURI = new URI(assecoGetCurrentCart+"?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        ResponseEntity<ArrayList<MenuItem>> responseEntity = getRestTemplate.getForEntity(getURI);
+        Double totalPrice = getTotalPrice(viberId);
+        ArrayList<MenuItem> menuItem = responseEntity.getBody();
+        ArrayList<OrderAsseco> orderAsseco = new ArrayList<>();
+        String orderJson = null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            orderJson = objectMapper.writeValueAsString(orderAsseco);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Generating Form body for obtaining token
+        MultiValueMap<String, Object> map= new LinkedMultiValueMap<>();
+        map.add("ACTION","SESSIONTOKEN");
+        map.add("MERCHANTUSER",merchantUser);
+        map.add("MERCHANTPASSWORD",merchantPw);
+        map.add("MERCHANT",merchant);
+        map.add("CUSTOMER",viberId);
+        map.add("SESSIONTYPE","PAYMENTSESSION");
+        map.add("MERCHANTPAYMENTID", LocalDateTime.now() +"_"+viberId);
+        map.add("AMOUNT",totalPrice);
+        map.add("CURRENCY","RSD");
+        map.add("RETURNURL",returnUrl);
+        map.add("ORDER",orderJson);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(map, headers);
+        ResponseEntity<String> response = restTemplate.exchange(assecoPayingOnline, HttpMethod.POST, request, String.class);
+        if(response.getStatusCode() == HttpStatus.OK){
+            ObjectMapper objectMapperAsecco = new ObjectMapper();
+            JsonNode rootNode = objectMapperAsecco.readTree(response.getBody());
+            String sessionToken = rootNode.get("sessionToken").asText();
+            return rootNode.get("sessionToken").asText();
+        }
+        else{
+            return null;
+        }
+        logger.info("Calling endpoint: " + assecoPayingOnline);
+        logger.info("Response status: " + response.getStatusCode());
+        logger.info("Response body: " + response.getBody());
+
     return "BAD";
     }
     //REMOVING ITEM FROM CART
-    public void removeCartItem(String viberId,ListModel itemName) throws URISyntaxException {
+    public void removeCartItem(String viberId, MenuItem itemName) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(rmvItems+"?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<ListModel> requestEntity = new HttpEntity<>(itemName, headers);
+        HttpEntity<MenuItem> requestEntity = new HttpEntity<>(itemName, headers);
 
-        ResponseEntity<ListModel> responseEntity = restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, ListModel.class);
+        ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, MenuItem.class);
 
         logger.info("Calling endpoint: " + rmvItems);
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
     }
     //Gathering items for selected category from menu
-    public ArrayList<ListModel> getServiceList(String menuItem) throws JsonProcessingException {
+    public ArrayList<MenuItem> getServiceList(String menuItem) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(urlItems.concat(menuItem), String.class);
         String responseBody = responseEntity.getBody();
@@ -133,7 +177,7 @@ public class HttpUtil {
         logger.info("Calling endpoint: " + urlItems);
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
-        return objectMapper.readValue(responseBody, new TypeReference<ArrayList<ListModel>>() {
+        return objectMapper.readValue(responseBody, new TypeReference<ArrayList<MenuItem>>() {
         });
     }
 
@@ -190,11 +234,11 @@ public class HttpUtil {
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
     }
-    public void sendOrder(Order order, String viberId) throws URISyntaxException {
+    public void sendOrder(OrderPOS orderPOS, String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Order> requestEntity = new HttpEntity<>(order, headers);
+        HttpEntity<OrderPOS> requestEntity = new HttpEntity<>(orderPOS, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(sendOrder, HttpMethod.POST, requestEntity, String.class);
         if(responseEntity.getStatusCode().equals(HttpStatus.OK)){
             restTemplate = new RestTemplate();
@@ -206,13 +250,13 @@ public class HttpUtil {
             logger.info("Response body: " + responseEntityPut.getBody());
         }
     }
-    public ListModel getItemByName(String itemName){
+    public MenuItem getItemByName(String itemName){
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<ListModel> responseEntity = restTemplate.getForEntity(findItem.concat(itemName), ListModel.class);
+        ResponseEntity<MenuItem> responseEntity = restTemplate.getForEntity(findItem.concat(itemName), MenuItem.class);
         logger.info("Calling endpoint: " + findItem);
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
-        ListModel model = responseEntity.getBody();
+        MenuItem model = responseEntity.getBody();
         return model;
     }
 
