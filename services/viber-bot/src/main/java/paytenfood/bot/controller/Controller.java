@@ -140,7 +140,7 @@ public class Controller {
                     break;
                 case startPaymentProcess:
                     if (httpUtil.cartChecker(userId)) {
-                        bot.messageForUser(userId).postText(CHECK_PAYMENT, keyboardUtil.setPaymentOption());
+                        bot.messageForUser(userId).postText(CHECK_PAYMENT, keyboardUtil.setPaymentOption(userId));
                         logger.info("Asking user if he agrees with his cart.");
                     } else {
                         bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
@@ -155,7 +155,7 @@ public class Controller {
                 case startOnlinePayment:
                     String startOnlinePayment = httpUtil.generatePaymentId(userId,"api.test@payten.com","Hephr=R4SKNycaLf","chipcardtest01","www.google.com");
                     if(startOnlinePayment != null){
-                        bot.messageForUser(userId).postUrl(assecoPaymentPage+startOnlinePayment);
+
                     }
                     else{
                         bot.messageForUser(userId).postText("Plaćanje nije uspelo, molim pokušajte ponovo!",keyboardUtil.getMainMenu());
@@ -169,8 +169,12 @@ public class Controller {
                     bot.messageForUser(userId).postText("Uklanjam "+messageText.substring(3,newlineIndex), keyboardUtil.setCartList(userId));
                     logger.info("Trying to remove: " + messageText.substring(3));
                     break;
-                case navigateToMainMenu:
+              case navigateToMainMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                    logger.info("Navigating to main menu.");
+                  break;
+                default:
+                    bot.messageForUser(userId).postText("Komanda nije pronađena",keyboardUtil.getMainMenu());
                     logger.info("Navigating to main menu.");
                     break;
             }

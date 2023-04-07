@@ -62,5 +62,9 @@ public class StringUtils {
     public static final String assecoPaymentPage = "https://entegrasyon.asseco-see.com.tr/chipcard/pay3d/";
     public static final String checkIfTimeIsAvailable = "http://rest:9097/api/v1/checkAvailability";
     public static final String sendOrder = "http://rest:9097/api/v1/addOrder";
+    public static final String merchant = "chipcardtest01";
+    public static final String merchantUser = "api.test@payten.com";
+    public static final String merchantPw = "Hephr=R4SKNycaLf";
+    public static final String redirection = "www.google.com";
 
 }

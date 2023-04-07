@@ -10,6 +10,7 @@ import ru.multicon.viber4j.keyboard.ViberButton;
 import ru.multicon.viber4j.keyboard.ViberKeyboard;
 
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import static paytenfood.bot.util.StringUtils.*;
@@ -80,25 +81,35 @@ public class KeyboardUtil {
         return confirmationKeyboard;
     }
 
-    public ViberKeyboard setPaymentOption(){
-        confirmationKeyboard = new ViberKeyboard();
-        confirmationKeyboard.setInputFieldState("hidden");
-        confirmationKeyboard.setType("keyboard");
-        confirmationKeyboard.addButton(new ViberButton(startOnlinePayment)
-                .setText(yesButtonFormat)
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(primarilyColor)
-                .setColumns(3)
-                .setSilent(true)
-                .setRows(2));
-        confirmationKeyboard.addButton(new ViberButton(selectDeliveryTime)
-                .setText(noButtonFormat)
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(secondarilyColor)
-                .setSilent(true)
-                .setColumns(3)
-                .setRows(2));
-        return confirmationKeyboard;
+    public ViberKeyboard setPaymentOption(String userId) throws URISyntaxException, JsonProcessingException {
+        String startOnlinePayment = httpUtil.generatePaymentId(userId,merchantUser,merchantPw,merchant,redirection);
+        if (startOnlinePayment!=null){
+            confirmationKeyboard = new ViberKeyboard();
+            confirmationKeyboard.setInputFieldState("hidden");
+            confirmationKeyboard.setType("keyboard");
+            confirmationKeyboard.addButton(ViberButton.createButtonForUrl(assecoPaymentPage+startOnlinePayment)
+                    .setText(yesButtonFormat)
+                    .setOpenURLType(ViberButton.OpenURLType.INTERNAL)
+                    .setTextSize(ViberButton.TextSize.LARGE)
+                    .setBgColor(primarilyColor)
+                    .setColumns(3)
+                    .setSilent(true)
+                    .setRows(2));
+            confirmationKeyboard.addButton(new ViberButton(selectDeliveryTime)
+                    .setText(noButtonFormat)
+                    .setTextSize(ViberButton.TextSize.LARGE)
+                    .setBgColor(secondarilyColor)
+                    .setSilent(true)
+                    .setColumns(3)
+                    .setRows(2));
+            return confirmationKeyboard;
+        }
+        else{
+            return mainMenu;
+        }
+
+
+
     }
 
     public ViberKeyboard setCartList(String viberId) throws JsonProcessingException {
