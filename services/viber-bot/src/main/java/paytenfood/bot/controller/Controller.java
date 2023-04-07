@@ -155,7 +155,7 @@ public class Controller {
                 case startOnlinePayment:
                     String startOnlinePayment = httpUtil.generatePaymentId(userId,"api.test@payten.com","Hephr=R4SKNycaLf","chipcardtest01","www.google.com");
                     if(startOnlinePayment != null){
-                        bot.messageForUser(userId).postText(startOnlinePayment,keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postUrl(assecoPaymentPage+startOnlinePayment);
                     }
                     else{
                         bot.messageForUser(userId).postText("Plaćanje nije uspelo, molim pokušajte ponovo!",keyboardUtil.getMainMenu());
