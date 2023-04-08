@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import paytenfood.bot.model.MenuItem;
 import paytenfood.bot.model.OrderPOS;
@@ -22,6 +23,7 @@ import ru.multicon.viber4j.incoming.Incoming;
 import ru.multicon.viber4j.incoming.IncomingImpl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -109,6 +111,7 @@ public class Controller {
 
         //If user is not in finishing phase we will go through bot menu flow
         else if (messageText.length() >= 3) {
+            //First we have special case, if user accepted paying online  we don't wont to leave Viber without telling user that he will be redirected to payment page
             if(messageText.startsWith(assecoPaymentPage)){
                     bot.messageForUser(userId).postText(redirectPaymentMessage);
                 }
@@ -186,8 +189,19 @@ public class Controller {
 
         return ResponseEntity.ok().build();
     }
+    @RequestMapping(method = POST, path = "/viberbot/external")
+    ResponseEntity<?> sendExternalMessage(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
+        ViberBot bot = ViberBotManager.viberBot(botToken);
+        bot.messageForUser(viberId).postText("Plaćanje je uspešno izvršeno!");
+        bot.messageForUser(viberId).postText(CHECK_TIME);
+        httpUtil.changeIsPayingStatus(viberId, true);
+        logger.info("User successfully payed his bill.");
+        logger.info("User selecting time.");
+        return ResponseEntity.ok().build();
+
+    }
 
 
-}
+    }
         
 
