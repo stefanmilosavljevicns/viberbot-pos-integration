@@ -28,12 +28,20 @@
             font-size: 18px;
             margin-top: 30px;
         }
+        .image {
+            margin-top: 50px;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
     <div class="square">
-        <h1>Plaćanje uspešno realizovano</h1>
+        <h1>Plaćanje uspešno realizovano!</h1>
         <p>Bićete redirektovani na Viber za 5 sekundi...</p>
     </div>
+    <div class="image">
+        <img src="{{ url_for('static', filename='sputnik.png') }}" alt="Sputnik Image">
+    </div>    
 </body>
 </html>
