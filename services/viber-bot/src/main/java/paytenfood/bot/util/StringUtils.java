@@ -17,7 +17,6 @@ public class StringUtils {
     public static final String navigateToMainMenu = "RTS";
     public static final String ignoreUserInput = "IGR";
     public static final String addingItemToCart = "ADD";
-    public static final String startOnlinePayment = "SOP";
     public static final String removingItemFromCart = "RMV";
     //COLORS AND TEXT STYLING FOR VIBER BOT
     public static final String textColor = "<font color=\"#494E67\">";
@@ -66,6 +65,7 @@ public class StringUtils {
     public static final String merchant = "chipcardtest01";
     public static final String merchantUser = "api.test@payten.com";
     public static final String merchantPw = "Hephr=R4SKNycaLf";
-    public static final String redirection = "www.google.com";
+    public static final String redirection = "www.sputnik-it.rs/paymentinfo";
+    public static final String botPath = "viberbot";
 
 }

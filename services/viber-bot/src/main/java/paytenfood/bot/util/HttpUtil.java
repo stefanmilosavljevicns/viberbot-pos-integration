@@ -106,7 +106,7 @@ public class HttpUtil {
         logger.info("Response body: " + responseEntity.getBody());
     }
     //We are using this for generating Asecco landing page
-    public String generatePaymentId(String viberId, String merchantUser, String merchantPw, String merchant, String returnUrl) throws URISyntaxException, JsonProcessingException {
+    public String generatePaymentId(String viberId, String merchantUser, String merchantPw, String merchant) throws URISyntaxException, JsonProcessingException {
         RestTemplate getRestTemplate = new RestTemplate();
         URI getURI = new URI(assecoGetCurrentCart+"?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = getRestTemplate.getForEntity(getURI,String.class);
@@ -141,7 +141,7 @@ public class HttpUtil {
         map.add("MERCHANTPAYMENTID", LocalDateTime.now() +"_"+viberId);
         map.add("AMOUNT",totalPrice);
         map.add("CURRENCY","RSD");
-        map.add("RETURNURL",returnUrl);
+        map.add("RETURNURL",redirection+"?viberid="+viberId+"&path="+botPath);
         map.add("ORDER",orderJson);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();

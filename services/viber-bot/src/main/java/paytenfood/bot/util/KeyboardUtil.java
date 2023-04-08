@@ -82,7 +82,7 @@ public class KeyboardUtil {
     }
 
     public ViberKeyboard setPaymentOption(String userId) throws URISyntaxException, JsonProcessingException {
-        String startOnlinePayment = httpUtil.generatePaymentId(userId,merchantUser,merchantPw,merchant,redirection);
+        String startOnlinePayment = httpUtil.generatePaymentId(userId,merchantUser,merchantPw,merchant);
         if (startOnlinePayment!=null){
             confirmationKeyboard = new ViberKeyboard();
             confirmationKeyboard.setInputFieldState("hidden");
