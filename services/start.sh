@@ -15,6 +15,8 @@ echo '~~~~~~ 1. BULDING REST IMAGE ~~~~~~'
 docker build ./rest -t foodrest.jar
 echo '~~~~~~ 2. BULDING VIBER-BOT IMAGE ~~~~~~'
 docker build ./viber-bot -t bot.jar
+echo '~~~~~~ 3. BULDING CLIENT-FLASK IMAGE ~~~~~~'
+docker build ./client -t client-flask
 echo '~~~~~~ CREATING DOCKER NETWORK ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
@@ -33,3 +35,7 @@ sleep 15
 echo '~~~~~~ 3. STARTING VIBER-BOT ~~~~~~'
 docker-compose -f ./viber-bot/docker-compose.yml down
 docker-compose -f ./viber-bot/docker-compose.yml up -d
+sleep 15
+echo '~~~~~~ 2. STARTING CLIENT FLASK ~~~~~~'
+docker-compose -f ./client/docker-compose.yml down
+docker-compose -f ./client/docker-compose.yml up -d

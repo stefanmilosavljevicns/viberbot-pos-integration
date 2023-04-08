@@ -103,88 +103,80 @@ public class Controller {
                     logger.info("Time slot is not available giving user another chance to reserve.");
                 }
             }
-        //If user is not in finishing phase we will go through bot menu flow
-        }
-        else if(messageText.startsWith(assecoPaymentPage)){
-            bot.messageForUser(userId).postText(redirectPaymentMessage);
-        }
-        else if (messageText.length() >= 3) {
-            switch (messageText.substring(0, 3)) {
-                case selectCategoryFromMainMenu:
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
-                    logger.info(String.format("Showing category list for %s", messageText.substring(3)));
-                    break;
-                case addingItemToCart:
-                    MenuItem addList = httpUtil.getItemByName(messageText.substring(3));
-                    httpUtil.addServiceToCart(userId, addList);
-                    bot.messageForUser(userId).postText("Dodajem na listu "+messageText.substring(3), keyboardUtil.getMainMenu());
-                    logger.info("Adding to cart: " + messageText.substring(3));
-                    break;
-                case navigateToCartMenu:
-                    if (httpUtil.cartChecker(userId)) {
-                        bot.messageForUser(userId).postKeyboard(keyboardUtil.setCartList(userId));
-                        logger.info("Showing current cart.");
-                    } else {
-                        bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
-                        logger.info("Unable to show current cart.");
-                    }
-                    break;
-                case startFinishProcess:
-                    if (httpUtil.cartChecker(userId)) {
-                        StringBuilder finishMsg = new StringBuilder(CHECK_CART);
-                        for (String element : httpUtil.getCartList(userId)) {
-                            finishMsg.append(element).append("\n");
-                        }
-                        bot.messageForUser(userId).postText(finishMsg.toString(), keyboardUtil.setYesNo());
-                        logger.info("User have enough cart items to proceed with reservation.");
-                    } else {
-                        bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
-                        logger.info("Unable to show current cart.");
-                    }
-                    break;
-                case startPaymentProcess:
-                    if (httpUtil.cartChecker(userId)) {
-                        bot.messageForUser(userId).postText(CHECK_PAYMENT, keyboardUtil.setPaymentOption(userId));
-                        logger.info("Asking user if he agrees with his cart.");
-                    } else {
-                        bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
-                        logger.info("Unable to show current cart.");
-                    }
-                    break;
-                case selectDeliveryTime:
-                    bot.messageForUser(userId).postText(CHECK_TIME);
-                    httpUtil.changeIsPayingStatus(userId, true);
-                    logger.info("User selecting time.");
-                    break;
-                case startOnlinePayment:
-                    String startOnlinePayment = httpUtil.generatePaymentId(userId,"api.test@payten.com","Hephr=R4SKNycaLf","chipcardtest01","www.google.com");
-                    if(startOnlinePayment != null){
 
-                    }
-                    else{
-                        bot.messageForUser(userId).postText("Plaćanje nije uspelo, molim pokušajte ponovo!",keyboardUtil.getMainMenu());
+        }
+
+
+        //If user is not in finishing phase we will go through bot menu flow
+        else if (messageText.length() >= 3) {
+            //TODO Handlaj bolje Viber stranu dok je korisnik na stranici za placanje, za sada ovo ce posluziti
+            if(messageText.startsWith(assecoPaymentPage)){
+                    bot.messageForUser(userId).postText(redirectPaymentMessage);
+                }
+            else {
+                switch (messageText.substring(0, 3)) {
+                    case selectCategoryFromMainMenu:
+                        bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
+                        logger.info(String.format("Showing category list for %s", messageText.substring(3)));
+                        break;
+                    case addingItemToCart:
+                        MenuItem addList = httpUtil.getItemByName(messageText.substring(3));
+                        httpUtil.addServiceToCart(userId, addList);
+                        bot.messageForUser(userId).postText("Dodajem na listu " + messageText.substring(3), keyboardUtil.getMainMenu());
+                        logger.info("Adding to cart: " + messageText.substring(3));
+                        break;
+                    case navigateToCartMenu:
+                        if (httpUtil.cartChecker(userId)) {
+                            bot.messageForUser(userId).postKeyboard(keyboardUtil.setCartList(userId));
+                            logger.info("Showing current cart.");
+                        } else {
+                            bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
+                            logger.info("Unable to show current cart.");
+                        }
+                        break;
+                    case startFinishProcess:
+                        if (httpUtil.cartChecker(userId)) {
+                            StringBuilder finishMsg = new StringBuilder(CHECK_CART);
+                            for (String element : httpUtil.getCartList(userId)) {
+                                finishMsg.append(element).append("\n");
+                            }
+                            bot.messageForUser(userId).postText(finishMsg.toString(), keyboardUtil.setYesNo());
+                            logger.info("User have enough cart items to proceed with reservation.");
+                        } else {
+                            bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
+                            logger.info("Unable to show current cart.");
+                        }
+                        break;
+                    case startPaymentProcess:
+                        if (httpUtil.cartChecker(userId)) {
+                            bot.messageForUser(userId).postText(CHECK_PAYMENT, keyboardUtil.setPaymentOption(userId));
+                            logger.info("Asking user if he agrees with his cart.");
+                        } else {
+                            bot.messageForUser(userId).postText(ERROR_CART, keyboardUtil.getMainMenu());
+                            logger.info("Unable to show current cart.");
+                        }
+                        break;
+                    case selectDeliveryTime:
+                        bot.messageForUser(userId).postText(CHECK_TIME);
+                        httpUtil.changeIsPayingStatus(userId, true);
+                        logger.info("User selecting time.");
+                        break;
+                    case removingItemFromCart:
+                        int newlineIndex = messageText.indexOf('\n', 3);
+                        MenuItem rmvList = httpUtil.getItemByName(messageText.substring(3, newlineIndex));
+                        httpUtil.removeCartItem(userId, rmvList);
+                        bot.messageForUser(userId).postText("Uklanjam " + messageText.substring(3, newlineIndex), keyboardUtil.setCartList(userId));
+                        logger.info("Trying to remove: " + messageText.substring(3));
+                        break;
+                    case navigateToMainMenu:
+                        bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
                         logger.info("Navigating to main menu.");
-                    }
-                    break;
-                case removingItemFromCart:
-                    int newlineIndex = messageText.indexOf('\n', 3);
-                    MenuItem rmvList = httpUtil.getItemByName(messageText.substring(3,newlineIndex));
-                    httpUtil.removeCartItem(userId, rmvList);
-                    bot.messageForUser(userId).postText("Uklanjam "+messageText.substring(3,newlineIndex), keyboardUtil.setCartList(userId));
-                    logger.info("Trying to remove: " + messageText.substring(3));
-                    break;
-              case navigateToMainMenu:
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
-                    logger.info("Navigating to main menu.");
-                  break;
-                default:
-                    bot.messageForUser(userId).postText("Komanda nije pronađena",keyboardUtil.getMainMenu());
-                    logger.info("Navigating to main menu.");
-                    break;
+                        break;
+                }
             }
         } else {
             if (!StringUtils.equals(ignoreUserInput, messageText)) {
-                bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                bot.messageForUser(userId).postText("Komanda nije pronađena",keyboardUtil.getMainMenu());
                 logger.info("Navigating to main menu.");
             }
         }
