@@ -104,7 +104,11 @@ public class Controller {
                 }
             }
         //If user is not in finishing phase we will go through bot menu flow
-        } else if (messageText.length() >= 3) {
+        }
+        else if(messageText.startsWith(assecoPaymentPage)){
+            bot.messageForUser(userId).postText(redirectPaymentMessage);
+        }
+        else if (messageText.length() >= 3) {
             switch (messageText.substring(0, 3)) {
                 case selectCategoryFromMainMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));

@@ -60,6 +60,7 @@ public class StringUtils {
     public static final String assecoPayingOnline ="https://entegrasyon.asseco-see.com.tr/msu/api/v2";
     public static final String assecoGetCurrentCart = "http://rest:9097/api/v1/getCustomerCartByViberId";
     public static final String assecoPaymentPage = "https://entegrasyon.asseco-see.com.tr/chipcard/pay3d/";
+    public static final String redirectPaymentMessage = "Redirektujem Vas na stranicu za plaćanje po završenoj transakciji bićete vraćeni u Viber";
     public static final String checkIfTimeIsAvailable = "http://rest:9097/api/v1/checkAvailability";
     public static final String sendOrder = "http://rest:9097/api/v1/addOrder";
     public static final String merchant = "chipcardtest01";
