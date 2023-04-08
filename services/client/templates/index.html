@@ -11,25 +11,19 @@
             background-color: rgb(31, 100, 31);
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            display: flex;
+            padding: 0;            
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            max-width: 90%;
-            position:relative;
-		}
         .square {
-			border-radius: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+			border-radius: 10px;           
 			padding: 20px;
-			margin: 20px;
-            position: relative;
+			margin: 20px;            
 			text-align: center;
 			box-shadow: 2px 2px 5px #ccc;
 			max-width: 90%;
@@ -50,37 +44,36 @@
         }
         .image {
 			max-width: 100%;
-			margin: 20px;
-            position:relative;
-
-            
+			margin: 20px;            
+            justify-content: center;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
 		}
 
       @media only screen and (min-width: 768px) {
-			.container {
-				flex-direction: row;
-				align-items: flex-start;
-			}
-			
 			.square {
 				max-width: 50%;
 				margin-right: 40px;
-				margin-left: 40px;
-                position: relative;                
+				margin-left: 40px;         
+                position: absolute;
+                top: 50%;
+                left: 50%;                         
 			}
 			
 			.image {
 				max-width: 40%;
 				margin: 20px 0 20px 40px;
-                position: relative;
-
+                position: absolute;
+                top: 40%;
+                left: 50%;                
 			}
 		}
 
     </style>
 </head>
-<body>
-    <div class="container">
+<body>    
     <div class="square">
         <h1>Plaćanje je uspešno realizovano!</h1>
         <p>Bićete redirektovani na Viber za 5 sekundi...</p>
@@ -88,6 +81,6 @@
     <div class="image">
         <img  src="https://sputnik-it.rs/images/sputnik.png" alt="Sputnik logo">    
     </div>
-    </div>
+    
 </body>
 </html>
