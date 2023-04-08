@@ -109,7 +109,6 @@ public class Controller {
 
         //If user is not in finishing phase we will go through bot menu flow
         else if (messageText.length() >= 3) {
-            //TODO Handlaj bolje Viber stranu dok je korisnik na stranici za placanje, za sada ovo ce posluziti
             if(messageText.startsWith(assecoPaymentPage)){
                     bot.messageForUser(userId).postText(redirectPaymentMessage);
                 }
@@ -170,6 +169,10 @@ public class Controller {
                         break;
                     case navigateToMainMenu:
                         bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                        logger.info("Navigating to main menu.");
+                        break;
+                    default:
+                        bot.messageForUser(userId).postText("Komanda nije pronađena",keyboardUtil.getMainMenu());
                         logger.info("Navigating to main menu.");
                         break;
                 }

@@ -151,6 +151,9 @@ public class HttpUtil {
         if(response.getStatusCode() == HttpStatus.OK){
             ObjectMapper objectMapperAsecco = new ObjectMapper();
             JsonNode rootNode = objectMapperAsecco.readTree(response.getBody());
+            logger.info("Calling endpoint: " + assecoPayingOnline);
+            logger.info("Response status: " + response.getStatusCode());
+            logger.info("Response body: " + responseEntity.getBody());
             return rootNode.get("sessionToken").asText();
         }
         else{
