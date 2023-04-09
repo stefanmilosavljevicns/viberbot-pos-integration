@@ -81,8 +81,7 @@
             .then(response => response.json())            
             .catch(error => console.error(error));
             //TODO moramo u HTTPUtil-u metodi generatePaymentId parametru RETURNURL osim endpoint path-a i ViberID-a da stavimo i URI od chat-a... window.close() ne radi probao sam
-            window.location.href = 'viber://pa?chatURI=5087ebda0067e0c2-a9d17dd5a603bfd2-17f5a2beb4815bf0';
-            window.location.href = 'viber://pa?chatURI=5087ebda0067e0c2-a9d17dd5a603bfd2-17f5a2beb4815bf0&event_types=delivered,seen';
+            window.location.href = 'viber://pa?chatURI=5087ebda0067e0c2-a9d17dd5a603bfd2-17f5a2beb4815bf0';            
 
   }, 5000);
       </script>
