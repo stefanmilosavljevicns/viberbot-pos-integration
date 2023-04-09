@@ -73,17 +73,15 @@
     </style>
        <script>
           setTimeout(function() {
-            const url = "{{ viberPath }}";
-            const data = { "viberId": "{{ viberId }}" };
+            const url = "{{ viberPath }}";            
 
             fetch(url, {
-                method: 'POST',                
+                method: 'POST'                
             })
-            .then(response => response.json())
-            .then(data => console.log(data))
+            .then(response => response.json())            
             .catch(error => console.error(error));
             window.close();            
-  }, 10000);
+  }, 5000);
       </script>
 </head>
 <body>    
