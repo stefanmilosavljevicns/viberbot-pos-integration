@@ -71,7 +71,7 @@ public class Controller {
         UserDetails userDet = bot.getUserDetails(userId);
         logger.info("User country: {}", userDet.getCountry());
         logger.info("User device: {}", userDet.getDeviceType());
-        //Checking if this is the user first time openning bot, if that is true we want to show him immediately welcome message with main menu.
+        //Checking if this is the user first time openning if that is true we want to show him immediately welcome message with main menu.
         // Incoming class will not work in this case because user did not send any message instead we are going to parse user ViberID from default Viber log
         if (StringUtils.equals(incoming.getEvent(), START_MSG_EVENT)) {
             Gson gson = new Gson();
@@ -113,10 +113,9 @@ public class Controller {
         //If user is not in finishing phase we will go through bot menu flow
         else if (messageText.length() >= 3) {
             //First we have special case, if user accepted paying online  we don't wont to leave Viber without telling user that he will be redirected to payment page
-            if(messageText.startsWith(assecoPaymentPage)){
-                    //TODO NAPRAVI TASTATURU DOK JE KORISNIK NA ASSECO STRANI DA MOZE DA SE VRATI NA PLACANJE
-                }
-            else {
+            if (messageText.startsWith(assecoPaymentPage)) {
+                //TODO NAPRAVI TASTATURU DOK JE KORISNIK NA ASSECO STRANI DA MOZE DA SE VRATI NA PLACANJE
+            } else {
                 switch (messageText.substring(0, 3)) {
                     case selectCategoryFromMainMenu:
                         bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
@@ -176,28 +175,29 @@ public class Controller {
                         logger.info("Navigating to main menu.");
                         break;
                     default:
-                        bot.messageForUser(userId).postText("Komanda nije pronađena",keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText("Komanda nije pronađena", keyboardUtil.getMainMenu());
                         logger.info("Navigating to main menu.");
                         break;
                 }
             }
         } else {
             if (!StringUtils.equals(ignoreUserInput, messageText)) {
-                bot.messageForUser(userId).postText("Komanda nije pronađena",keyboardUtil.getMainMenu());
+                bot.messageForUser(userId).postText("Komanda nije pronađena", keyboardUtil.getMainMenu());
                 logger.info("Navigating to main menu.");
             }
         }
 
         return ResponseEntity.ok().build();
     }
+
     //TODO zameni viberbot za promenljivu iz StringUtils-a
     @RequestMapping(method = POST, path = "/viberbot/external-paying")
     ResponseEntity<?> sendExternalMessage(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
         ViberBot bot = ViberBotManager.viberBot(botToken);
-        logger.info("GLEDAJ OVO: "+viberId);
+        logger.info("GLEDAJ OVO: " + viberId);
         bot.messageForUser(viberId).postText(successfulPayment);
-        bot.messageForUser(viberId).postText(CHECK_TIME);
         httpUtil.changeIsPayingStatus(viberId, true);
+        bot.messageForUser(viberId).postText(CHECK_TIME);
         logger.info("User successfully payed his bill.");
         logger.info("User selecting time.");
         return ResponseEntity.ok().build();
@@ -205,6 +205,6 @@ public class Controller {
     }
 
 
-    }
+}
         
 
