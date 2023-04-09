@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import paytenfood.bot.model.MenuItem;
 import paytenfood.bot.model.OrderPOS;
@@ -191,7 +192,7 @@ public class Controller {
     }
     //TODO zameni viberbot za promenljivu iz StringUtils-a
     @RequestMapping(method = POST, path = "/viberbot/external-paying")
-    ResponseEntity<?> sendExternalMessage(@RequestBody String viberId) throws UnsupportedEncodingException, URISyntaxException {
+    ResponseEntity<?> sendExternalMessage(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
         ViberBot bot = ViberBotManager.viberBot(botToken);
         logger.info("GLEDAJ OVO: "+viberId);
         bot.messageForUser(viberId).postText(successfulPayment);
