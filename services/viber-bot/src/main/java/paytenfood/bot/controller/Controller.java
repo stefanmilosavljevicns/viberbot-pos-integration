@@ -114,7 +114,7 @@ public class Controller {
         else if (messageText.length() >= 3) {
             //First we have special case, if user accepted paying online  we don't wont to leave Viber without telling user that he will be redirected to payment page
             if(messageText.startsWith(assecoPaymentPage)){
-                    bot.messageForUser(userId).postText(redirectPaymentMessage);
+                    //TODO NAPRAVI TASTATURU DOK JE KORISNIK NA ASSECO STRANI DA MOZE DA SE VRATI NA PLACANJE
                 }
             else {
                 switch (messageText.substring(0, 3)) {
