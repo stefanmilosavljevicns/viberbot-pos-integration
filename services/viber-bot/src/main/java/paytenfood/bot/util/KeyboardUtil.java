@@ -89,7 +89,7 @@ public class KeyboardUtil {
             confirmationKeyboard.setType("keyboard");
             confirmationKeyboard.addButton(ViberButton.createButtonForUrl(assecoPaymentPage+startOnlinePayment)
                     .setText(yesButtonFormat)
-                    .setOpenURLType(ViberButton.OpenURLType.INTERNAL)
+                    .setOpenURLType(ViberButton.OpenURLType.EXTERNAL)
                     .setTextSize(ViberButton.TextSize.LARGE)
                     .setBgColor(primarilyColor)
                     .setColumns(3)
