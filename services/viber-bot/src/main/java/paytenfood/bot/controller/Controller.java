@@ -188,6 +188,7 @@ public class Controller {
 
         return ResponseEntity.ok().build();
     }
+    //TODO zameni viberbot za promenljivu iz StringUtils-a
     @RequestMapping(method = POST, path = "/viberbot/external-paying")
     ResponseEntity<?> sendExternalMessage(@RequestBody String viberId) throws UnsupportedEncodingException, URISyntaxException {
         ViberBot bot = ViberBotManager.viberBot(botToken);
