@@ -193,6 +193,7 @@ public class Controller {
     @RequestMapping(method = POST, path = "/viberbot/external-paying")
     ResponseEntity<?> sendExternalMessage(@RequestBody String viberId) throws UnsupportedEncodingException, URISyntaxException {
         ViberBot bot = ViberBotManager.viberBot(botToken);
+        logger.info("GLEDAJ OVO: "+viberId);
         bot.messageForUser(viberId).postText(successfulPayment);
         bot.messageForUser(viberId).postText(CHECK_TIME);
         httpUtil.changeIsPayingStatus(viberId, true);
