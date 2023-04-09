@@ -58,7 +58,7 @@ public class StringUtils {
     public static final String merchant = "chipcardtest01";
     public static final String merchantUser = "api.test@payten.com";
     public static final String merchantPw = "Hephr=R4SKNycaLf";
-    public static final String redirection = "www.sputnik-it.rs/paymentinfo";
+    public static final String redirection = "https://sputnik-it.rs/paymentinfo";
     public static final String botPath = "/viberbot/external-paying";
     public static final String successfulPayment = "Uspešno ste završili online plaćanje.";
 
