@@ -37,7 +37,7 @@ public class CustomersController {
             doc.get().getCurrentOrder().remove(removeItem);
             return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
     @PutMapping("/changePayingStatus")
     public ResponseEntity<Customers> changePayingStatus(@RequestParam String viberId, @RequestParam Boolean payingStatus){
@@ -75,6 +75,7 @@ public class CustomersController {
         }
         return new ResponseEntity<>(totalPrice, HttpStatus.OK);
     }
+    //Using this endpoint for creating Orders for Android POS
     @GetMapping("/getListForOrderByViberId/{viberId}")
     public ResponseEntity<List<String>> getListForOrderByViberId(@PathVariable(value = "viberId") String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
@@ -84,13 +85,21 @@ public class CustomersController {
         }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    //Using this endpoint for creating Asseco payment.
+    @GetMapping("/getCustomerCartByViberId")
+    public ResponseEntity<List<Menu>> getCustomerCartByViberId(@RequestParam String viberId) {
+        Optional<Customers> customers = customersRepository.findById(viberId);
+        return new ResponseEntity<>(customers.get().getCurrentOrder(), HttpStatus.OK);
+    }
+    //Using this endpoint for generating current cart list for Viber Bot
     @GetMapping("/getListByViberId")
     public ResponseEntity<List<String>> findByViber(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
         Double totalPrice = 0.0;
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
-            response.add(menu.getName()+"\n"+"CENA: "+ menu.getPrice());
+            response.add(menu.getName()+"\n"+"CENA: "+ menu.getPrice()+"RSD");
             totalPrice += menu.getPrice();
         }
         response.add("Ukupno za uplatu: "+ totalPrice);

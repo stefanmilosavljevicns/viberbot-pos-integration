@@ -3,7 +3,7 @@ package paytenfood.bot.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Order {
+public class OrderPOS {
     private ArrayList<String> description;
     private Double price;
     private LocalDateTime startTime;
@@ -11,7 +11,7 @@ public class Order {
     private String state;
     private String viberID;
 
-    public Order(ArrayList<String> description, Double price, LocalDateTime startTime, LocalDateTime endTime, String state, String viberID) {
+    public OrderPOS(ArrayList<String> description, Double price, LocalDateTime startTime, LocalDateTime endTime, String state, String viberID) {
         this.description = description;
         this.price = price;
         this.startTime = startTime;

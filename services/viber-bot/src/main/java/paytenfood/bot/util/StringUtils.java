@@ -1,12 +1,5 @@
 package paytenfood.bot.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
 public class StringUtils {
     //KEY NAMES FOR MAPPING ACTION STATES FOR VIBER
     public static final String navigateToCartMenu = "CRT";
@@ -56,8 +49,17 @@ public class StringUtils {
     public static final String getCurrentList = "http://rest:9097/api/v1/getListForOrderByViberId/";
     public static final String findItem = "http://rest:9097/api/v1/getItemByName/";
     public static final String completeOrder = "http://rest:9097/api/v1/completeOrder";
-
+    public static final String assecoPayingOnline ="https://entegrasyon.asseco-see.com.tr/msu/api/v2";
+    public static final String assecoGetCurrentCart = "http://rest:9097/api/v1/getCustomerCartByViberId";
+    public static final String assecoPaymentPage = "https://entegrasyon.asseco-see.com.tr/chipcard/pay3d/";
+    public static final String redirectPaymentMessage = "Redirektujem Vas na stranicu za plaćanje po završenoj transakciji bićete vraćeni u Viber";
     public static final String checkIfTimeIsAvailable = "http://rest:9097/api/v1/checkAvailability";
     public static final String sendOrder = "http://rest:9097/api/v1/addOrder";
+    public static final String merchant = "chipcardtest01";
+    public static final String merchantUser = "api.test@payten.com";
+    public static final String merchantPw = "Hephr=R4SKNycaLf";
+    public static final String redirection = "https://sputnik-it.rs/paymentinfo";
+    public static final String botPath = "/viberbot";
+    public static final String successfulPayment = "Uspešno ste završili online plaćanje.";
 
 }

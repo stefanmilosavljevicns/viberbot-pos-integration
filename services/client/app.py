@@ -1,0 +1,12 @@
+from flask import Flask,request,render_template
+
+app = Flask(__name__,template_folder='templates')
+
+@app.route('/paymentinfo',methods=['POST'])
+def index():
+    viberId = request.args.get('viberId')
+    viberPath = "https://sputnik-it.rs"+request.args.get('viberPath')+"/external-paying?viberId="+viberId
+    return render_template('index.html',viberPath=viberPath)
+
+if __name__ == "__main__":    
+    app.run(host="0.0.0.0", port=5000, debug=True)

@@ -1,17 +1,17 @@
 package paytenfood.bot.model;
 
-public class ListModel {
+public class MenuItem {
     private String name;
     private Double price;
     private String description;
     private Integer time;
     private String category;
 
-    public ListModel() {
+    public MenuItem() {
         // Default constructor required by Jackson
     }
 
-    public ListModel(String name, Double price, String description, Integer time, String category) {
+    public MenuItem(String name, Double price, String description, Integer time, String category) {
         this.name = name;
         this.price = price;
         this.description = description;

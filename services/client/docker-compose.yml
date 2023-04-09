@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  client-flask:
+    container_name: client-flask
+    image: client-flask:latest
+    ports:
+      - "5000:5000"
+    networks:
+      - nginx-net      
+networks:
+  nginx-net:
+    external: true           
