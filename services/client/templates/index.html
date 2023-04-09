@@ -70,8 +70,22 @@
                 left: 50%;                
 			}
 		}
-
     </style>
+       <script>
+          setTimeout(function() {
+            const url = "{{ viberPath }}";
+            const data = { "viberId": "{{ viberId }}" };
+
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+            window.close();            
+  }, 10000);
+      </script>
 </head>
 <body>    
     <div class="square">

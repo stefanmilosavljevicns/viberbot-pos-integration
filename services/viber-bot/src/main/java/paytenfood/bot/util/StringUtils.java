@@ -1,12 +1,5 @@
 package paytenfood.bot.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
 public class StringUtils {
     //KEY NAMES FOR MAPPING ACTION STATES FOR VIBER
     public static final String navigateToCartMenu = "CRT";
@@ -66,6 +59,7 @@ public class StringUtils {
     public static final String merchantUser = "api.test@payten.com";
     public static final String merchantPw = "Hephr=R4SKNycaLf";
     public static final String redirection = "www.sputnik-it.rs/paymentinfo";
-    public static final String botPath = "viberbot";
+    public static final String botPath = "/viberbot/external-paying";
+    public static final String successfulPayment = "Uspešno ste završili online plaćanje.";
 
 }
