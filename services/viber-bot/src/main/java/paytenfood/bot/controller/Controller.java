@@ -80,6 +80,7 @@ public class Controller {
             logger.info("Showing welcome message.");
             return ResponseEntity.ok().build();
         }
+        //TODO probaj ovo da ukljucis u switch isto
         //FIRST WE NEED TO CHECK IF USER IS AT LAST STAGE OF RESERVATION
         else if (httpUtil.getIsPayingStatus(userId)) {
             LocalDateTime startTime = dateUtil.parseUserInput(messageText);

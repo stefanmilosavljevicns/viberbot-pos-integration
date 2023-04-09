@@ -2,7 +2,7 @@ from flask import Flask,request,render_template
 
 app = Flask(__name__,template_folder='templates')
 
-@app.route('/paymentinfo',methods=['GET'])
+@app.route('/paymentinfo',methods=['POST'])
 def index():
     viberId = request.args.get('viberId')
     viberPath = "https://sputnik-it.rs"+"/"+request.args.get('viberPath')+"/external-paying"
