@@ -20,9 +20,11 @@ import ru.multicon.viber4j.ViberBotManager;
 public class BotApplication  implements ApplicationListener<ApplicationReadyEvent> {
 	private static final Logger logger = LoggerFactory.getLogger(BotApplication.class);
     @Value("${viber.token}")
-    public static String botToken;
+    private String botToken;
     @Value("${viber.web-hook}")
-    public static String webHookUrl;
+    private String webHookUrl;
+    @Value("${viber.media-source-url}")
+    private String mediaSourceUrl;
     @Autowired
     KeyboardUtil keyboardUtil;
     @Autowired

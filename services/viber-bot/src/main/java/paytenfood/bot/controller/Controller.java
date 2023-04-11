@@ -34,9 +34,10 @@ import static paytenfood.bot.util.StringUtils.*;
 @RestController
 public class Controller {
     @Value("${viber.token}")
-    public static String botToken;
+    private String botToken;
     @Value("${viber.web-hook}")
-    public static String webHookUrl;
+    private String webHookUrl;
+
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
 
