@@ -15,12 +15,7 @@ public class StringUtils {
     public static final String ignoreUserInput = "IGR";
     public static final String addingItemToCart = "ADD";
     public static final String removingItemFromCart = "RMV";
-    @Value("${viber.token}")
-    public static String botToken;
-    @Value("${viber.web-hook}")
-    public static String webHookUrl;
-    @Value("${viber.media-source-url}")
-    public static String mediaSourceUrl;
+
     //COLORS AND TEXT STYLING FOR VIBER BOT
     public static final String textColor = "<font color=\"#494E67\">";
     public static final String primarilyColor = "#7eceea";
