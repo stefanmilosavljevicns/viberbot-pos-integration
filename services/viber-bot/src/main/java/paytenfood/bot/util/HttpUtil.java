@@ -70,7 +70,7 @@ public class HttpUtil {
     public ArrayList<String> getCurrentList(String viberId) throws JsonProcessingException, URISyntaxException {
         ArrayList<String> cartList;
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(checkCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI(getCurrentList + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
         String responseBody = responseEntity.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
