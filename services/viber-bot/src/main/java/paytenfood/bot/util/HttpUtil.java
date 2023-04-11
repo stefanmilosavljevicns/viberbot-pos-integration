@@ -67,10 +67,11 @@ public class HttpUtil {
     }
 
     //Repacking current list into Strings so we can send it according to OrderPOS model, field: Description
-    public ArrayList<String> getCurrentList(String viberId) throws JsonProcessingException {
+    public ArrayList<String> getCurrentList(String viberId) throws JsonProcessingException, URISyntaxException {
         ArrayList<String> cartList;
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(getCurrentList.concat(viberId), String.class);
+        URI uri = new URI(checkCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
         String responseBody = responseEntity.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         cartList = objectMapper.readValue(responseBody, new TypeReference<>() {
