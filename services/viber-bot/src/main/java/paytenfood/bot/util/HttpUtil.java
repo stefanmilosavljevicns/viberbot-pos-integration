@@ -259,7 +259,7 @@ public class HttpUtil {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<OrderPOS> requestEntity = new HttpEntity<>(orderPOS, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(sendOrder, HttpMethod.POST, requestEntity, String.class);
-        if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
+        if(responseEntity.getStatusCode().equals(HttpStatus.OK)){
             restTemplate = new RestTemplate();
             URI uri = new URI(completeOrder + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
             HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
