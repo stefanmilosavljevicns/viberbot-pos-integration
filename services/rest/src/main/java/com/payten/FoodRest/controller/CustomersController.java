@@ -59,7 +59,7 @@ public class CustomersController {
         }
         return new ResponseEntity<>(false, HttpStatus.OK);
     }
-    @GetMapping("/getTotalTime}")
+    @GetMapping("/getTotalTime")
     public ResponseEntity<Integer> getTotalTime(@RequestParam String viberId) {
             Integer totalTime = 0;
             for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
