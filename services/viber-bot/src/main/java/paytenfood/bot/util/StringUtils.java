@@ -1,7 +1,11 @@
 package paytenfood.bot.util;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class StringUtils {
     //KEY NAMES FOR MAPPING ACTION STATES FOR VIBER
+    public static final String MESSAGE_EVENT = "message";
+    public static final String START_MSG_EVENT = "conversation_started";
     public static final String navigateToCartMenu = "CRT";
     public static final String startFinishProcess = "FNH";
     public static final String startPaymentProcess = "PYT";
@@ -11,6 +15,12 @@ public class StringUtils {
     public static final String ignoreUserInput = "IGR";
     public static final String addingItemToCart = "ADD";
     public static final String removingItemFromCart = "RMV";
+    @Value("${viber.token}")
+    public static String botToken;
+    @Value("${viber.web-hook}")
+    public static String webHookUrl;
+    @Value("${viber.media-source-url}")
+    public static String mediaSourceUrl;
     //COLORS AND TEXT STYLING FOR VIBER BOT
     public static final String textColor = "<font color=\"#494E67\">";
     public static final String primarilyColor = "#7eceea";
@@ -36,25 +46,28 @@ public class StringUtils {
     public static final String SUCCESS_RESERVATION = "Uspešno ste završili rezervaciju!";
 
     //ENDPOINTS FROM INTERNAL REST
-    public static final String urlMenu = "http://rest:9097/api/v1/getallCategories";
-    public static final String urlItems = "http://rest:9097/api/v1/getCategoryItems/";
-    public static final String addItems = "http://rest:9097/api/v1/addListItem";
-    public static final String rmvItems = "http://rest:9097/api/v1/removeListItem";
-    public static final String getCart = "http://rest:9097/api/v1/getListByViberId?viberId=";
-    public static final String checkCart = "http://rest:9097/api/v1/getActiveOrders?viberId=";
-    public static final String checkPayingStatus = "http://rest:9097/api/v1/getIsPayingStatus/";
-    public static final String changePayingStatus = "http://rest:9097/api/v1/changePayingStatus";
-    public static final String findTotalTime = "http://rest:9097/api/v1/getTotalTime/";
-    public static final String findTotalPrice = "http://rest:9097/api/v1/getTotalPrice/";
-    public static final String getCurrentList = "http://rest:9097/api/v1/getListForOrderByViberId/";
-    public static final String findItem = "http://rest:9097/api/v1/getItemByName/";
-    public static final String completeOrder = "http://rest:9097/api/v1/completeOrder";
+    public static final String rootPath = "http://rest:9097/api/v1";
+    public static final String urlMenu = rootPath+"/getallCategories";
+    public static final String urlItems = rootPath+"/getCategoryItems/";
+    public static final String addItems = rootPath+"/addListItem";
+    public static final String rmvItems = rootPath+"/removeListItem";
+    public static final String getCart = rootPath+"/getListByViberId";
+    public static final String checkCart = rootPath+"/getActiveOrders";
+    public static final String checkPayingStatus = rootPath+"/getIsPayingStatus";
+    public static final String changePayingStatus = rootPath+"/changePayingStatus";
+    public static final String findTotalTime = rootPath+"/getTotalTime";
+    public static final String findTotalPrice = rootPath+"/getTotalPrice";
+    public static final String getCurrentList = rootPath+"/getListForOrderByViberId";
+    public static final String findItem = rootPath+"/getItemByName/";
+    public static final String completeOrder = rootPath+"/completeOrder";
+    public static final String checkIfTimeIsAvailable = rootPath+"/checkAvailability";
+    public static final String sendOrder = rootPath+"/addOrder";
+    public static final String assecoGetCurrentCart = rootPath+"/getCustomerCartByViberId";
     public static final String assecoPayingOnline ="https://entegrasyon.asseco-see.com.tr/msu/api/v2";
-    public static final String assecoGetCurrentCart = "http://rest:9097/api/v1/getCustomerCartByViberId";
     public static final String assecoPaymentPage = "https://entegrasyon.asseco-see.com.tr/chipcard/pay3d/";
+
     public static final String redirectPaymentMessage = "Redirektujem Vas na stranicu za plaćanje po završenoj transakciji bićete vraćeni u Viber";
-    public static final String checkIfTimeIsAvailable = "http://rest:9097/api/v1/checkAvailability";
-    public static final String sendOrder = "http://rest:9097/api/v1/addOrder";
+
     public static final String merchant = "chipcardtest01";
     public static final String merchantUser = "api.test@payten.com";
     public static final String merchantPw = "Hephr=R4SKNycaLf";

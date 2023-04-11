@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,14 +34,8 @@ import static paytenfood.bot.util.StringUtils.*;
 public class Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
-    private final String MESSAGE_EVENT = "message";
-    private final String START_MSG_EVENT = "conversation_started";
-    @Value("${viber.token}")
-    private String botToken;
-    @Value("${viber.web-hook}")
-    private String webHookUrl;
-    @Value("${viber.media-source-url}")
-    private String mediaSourceUrl;
+
+
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
@@ -194,7 +187,6 @@ public class Controller {
     @RequestMapping(method = POST, path = "/viberbot/external-paying")
     ResponseEntity<?> sendExternalMessage(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
         ViberBot bot = ViberBotManager.viberBot(botToken);
-        logger.info("GLEDAJ OVO: " + viberId);
         bot.messageForUser(viberId).postText(successfulPayment);
         httpUtil.changeIsPayingStatus(viberId, true);
         bot.messageForUser(viberId).postText(CHECK_TIME);

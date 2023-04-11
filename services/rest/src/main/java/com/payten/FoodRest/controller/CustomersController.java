@@ -52,23 +52,23 @@ public class CustomersController {
         doc.get().setCurrentOrder(new ArrayList<>());
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
-    @GetMapping("/getIsPayingStatus/{viberId}")
-    public ResponseEntity<Boolean> getIsPayingStatus(@PathVariable(value = "viberId") String viberId) {
+    @GetMapping("/getIsPayingStatus")
+    public ResponseEntity<Boolean> getIsPayingStatus(@RequestParam String viberId) {
         if (customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getIsPaying().equals(true)) {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.OK);
     }
-    @GetMapping("/getTotalTime/{viberId}")
-    public ResponseEntity<Integer> getTotalTime(@PathVariable(value = "viberId") String viberId) {
+    @GetMapping("/getTotalTime}")
+    public ResponseEntity<Integer> getTotalTime(@RequestParam String viberId) {
             Integer totalTime = 0;
             for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
                 totalTime += menu.getTime();
             }
             return new ResponseEntity<>(totalTime, HttpStatus.OK);
     }
-    @GetMapping("/getTotalPrice/{viberId}")
-    public ResponseEntity<Double> getTotalPrice(@PathVariable(value = "viberId") String viberId) {
+    @GetMapping("/getTotalPrice")
+    public ResponseEntity<Double> getTotalPrice(@RequestParam String viberId) {
         Double totalPrice = 0.0;
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
             totalPrice += menu.getPrice();
@@ -76,8 +76,8 @@ public class CustomersController {
         return new ResponseEntity<>(totalPrice, HttpStatus.OK);
     }
     //Using this endpoint for creating Orders for Android POS
-    @GetMapping("/getListForOrderByViberId/{viberId}")
-    public ResponseEntity<List<String>> getListForOrderByViberId(@PathVariable(value = "viberId") String viberId) {
+    @GetMapping("/getListForOrderByViberId")
+    public ResponseEntity<List<String>> getListForOrderByViberId(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){

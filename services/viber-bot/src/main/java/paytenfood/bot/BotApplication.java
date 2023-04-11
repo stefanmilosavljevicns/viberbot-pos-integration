@@ -14,15 +14,13 @@ import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
 import ru.multicon.viber4j.ViberBotManager;
 
+import static paytenfood.bot.util.StringUtils.botToken;
+import static paytenfood.bot.util.StringUtils.webHookUrl;
+
 @SpringBootApplication
 public class BotApplication  implements ApplicationListener<ApplicationReadyEvent> {
 	private static final Logger logger = LoggerFactory.getLogger(BotApplication.class);
-    @Value("${viber.token}")
-    private String botToken;
-    @Value("${viber.web-hook}")
-    private String webHookUrl;
-    @Value("${viber.media-source-url}")
-    private String mediaSourceUrl;
+
     @Autowired
     KeyboardUtil keyboardUtil;
     @Autowired

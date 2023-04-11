@@ -112,7 +112,7 @@ public class KeyboardUtil {
 
     }
 
-    public ViberKeyboard setCartList(String viberId) throws JsonProcessingException {
+    public ViberKeyboard setCartList(String viberId) throws JsonProcessingException, URISyntaxException {
 
         ArrayList<String> currentCart = httpUtil.getCartList(viberId);
 
