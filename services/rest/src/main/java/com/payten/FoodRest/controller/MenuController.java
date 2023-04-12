@@ -15,34 +15,23 @@ public class MenuController {
     private MenuRepository menuRepository;
 
     @PostMapping("/addMenuItem")
-    public ResponseEntity<Menu> save(@RequestBody Menu menu) {
+    public ResponseEntity<Menu> save(@RequestBody Menu menu)
+    {
         return ResponseEntity.ok(menuRepository.save(menu));
     }
 
-    @GetMapping("/getWholeMenu")
-    public ResponseEntity<List<Menu>> findAll() {
-        return ResponseEntity.ok(menuRepository.findAll());
-    }
 
     @GetMapping("/getallCategories")
     public ResponseEntity<List<String>> findAllLocations() {
         return ResponseEntity.ok(menuRepository.findDistinctCategories());
     }
+
     @GetMapping("/getItemByName/{name}")
     public ResponseEntity<Menu> fetchItemByName(@PathVariable(value = "name") String name) {
         Menu menu = menuRepository.findByName(name);
         return ResponseEntity.ok(menu);
     }
-    @GetMapping("/getPriceByName/{name}")
-    public ResponseEntity<Double> fetchPriceByName(@PathVariable(value = "name") String name) {
-        Menu menu = menuRepository.findByName(name);
-        return ResponseEntity.ok(menu.getPrice());
-    }
-    @GetMapping("/getDurationByName/{name}")
-    public ResponseEntity<Integer> fetchDurationByName(@PathVariable(value = "name") String name) {
-        Menu menu = menuRepository.findByName(name);
-        return ResponseEntity.ok(menu.getTime());
-    }
+
     @GetMapping("/getCategoryItems/{category}")
     public ResponseEntity<List<Menu>> fetchLocation(@PathVariable(value = "category") String category) {
         return ResponseEntity.ok(menuRepository.findByCategory(category));

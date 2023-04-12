@@ -33,7 +33,7 @@ public class OrderController {
         return ResponseEntity.ok(orderRepository.save(order));
     }
 
-    @GetMapping("/checkAvailability")
+    @GetMapping("/checkTimeSlotAvailability")
     public ResponseEntity<String> checkAvailability(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
                                                     @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         List<Order> conflictingReservations = orderRepository.findByStartTimeLessThanAndEndTimeGreaterThan(end, start);
@@ -98,7 +98,7 @@ public class OrderController {
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
 
-    @PutMapping("/completeOrder/{id}")
+    @PutMapping("/clearCart/{id}")
     public ResponseEntity<Order> completeOrder(@PathVariable("id") String id) {
         Optional<Order> existingOrder = orderRepository.findById(id);
         if (!existingOrder.isPresent()) {

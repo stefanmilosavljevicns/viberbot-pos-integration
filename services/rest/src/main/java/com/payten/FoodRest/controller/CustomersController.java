@@ -20,7 +20,8 @@ public class CustomersController {
     @Autowired
     private CustomersRepository customersRepository;
 
-    @PutMapping("/addListItem")
+    //Adding item to cart, if cart is empty we are going to create Customer entry first
+    @PutMapping("/addItemToCart")
     public ResponseEntity<Customers> addItem(@RequestParam String viberId, @RequestBody Menu newItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if (doc.isEmpty()) {
@@ -30,7 +31,7 @@ public class CustomersController {
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
 
-    @DeleteMapping("/removeListItem")
+    @DeleteMapping("/removeItemFromCart")
     public ResponseEntity<Customers> removeListItem(@RequestParam String viberId, @RequestBody Menu removeItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if(doc.get().getCurrentOrder().contains(removeItem)){
@@ -52,7 +53,7 @@ public class CustomersController {
         doc.get().setCurrentOrder(new ArrayList<>());
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
-    @GetMapping("/getIsPayingStatus")
+    @GetMapping("/checkPayingStatus")
     public ResponseEntity<Boolean> getIsPayingStatus(@RequestParam String viberId) {
         if (customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getIsPaying().equals(true)) {
             return new ResponseEntity<>(true, HttpStatus.OK);
@@ -76,7 +77,7 @@ public class CustomersController {
         return new ResponseEntity<>(totalPrice, HttpStatus.OK);
     }
     //Using this endpoint for creating Orders for Android POS
-    @GetMapping("/getListForOrderByViberId")
+    @GetMapping("/convertToOrderModel")
     public ResponseEntity<List<String>> getListForOrderByViberId(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
@@ -87,7 +88,7 @@ public class CustomersController {
     }
 
     //Using this endpoint for creating Asseco payment.
-    @GetMapping("/getCustomerCartByViberId")
+    @GetMapping("/assecoOrderConverter")
     public ResponseEntity<List<Menu>> getCustomerCartByViberId(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         return new ResponseEntity<>(customers.get().getCurrentOrder(), HttpStatus.OK);
@@ -107,7 +108,7 @@ public class CustomersController {
     }
 
     //Used for checking if user added some of services to cart
-    @GetMapping("/getActiveOrders")
+    @GetMapping("/checkIfCartIsEmpty")
     public ResponseEntity<Boolean> checkCurrentOrder(@RequestParam String viberId) {
         if(customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getCurrentOrder().size() > 0){
             return new ResponseEntity<>(true,HttpStatus.OK);

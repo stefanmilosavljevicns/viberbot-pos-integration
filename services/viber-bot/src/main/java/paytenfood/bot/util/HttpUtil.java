@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static paytenfood.bot.util.StringUtils.*;
+import static paytenfood.bot.util.BotConstants.*;
 
 @Component
 public class HttpUtil {

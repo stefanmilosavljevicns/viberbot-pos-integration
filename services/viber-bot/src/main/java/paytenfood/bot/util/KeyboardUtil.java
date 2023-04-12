@@ -13,7 +13,7 @@ import ru.multicon.viber4j.keyboard.ViberKeyboard;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import static paytenfood.bot.util.StringUtils.*;
+import static paytenfood.bot.util.BotConstants.*;
 
 @Component
 public class KeyboardUtil {

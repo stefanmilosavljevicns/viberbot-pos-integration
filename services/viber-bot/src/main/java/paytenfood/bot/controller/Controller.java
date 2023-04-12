@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static paytenfood.bot.util.StringUtils.*;
+import static paytenfood.bot.util.BotConstants.*;
 
 @RestController
 public class Controller {
@@ -188,7 +188,7 @@ public class Controller {
         return ResponseEntity.ok().build();
     }
 
-    //TODO zameni viberbot za promenljivu iz StringUtils-a
+    //TODO zameni viberbot za promenljivu iz BotConstants-a
     @RequestMapping(method = POST, path = "/viberbot/external-paying")
     ResponseEntity<?> sendExternalMessage(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
         ViberBot bot = ViberBotManager.viberBot(botToken);
