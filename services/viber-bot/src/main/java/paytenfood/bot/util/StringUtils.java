@@ -29,7 +29,7 @@ public class StringUtils {
     private String buttonMenuFinishReservation;
     @Value("${text.price-format}")
     private String buttonPriceFormat;
-    @Value("${text.text.add-cart-item}")
+    @Value("${text.add-cart-item}")
     private String buttonAddCartItem;
     @Value("${text.remove-cart-item}")
     private String buttonRemoveCartItem;
