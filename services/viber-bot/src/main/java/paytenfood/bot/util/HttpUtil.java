@@ -92,7 +92,7 @@ public class HttpUtil {
     //Inserting selected service to DB in case User doesn't have field in DB here we create it.
     public void addServiceToCart(String viberId, MenuItem itemName) throws URISyntaxException, UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI("${rest.address}" + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -105,7 +105,7 @@ public class HttpUtil {
     //REMOVING ITEM FROM CART
     public void removeServiceFromCart(String viberId, MenuItem itemName) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + removeItemFromCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI("${rest.address}" + removeItemFromCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

@@ -42,7 +42,6 @@ public class Controller {
     private DateUtil dateUtil;
     @Autowired
     private KeyboardUtil keyboardUtil;
-
     @RequestMapping(method = POST, path = "${viber.bot-path}")
     ResponseEntity<?> callbackHandle(@RequestBody String text) throws IOException, InterruptedException, URISyntaxException {
         logger.info("Received messageForUser {}", text);
