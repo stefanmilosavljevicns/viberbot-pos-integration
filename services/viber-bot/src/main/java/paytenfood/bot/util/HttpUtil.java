@@ -153,7 +153,7 @@ public class HttpUtil {
         map.add("MERCHANTPAYMENTID", LocalDateTime.now() + "_" + viberId);
         map.add("AMOUNT", totalPrice);
         map.add("CURRENCY", "RSD");
-        map.add("RETURNURL", redirection + "?viberId=" + viberId + "&viberPath=" + botPath);
+        map.add("RETURNURL", redirection + "?viberId=" + viberId + "&viberPath=" + stringUtils.getBotPath());
         map.add("ORDER", orderJson);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -248,9 +248,6 @@ public class HttpUtil {
     public MenuItem getItemByName(String itemName) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<MenuItem> responseEntity = restTemplate.getForEntity(stringUtils.getRestAdress()+getItemByName.concat(itemName), MenuItem.class);
-        logger.info("Calling endpoint: " + getItemByName);
-        logger.info("Response status: " + responseEntity.getStatusCode());
-        logger.info("Response body: " + responseEntity.getBody());
         logger.info(String.format(httpLogFormat, getItemByName, responseEntity.getStatusCode(), responseEntity.getBody()));
         MenuItem model = responseEntity.getBody();
         return model;

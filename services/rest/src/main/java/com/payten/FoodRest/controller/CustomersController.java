@@ -22,7 +22,7 @@ public class CustomersController {
 
     //Adding item to cart, if cart is empty we are going to create Customer entry first
     @PutMapping("/addItemToCart")
-    public ResponseEntity<Customers> addItem(@RequestParam String viberId, @RequestBody Menu newItem) {
+    public ResponseEntity<Customers> addItemToCart(@RequestParam String viberId, @RequestBody Menu newItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if (doc.isEmpty()) {
             doc = Optional.of(new Customers(viberId, new ArrayList<>(),new ArrayList<>(), null,false));
@@ -32,7 +32,7 @@ public class CustomersController {
     }
 
     @DeleteMapping("/removeItemFromCart")
-    public ResponseEntity<Customers> removeListItem(@RequestParam String viberId, @RequestBody Menu removeItem) {
+    public ResponseEntity<Customers> removeItemFromCart(@RequestParam String viberId, @RequestBody Menu removeItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if(doc.get().getCurrentOrder().contains(removeItem)){
             doc.get().getCurrentOrder().remove(removeItem);
@@ -47,14 +47,14 @@ public class CustomersController {
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
     @PutMapping("/clearCart")
-    public ResponseEntity<Customers> completeOrder(@RequestParam String viberId){
+    public ResponseEntity<Customers> clearCart(@RequestParam String viberId){
         Optional<Customers> doc = customersRepository.findById(viberId);
         doc.get().getArchievedOrder().addAll(doc.get().getCurrentOrder());
         doc.get().setCurrentOrder(new ArrayList<>());
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
     @GetMapping("/checkPayingStatus")
-    public ResponseEntity<Boolean> getIsPayingStatus(@RequestParam String viberId) {
+    public ResponseEntity<Boolean> checkPayingStatus(@RequestParam String viberId) {
         if (customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getIsPaying().equals(true)) {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
@@ -78,7 +78,7 @@ public class CustomersController {
     }
     //Using this endpoint for creating Orders for Android POS
     @GetMapping("/convertToOrderModel")
-    public ResponseEntity<List<String>> getListForOrderByViberId(@RequestParam String viberId) {
+    public ResponseEntity<List<String>> convertToOrderModel(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
@@ -89,13 +89,13 @@ public class CustomersController {
 
     //Using this endpoint for creating Asseco payment.
     @GetMapping("/assecoOrderConverter")
-    public ResponseEntity<List<Menu>> getCustomerCartByViberId(@RequestParam String viberId) {
+    public ResponseEntity<List<Menu>> assecoOrderConverter(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         return new ResponseEntity<>(customers.get().getCurrentOrder(), HttpStatus.OK);
     }
     //Using this endpoint for generating current cart list for Viber Bot
     @GetMapping("/getCart")
-    public ResponseEntity<List<String>> findByViber(@RequestParam String viberId) {
+    public ResponseEntity<List<String>> getCart(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
         Double totalPrice = 0.0;
@@ -109,7 +109,7 @@ public class CustomersController {
 
     //Used for checking if user added some of services to cart
     @GetMapping("/checkIfCartIsEmpty")
-    public ResponseEntity<Boolean> checkCurrentOrder(@RequestParam String viberId) {
+    public ResponseEntity<Boolean> checkIfCartIsEmpty(@RequestParam String viberId) {
         if(customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getCurrentOrder().size() > 0){
             return new ResponseEntity<>(true,HttpStatus.OK);
         }

@@ -22,6 +22,8 @@ public class KeyboardUtil {
     @Autowired
     private HttpUtil httpUtil;
     private ViberKeyboard mainMenu;
+    @Autowired
+    private StringUtils stringUtils;
     private ViberKeyboard confirmationKeyboard;
 
     public ViberKeyboard getMainMenu() {
@@ -36,15 +38,15 @@ public class KeyboardUtil {
         for (int i = 0; i < menuItems.size(); i++) {
             listMenu.addButton(new ViberButton(ignoreUserInput)
                     .setBgColor(whiteColor)
-                    .setText(String.format("<font color=\"#494E67\"><b>%s</b><br><b>OPIS</b>: %s. <br><b>CENA</b>: %s RSD", menuItems.get(i).getName(), menuItems.get(i).getDescription(), menuItems.get(i).getPrice()))
+                    .setText(String.format(stringUtils.getButtonDescription(), menuItems.get(i).getName(), menuItems.get(i).getDescription(), menuItems.get(i).getPrice()))
                     .setColumns(4)
                     .setRows(2)
                     .setSilent(true)
                     .setTextSize(ViberButton.TextSize.MEDIUM)
                     .setTextHAlign(ViberButton.TextAlign.LEFT))
                     .addButton(new ViberButton(String.format(addingItemToCart+"%s", menuItems.get(i).getName()))
-                            .setImage(reserveItemIcon)
-                            .setText("<br><br><br><font color=\"#494E67\"><b>REZERVIŠI</b></font>")
+                            .setImage(stringUtils.getIconAddItem())
+                            .setText(stringUtils.getButtonAddCartItem())
                             .setSilent(true)
                             .setColumns(2)
                             .setRows(2)
@@ -53,9 +55,9 @@ public class KeyboardUtil {
                             .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
         listMenu.addButton(new ViberButton(navigateToMainMenu)
-                    .setText(String.format(standardTextFormat,RETURN_MENU))
+                    .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
                     .setTextSize(ViberButton.TextSize.LARGE)
-                    .setBgColor(primarilyColor)
+                    .setBgColor(stringUtils.getPrimarilyColor())
                     .setSilent(true));
         return listMenu;
     }
@@ -65,16 +67,16 @@ public class KeyboardUtil {
         confirmationKeyboard.setInputFieldState("hidden");
         confirmationKeyboard.setType("keyboard");
         confirmationKeyboard.addButton(new ViberButton(startPaymentProcess)
-                .setText(yesButtonFormat)
+                .setText(stringUtils.getButtonYes())
                 .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(primarilyColor)
+                .setBgColor(stringUtils.getPrimarilyColor())
                 .setColumns(3)
                 .setSilent(true)
                 .setRows(2));
         confirmationKeyboard.addButton(new ViberButton(navigateToCartMenu)
-                .setText(noButtonFormat)
+                .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(secondarilyColor)
+                .setBgColor(stringUtils.getSecondarilyColor())
                 .setSilent(true)
                 .setColumns(3)
                 .setRows(2));
@@ -82,23 +84,23 @@ public class KeyboardUtil {
     }
 
     public ViberKeyboard setPaymentOption(String userId) throws URISyntaxException, JsonProcessingException {
-        String startOnlinePayment = httpUtil.generatePaymentId(userId,merchantUser,merchantPw,merchant);
+        String startOnlinePayment = httpUtil.generatePaymentId(userId,stringUtils.getAssecoMerchantUser(),stringUtils.getAssecoMerchantPassword(),stringUtils.getAssecoMerchant());
         if (startOnlinePayment!=null){
             confirmationKeyboard = new ViberKeyboard();
             confirmationKeyboard.setInputFieldState("hidden");
             confirmationKeyboard.setType("keyboard");
             confirmationKeyboard.addButton(ViberButton.createButtonForUrl(assecoPaymentPage+startOnlinePayment)
-                    .setText(yesButtonFormat)
+                    .setText(stringUtils.getButtonYes())
                     .setOpenURLType(ViberButton.OpenURLType.EXTERNAL)
                     .setTextSize(ViberButton.TextSize.LARGE)
-                    .setBgColor(primarilyColor)
+                    .setBgColor(stringUtils.getPrimarilyColor())
                     .setColumns(3)
                     .setSilent(true)
                     .setRows(2));
             confirmationKeyboard.addButton(new ViberButton(selectDeliveryTime)
-                    .setText(noButtonFormat)
+                    .setText(stringUtils.getButtonNo())
                     .setTextSize(ViberButton.TextSize.LARGE)
-                    .setBgColor(secondarilyColor)
+                    .setBgColor(stringUtils.getSecondarilyColor())
                     .setSilent(true)
                     .setColumns(3)
                     .setRows(2));
@@ -122,15 +124,15 @@ public class KeyboardUtil {
         for (int i = 0; i < currentCart.size() - 1; i++) {
             cartList.addButton(new ViberButton(ignoreUserInput)
                     .setBgColor(whiteColor)
-                    .setText(String.format(standardTextFormat, currentCart.get(i)))
+                    .setText(String.format(stringUtils.getButtonStandard(), currentCart.get(i)))
                     .setColumns(4)
                     .setRows(2)
                     .setSilent(true)
                     .setTextSize(ViberButton.TextSize.MEDIUM)
                     .setTextHAlign(ViberButton.TextAlign.LEFT))
                     .addButton(new ViberButton(String.format(removingItemFromCart+"%s", currentCart.get(i)))
-                            .setImage(removeItemIcon)
-                            .setText("<br><br><font color=\"#494E67\"><b>UKLONI</b></font>")
+                            .setImage(stringUtils.getIconRemoveItem())
+                            .setText(stringUtils.getButtonRemoveCartItem())
                             .setColumns(2)
                             .setRows(2)
                             .setSilent(true)
@@ -139,16 +141,16 @@ public class KeyboardUtil {
                             .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
         cartList.addButton(new ViberButton(ignoreUserInput)
-                .setText(String.format("<b><font color=\"#494E67\">%s RSD</b>", currentCart.get(currentCart.size() - 1)))
+                .setText(String.format(stringUtils.getButtonPriceFormat(), currentCart.get(currentCart.size() - 1)))
                 .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(secondarilyColor)
+                .setBgColor(stringUtils.getSecondarilyColor())
                 .setSilent(true)
                 .setTextSize(ViberButton.TextSize.LARGE));
         cartList.addButton(new ViberButton(navigateToMainMenu)
-                .setText(String.format(standardTextFormat,RETURN_MENU))
+                .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setSilent(true)
-                .setBgColor(primarilyColor));
+                .setBgColor(stringUtils.getPrimarilyColor()));
         return cartList;
     }
 
@@ -163,33 +165,33 @@ public class KeyboardUtil {
 
             if (i == 2) {
                 mainMenu.addButton(new ViberButton(navigateToCartMenu)
-                        .setText("<br><font color=\"#494E67\"><b>Izabrane usluge</b></font>")
-                        .setImage(cartMenuIcon)
+                        .setText(stringUtils.getButtonMenuCart())
+                        .setImage(stringUtils.getIconCart())
                         .setRows(2)
                         .setColumns(2)
                         .setSilent(true)
-                        .setBgColor(secondarilyColor)
+                        .setBgColor(stringUtils.getSecondarilyColor())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                         .setTextVAlign(ViberButton.TextAlign.MIDDLE));
             }
             mainMenu.addButton(new ViberButton(String.format(selectCategoryFromMainMenu+"%s", categoriesTitle.get(i)))
-                    .setText(String.format("<br><font color=\"#494E67\"><b>%s</b></font>", categoriesTitle.get(i)))
-                    .setImage(String.format(categoryMenuIcon, categoriesTitle.get(i)))
+                    .setText(String.format(stringUtils.getButtonMenuCategories(), categoriesTitle.get(i)))
+                    .setImage(String.format(stringUtils.getIconCategory(), categoriesTitle.get(i)))
                     .setRows(2)
                     .setSilent(true)
                     .setColumns(2)
-                    .setBgColor(primarilyColor)
+                    .setBgColor(stringUtils.getPrimarilyColor())
                     .setTextSize(ViberButton.TextSize.LARGE)
                     .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                     .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
-        mainMenu.addButton(new ViberButton(startFinishProcess).setText("<br><font color=\"#494E67\"><b>Završi rezervaciju</b></font>")
-                .setImage(finishOrderMenuIcon)
+        mainMenu.addButton(new ViberButton(startFinishProcess).setText(stringUtils.getButtonMenuFinishReservation())
+                .setImage(stringUtils.getIconCompleteOrder())
                 .setRows(2)
                 .setSilent(true)
                 .setColumns(2)
-                .setBgColor(secondarilyColor)
+                .setBgColor(stringUtils.getSecondarilyColor())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                 .setTextVAlign(ViberButton.TextAlign.MIDDLE));
