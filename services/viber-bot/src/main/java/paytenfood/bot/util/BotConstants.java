@@ -13,7 +13,8 @@ public class BotConstants {
     public static final String ignoreUserInput = "IGR";
     public static final String addingItemToCart = "ADD";
     public static final String removingItemFromCart = "RMV";
-
+    //LOG FORMAT
+    public static final String httpLogFormat = "Calling endpoint: %s \nResponse status: %s \nResponse body: %s";
     //COLORS AND TEXT STYLING FOR VIBER BOT
     public static final String textColor = "<font color=\"#494E67\">";
     public static final String primarilyColor = "#7eceea";
@@ -39,23 +40,22 @@ public class BotConstants {
     public static final String SUCCESS_RESERVATION = "Uspešno ste završili rezervaciju!";
 
     //ENDPOINTS FROM INTERNAL REST
-    public static final String rootPath = "http://rest:9097/api/v1";
-    public static final String urlMenu = "http://rest:9097/api/v1/getallCategories";
-    public static final String urlItems = "http://rest:9097/api/v1/getCategoryItems/";
-    public static final String addItems = "http://rest:9097/api/v1/addCartItem";
-    public static final String rmvItems = "http://rest:9097/api/v1/removeCartItem";
-    public static final String getCart = "http://rest:9097/api/v1/getCart";
-    public static final String checkCart = "http://rest:9097/api/v1/checkIfCartIsEmpty";
-    public static final String checkPayingStatus = "http://rest:9097/api/v1/checkPayingStatus";
-    public static final String changePayingStatus = "http://rest:9097/api/v1/changePayingStatus";
-    public static final String findTotalTime = "http://rest:9097/api/v1/getTotalTime";
-    public static final String findTotalPrice = "http://rest:9097/api/v1/getTotalPrice";
-    public static final String getCurrentList = "http://rest:9097/api/v1/convertToOrderModel";
-    public static final String findItem = "http://rest:9097/api/v1/getMenuItemByName/";
-    public static final String completeOrder = "http://rest:9097/api/v1/clearCart";
-    public static final String checkIfTimeIsAvailable = "http://rest:9097/api/v1/checkTimeSlotAvailability";
-    public static final String sendOrder = "http://rest:9097/api/v1/addOrder";
-    public static final String assecoGetCurrentCart = "http://rest:9097/api/v1/assecoOrderConverter";
+    public static final String getAllCategories = "/getallCategories";
+    public static final String getCategoryItems = "/getCategoryItems/";
+    public static final String addItemToCart = "/addCartItem";
+    public static final String removeItemFromCart = "/removeCartItem";
+    public static final String getCart = "/getCart";
+    public static final String checkIfCartIsEmpty = "/checkIfCartIsEmpty";
+    public static final String checkPayingStatus = "/checkPayingStatus";
+    public static final String changePayingStatus = "/changePayingStatus";
+    public static final String getTotalTime = "/getTotalTime";
+    public static final String getTotalPrice = "/getTotalPrice";
+    public static final String convertToOrderModel = "/convertToOrderModel";
+    public static final String getItemByName = "/getItemByName/";
+    public static final String completeOrder = "/clearCart";
+    public static final String checkTimeSlotAvailability = "/checkTimeSlotAvailability";
+    public static final String addOrder = "/addOrder";
+    public static final String assecoOrderConverter = "/assecoOrderConverter";
     public static final String assecoPayingOnline ="https://entegrasyon.asseco-see.com.tr/msu/api/v2";
     public static final String assecoPaymentPage = "https://entegrasyon.asseco-see.com.tr/chipcard/pay3d/";
 

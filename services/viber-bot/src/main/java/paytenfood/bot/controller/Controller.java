@@ -33,14 +33,10 @@ import static paytenfood.bot.util.BotConstants.*;
 
 @RestController
 public class Controller {
-    @Value("${viber.token}")
-    private String botToken;
-    @Value("${viber.web-hook}")
-    private String webHookUrl;
-
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
-
+    @Autowired
+    public paytenfood.bot.util.StringUtils stringUtils;
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
@@ -48,11 +44,11 @@ public class Controller {
     @Autowired
     private KeyboardUtil keyboardUtil;
 
-    @RequestMapping(method = POST, path = "/viberbot")
+    @RequestMapping(method = POST, path = "${viber.bot-path}")
     ResponseEntity<?> callbackHandle(@RequestBody String text) throws IOException, InterruptedException, URISyntaxException {
         logger.info("Received messageForUser {}", text);
         // Processing incoming messageForUser
-        ViberBot bot = ViberBotManager.viberBot(botToken);
+        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         Incoming incoming = IncomingImpl.fromString(text);
         String eventType = incoming.getEvent();
         logger.info("Event type {}", eventType);
@@ -189,9 +185,9 @@ public class Controller {
     }
 
     //TODO zameni viberbot za promenljivu iz BotConstants-a
-    @RequestMapping(method = POST, path = "/viberbot/external-paying")
+    @RequestMapping(method = POST, path = "${viber.bot-path}"+"/external-paying")
     ResponseEntity<?> sendExternalMessage(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
-        ViberBot bot = ViberBotManager.viberBot(botToken);
+        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         bot.messageForUser(viberId).postText(successfulPayment);
         httpUtil.changeIsPayingStatus(viberId, true);
         bot.messageForUser(viberId).postText(CHECK_TIME);
