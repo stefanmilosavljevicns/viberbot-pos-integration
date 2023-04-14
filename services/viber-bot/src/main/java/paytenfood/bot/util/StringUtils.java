@@ -13,37 +13,28 @@ public class StringUtils {
     private String botPath;
     @Value("${rest.address}")
     private String restAdress;
+    @Value("${color.primarily}")
     private String primarilyColor;
+    @Value("${color.secondarily}")
+    private String secondarilyColor;
 
     public String getBotToken() {
         return botToken;
     }
 
-    public void setBotToken(String botToken) {
-        this.botToken = botToken;
-    }
+
 
     public String getWebHookUrl() {
         return webHookUrl;
     }
 
-    public void setWebHookUrl(String webHookUrl) {
-        this.webHookUrl = webHookUrl;
-    }
+
 
     public String getRestAdress() {
         return restAdress;
     }
 
-    public void setRestAdress(String restAdress) {
-        this.restAdress = restAdress;
-    }
 
-    public String getPrimarilyColor() {
-        return primarilyColor;
-    }
 
-    public void setPrimarilyColor(String primarilyColor) {
-        this.primarilyColor = primarilyColor;
-    }
+
 }
