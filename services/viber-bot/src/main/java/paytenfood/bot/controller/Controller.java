@@ -163,6 +163,9 @@ public class Controller {
                         bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
                         logger.info("Navigating to main menu.");
                         break;
+                    case ignoreUserInput:
+                        logger.info("User clicked on text label, safely ignore this log.");
+                        break;
                     default:
                         bot.messageForUser(userId).postText("Komanda nije pronađena", keyboardUtil.getMainMenu());
                         logger.info("Navigating to main menu.");
