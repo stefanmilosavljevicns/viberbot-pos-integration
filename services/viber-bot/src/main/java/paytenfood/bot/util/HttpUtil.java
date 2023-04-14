@@ -92,9 +92,7 @@ public class HttpUtil {
     //Inserting selected service to DB in case User doesn't have field in DB here we create it.
     public void addServiceToCart(String viberId, MenuItem itemName) throws URISyntaxException, UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
-        String fixUri = stringUtils.getRestAdress()+addItemToCart;
-        logger.info(fixUri);
-        URI uri = new URI(fixUri + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI(stringUtils.getRestAdress() + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -249,7 +247,7 @@ public class HttpUtil {
 
     public MenuItem getItemByName(String itemName) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<MenuItem> responseEntity = restTemplate.getForEntity(getItemByName.concat(itemName), MenuItem.class);
+        ResponseEntity<MenuItem> responseEntity = restTemplate.getForEntity(stringUtils.getRestAdress()+getItemByName.concat(itemName), MenuItem.class);
         logger.info("Calling endpoint: " + getItemByName);
         logger.info("Response status: " + responseEntity.getStatusCode());
         logger.info("Response body: " + responseEntity.getBody());
