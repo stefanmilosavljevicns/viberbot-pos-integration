@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 public class StringUtils {
     @Value("${viber.token}")
     private String botToken;
-    @Value("${viber.web-hook}")
-    private String webHookUrl;
     @Value("${viber.bot-path}")
     private String botPath;
     @Value("${rest.address}")
@@ -22,13 +20,9 @@ public class StringUtils {
         return botToken;
     }
 
-
-
-    public String getWebHookUrl() {
-        return webHookUrl;
+    public String getBotPath() {
+        return botPath;
     }
-
-
 
     public String getRestAdress() {
         return restAdress;

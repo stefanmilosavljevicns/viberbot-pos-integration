@@ -94,7 +94,7 @@ public class CustomersController {
         return new ResponseEntity<>(customers.get().getCurrentOrder(), HttpStatus.OK);
     }
     //Using this endpoint for generating current cart list for Viber Bot
-    @GetMapping("/getListByViberId")
+    @GetMapping("/getCart")
     public ResponseEntity<List<String>> findByViber(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();

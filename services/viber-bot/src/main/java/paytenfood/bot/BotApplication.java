@@ -14,6 +14,7 @@ import paytenfood.bot.util.KeyboardUtil;
 import paytenfood.bot.util.StringUtils;
 import ru.multicon.viber4j.ViberBotManager;
 
+import static paytenfood.bot.util.BotConstants.domain;
 
 
 @SpringBootApplication
@@ -37,8 +38,8 @@ public class BotApplication  implements ApplicationListener<ApplicationReadyEven
             throw new RuntimeException(e);
         }
         keyboardUtil.setMainMenu();
-		logger.info("Web-hook registration for {}", stringUtils.getWebHookUrl());
-        if (!ViberBotManager.viberBot(stringUtils.getBotToken()).setWebHook(stringUtils.getWebHookUrl()))
+		logger.info("Web-hook registration for {}", domain+stringUtils.getBotPath());
+        if (!ViberBotManager.viberBot(stringUtils.getBotToken()).setWebHook(domain+stringUtils.getBotPath()))
             logger.error("Web-hook registration failed!");
 
 

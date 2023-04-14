@@ -14,7 +14,7 @@ public class BotConstants {
     public static final String addingItemToCart = "ADD";
     public static final String removingItemFromCart = "RMV";
     //LOG FORMAT
-    public static final String httpLogFormat = "Calling endpoint: %s \nResponse status: %s \nResponse body: %s";
+    public static final String httpLogFormat = "||Calling endpoint: %s ||Response status: %s ||Response body: %s";
     //COLORS AND TEXT STYLING FOR VIBER BOT
     public static final String textColor = "<font color=\"#494E67\">";
     public static final String primarilyColor = "#7eceea";
@@ -23,6 +23,8 @@ public class BotConstants {
     public static final String yesButtonFormat = "<b><font color=\"#494E67\">DA</b>";
     public static final String noButtonFormat = "<b><font color=\"#494E67\">NE</b>";
     public static final String standardTextFormat = "<b><font color=\"#494E67\">%s</b>";
+    //DOMAIN
+    public static final String domain = "https://sputnik-it.rs";
     //IMAGES
     public static final String removeItemIcon = "https://sputnik-it.rs/images/remove-mark-final.png";
     public static final String cartMenuIcon = "https://sputnik-it.rs/images/Izabrane usluge.png";
@@ -42,8 +44,8 @@ public class BotConstants {
     //ENDPOINTS FROM INTERNAL REST
     public static final String getAllCategories = "/getallCategories";
     public static final String getCategoryItems = "/getCategoryItems/";
-    public static final String addItemToCart = "/addCartItem";
-    public static final String removeItemFromCart = "/removeCartItem";
+    public static final String addItemToCart = "/addItemToCart";
+    public static final String removeItemFromCart = "/removeItemFromCart";
     public static final String getCart = "/getCart";
     public static final String checkIfCartIsEmpty = "/checkIfCartIsEmpty";
     public static final String checkPayingStatus = "/checkPayingStatus";
