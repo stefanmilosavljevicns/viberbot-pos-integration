@@ -55,7 +55,7 @@ public class HttpUtil {
     public ArrayList<String> getCartList(String viberId) throws JsonProcessingException, URISyntaxException {
         ArrayList<String> cartList;
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + getCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI("${viber.bot-path}" + getCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
         String responseBody = responseEntity.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -69,7 +69,7 @@ public class HttpUtil {
     public ArrayList<String> getCurrentList(String viberId) throws JsonProcessingException, URISyntaxException {
         ArrayList<String> cartList;
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + convertToOrderModel + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI("${viber.bot-path}" + convertToOrderModel + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
         String responseBody = responseEntity.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -82,7 +82,7 @@ public class HttpUtil {
     //CHECKING IF USER ADDED ANY ITEM TO CART IF THIS IS FALSE WE WILL NOT ALLOW USER TO GET CART PAGE OR FINISH ORDER
     public Boolean cartChecker(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + checkIfCartIsEmpty + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI("${viber.bot-path}" + checkIfCartIsEmpty + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
         Boolean status = Boolean.valueOf(responseEntity.getBody());
         logger.info(String.format(httpLogFormat, checkIfCartIsEmpty, responseEntity.getStatusCode(), responseEntity.getBody()));
@@ -92,7 +92,7 @@ public class HttpUtil {
     //Inserting selected service to DB in case User doesn't have field in DB here we create it.
     public void addServiceToCart(String viberId, MenuItem itemName) throws URISyntaxException, UnsupportedEncodingException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI("${viber.bot-path}" + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -102,11 +102,23 @@ public class HttpUtil {
 
         logger.info(String.format(httpLogFormat, addItemToCart, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
+    //REMOVING ITEM FROM CART
+    public void removeServiceFromCart(String viberId, MenuItem itemName) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+        URI uri = new URI("${viber.bot-path}" + removeItemFromCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
+        HttpEntity<MenuItem> requestEntity = new HttpEntity<>(itemName, headers);
+
+        ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, MenuItem.class);
+
+        logger.info(String.format(httpLogFormat, removeItemFromCart, responseEntity.getStatusCode(), responseEntity.getBody()));
+    }
     //We are using this for generating Asecco landing page
     public String generatePaymentId(String viberId, String merchantUser, String merchantPw, String merchant) throws URISyntaxException, JsonProcessingException {
         RestTemplate getRestTemplate = new RestTemplate();
-        URI getURI = new URI(stringUtils.getRestAdress() + assecoOrderConverter + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI getURI = new URI("${viber.bot-path}" + assecoOrderConverter + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = getRestTemplate.getForEntity(getURI, String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info(String.format(httpLogFormat, assecoOrderConverter, responseEntity.getStatusCode(), responseEntity.getBody()));
@@ -157,21 +169,7 @@ public class HttpUtil {
             return null;
         }
     }
-
-    //REMOVING ITEM FROM CART
-    public void removeCartItem(String viberId, MenuItem itemName) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + removeItemFromCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<MenuItem> requestEntity = new HttpEntity<>(itemName, headers);
-
-        ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, MenuItem.class);
-
-        logger.info(String.format(httpLogFormat, removeItemFromCart, responseEntity.getStatusCode(), responseEntity.getBody()));
-    }
-
+    
     //Gathering items for selected category from menu
     public ArrayList<MenuItem> getServiceList(String menuItem) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
@@ -240,10 +238,10 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, addOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
         if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
             restTemplate = new RestTemplate();
-            URI uri = new URI(stringUtils.getRestAdress() + completeOrder + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+            URI uri = new URI(stringUtils.getRestAdress() + clearCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
             HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
             ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
-            logger.info(String.format(httpLogFormat, completeOrder, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
+            logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
         }
     }
 

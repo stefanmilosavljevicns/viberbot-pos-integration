@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -160,7 +159,7 @@ public class Controller {
                     case removingItemFromCart:
                         int newlineIndex = messageText.indexOf('\n', 3);
                         MenuItem rmvList = httpUtil.getItemByName(messageText.substring(3, newlineIndex));
-                        httpUtil.removeCartItem(userId, rmvList);
+                        httpUtil.removeServiceFromCart(userId, rmvList);
                         bot.messageForUser(userId).postText("Uklanjam " + messageText.substring(3, newlineIndex), keyboardUtil.setCartList(userId));
                         logger.info("Trying to remove: " + messageText.substring(3));
                         break;

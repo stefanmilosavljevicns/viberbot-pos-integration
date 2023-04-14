@@ -54,7 +54,7 @@ public class BotConstants {
     public static final String getTotalPrice = "/getTotalPrice";
     public static final String convertToOrderModel = "/convertToOrderModel";
     public static final String getItemByName = "/getItemByName/";
-    public static final String completeOrder = "/clearCart";
+    public static final String clearCart = "/clearCart";
     public static final String checkTimeSlotAvailability = "/checkTimeSlotAvailability";
     public static final String addOrder = "/addOrder";
     public static final String assecoOrderConverter = "/assecoOrderConverter";

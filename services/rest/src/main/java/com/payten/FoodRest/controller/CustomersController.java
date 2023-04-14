@@ -46,7 +46,7 @@ public class CustomersController {
         doc.get().setIsPaying(payingStatus);
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
-    @PutMapping("/completeOrder")
+    @PutMapping("/clearCart")
     public ResponseEntity<Customers> completeOrder(@RequestParam String viberId){
         Optional<Customers> doc = customersRepository.findById(viberId);
         doc.get().getArchievedOrder().addAll(doc.get().getCurrentOrder());
