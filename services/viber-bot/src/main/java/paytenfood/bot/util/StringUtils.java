@@ -25,7 +25,7 @@ public class StringUtils {
     private String buttonMenuCart;
     @Value("${text.menu-categories}")
     private String buttonMenuCategories;
-    @Value("${text.menu-finish.reservation}")
+    @Value("${text.menu-finish-reservation}")
     private String buttonMenuFinishReservation;
     @Value("${text.price-format}")
     private String buttonPriceFormat;
