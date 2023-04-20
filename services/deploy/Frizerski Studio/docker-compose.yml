@@ -1,0 +1,65 @@
+version: "3.3"
+services:
+    frizerskisalon-bot:
+      container_name: bot
+      image: bot.jar:latest
+      restart: on-failure
+      ports:
+        - "9945:9945"
+      stdin_open: true
+      tty: true
+      environment:
+        -  "viber.token: 50e7e666c8e7e726-9b72477927dbc498-c59497ce6f143d75"
+        -  "viber.bot-path: /frizerskisalon-bot"
+        -  "rest.address: http://frizerskisalon-rest:9099/frizerskisalon-rest"
+        -  "color.primarily: #7eceea"
+        -  "color.secondarily: #a8aaba"
+        -  'text.yes-button: <b><font color="#494E67">DA</b>'
+        -  'text.menu-cart: <br><font color="#494E67"><b>Izabrane usluge</b></font>'
+        -  'text.menu-categories: <br><font color="#494E67"><b>%s</b></font>'
+        -  'text.menu-finish-reservation= <br><font color="#494E67"><b>Zavr\u0161i rezervaciju</b></font>'
+        -  'text.no-button <b><font color="#494E67">NE</b>'
+        -  'text.standard-button: <b><font color="#494E67">%s</b>'
+        -  'text.item-description: <font color="#494E67"><b>%s</b><br><b>OPIS</b>: %s. <br><b>CENA</b>: %s RSD'
+        -  'text.add-cart-item: <br><br><br><font color="#494E67"><b>REZERVI\u0160I</b></font>'
+        -  'text.price-format: <b><font color="#494E67">%s RSD</b>'
+        -  "text.remove-cart-item: <br><br><font color=\"#494E67\"><b>UKLONI</b></font>"
+        -  "icon.cart: https://sputnik-it.rs/images/Izabrane usluge.png"
+        -  "icon.complete-order: https://sputnik-it.rs/images/Zavrsi rezervaciju.png"
+        -  "icon.category: https://sputnik-it.rs/images/%s.png"
+        -  "icon.add-item: https://sputnik-it.rs/images/check-mark-final.png"
+        -  "icon.remove-item: https://sputnik-it.rs/images/remove-mark-final.png"
+        -  "message.error: Molim Vas da prvo izaberete bar jednu uslugu."
+        -  "message.error-time: Pogre\u0161an format vremena. Molim da izaberete vreme u formatu: DAN.MESEC SAT:MIN PRIMER: 22.03 14:30 Pokrenite proces naru\u010divaja ponovo."
+        -  "message.welcome: Dobrodo\u0161li u Viber bot Dental Care ordinacije! Mo\u017eete zakazati na\u0161e usluge pra\u0107enjem uputstva na ekranu."
+        -  "message.return-to-menu: Povratak na glavni meni"
+        -  "message.payment-online: Va\u0161 termin je uspe\u0161no rezervisan!\n\nDa li \u017eelite da uplatite rezervaciju online?"
+        -  "message.check-cart: Prikazujem listu izabranih usluga, ako se sla\u017eete sa listom pritisnite DA, ukoliko \u017eelite da izmenite listu pritisnite NE:\n"
+        -  "message.check-time: Izaberite vreme rezervacije u formatu: DAN.MESEC SAT:MIN PRIMER: 22.03 14:30"
+        -  "message.success-reservation: Uspe\u0161no ste zavr\u0161ili rezervaciju, povratak na glavni meni!"
+        -  "asseco.merchant: chipcardtest01"
+        -  "asseco.merchant-user: api.test@payten.com"
+        -  "asseco.merchant-password: Hephr=R4SKNycaLf"
+        - LANG=C.UTF-8
+      networks:
+        - nginx-net      
+        
+    frizerskisalon-rest:
+      image: foodrest.jar:latest
+      restart: on-failure
+      container_name: rest
+      environment:
+        - "spring.data.mongodb.uri=mongodb://root:test@food-mongo:27055/frizerskisalon?authSource=admin&authMechanism=SCRAM-SHA-1"
+        - "rest.path=/frizerskisalon-rest"
+      ports:
+        - "9099:9099"
+      stdin_open: true
+      tty: true
+      depends_on:
+        - food-mongo
+      networks:
+        - nginx-net
+
+networks:
+  nginx-net:
+    external: true
