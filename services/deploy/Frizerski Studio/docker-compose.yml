@@ -1,7 +1,7 @@
 version: "3.3"
 services:
     frizerskisalon-bot:
-      container_name: bot
+      container_name: frizerskisalon-bot
       image: bot.jar:latest
       restart: on-failure
       ports:
@@ -41,13 +41,14 @@ services:
         -  "asseco.merchant-user=api.test@payten.com"
         -  "asseco.merchant-password=Hephr=R4SKNycaLf"
         -  'LANG=C.UTF-8'
+      depends_on:
+        - frizerskisalon-rest
       networks:
         - nginx-net      
         
     frizerskisalon-rest:
       image: foodrest.jar:latest
-      restart: on-failure
-      container_name: rest
+      container_name: frizerskisalon-rest
       environment:
         - "spring.data.mongodb.uri=mongodb://root:test@food-mongo:27055/frizerskisalon?authSource=admin&authMechanism=SCRAM-SHA-1"
         - "rest.path=/frizerskisalon-rest"
