@@ -45,6 +45,7 @@ public class BotConstants {
 
     //OTHER MESSAGES FOR VIBER
     public static final String returnToPayment = "Povratak na odabir plaćanja";
+    public static final String failedPayment = "Da li želite da ponovite online plaćanje?";
 
 
 }

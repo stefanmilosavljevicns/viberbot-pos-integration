@@ -197,7 +197,7 @@ public class Controller {
     @RequestMapping(method = POST, path = "${viber.bot-path}" + "/external-failure")
     ResponseEntity<?> sendExternalFail(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
-        bot.messageForUser(viberId).postText(stringUtils.getMessagePaymentOnline(), keyboardUtil.setPaymentOption(viberId));
+        bot.messageForUser(viberId).postText(failedPayment, keyboardUtil.setPaymentOption(viberId));
         logger.info("User failed to complete online payment, trying again.");
         return ResponseEntity.ok().build();
 
