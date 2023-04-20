@@ -236,15 +236,16 @@ public class HttpUtil {
         HttpEntity<OrderPOS> requestEntity = new HttpEntity<>(orderPOS, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(stringUtils.getRestAdress() + addOrder, HttpMethod.POST, requestEntity, String.class);
         logger.info(String.format(httpLogFormat, addOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
-        if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
-            restTemplate = new RestTemplate();
-            URI uri = new URI(stringUtils.getRestAdress() + clearCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-            HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
-            ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
-            logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
-        }
     }
-
+    public void clearCart(String viberId) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        URI uri = new URI(stringUtils.getRestAdress() + clearCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
+        ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
+        logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
+    }
     public MenuItem getItemByName(String itemName) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<MenuItem> responseEntity = restTemplate.getForEntity(stringUtils.getRestAdress()+getItemByName.concat(itemName), MenuItem.class);
