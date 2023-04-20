@@ -1,27 +1,23 @@
-from flask import Flask,request,render_template, abort,url_for, redirect
+from flask import Flask,request,render_template, abort, session
 
 app = Flask(__name__,template_folder='templates')
 
-@app.route('/paymentinfo', methods=['POST'])
+@app.route('/paymentinfo',methods=['POST'])
 def index():
     referer = request.headers.get('referer')
-    if referer != 'https://entegrasyon.asseco-see.com.tr/':
-        abort(403)
-    
-    # process payment here
-    # ...
-    
+    if referer != 'https://entegrasyon.asseco-see.com.tr/chipcard/pay3d/':
+        abort(403)  # Return a 403 Forbidden error if the referer is not the expected URL    
     viberId = request.args.get('viberId')
-    viberPath = "https://sputnik-it.rs"+request.args.get('viberPath')+"/external-paying?viberId="+viberId
+    viberPath = "https://sputnik-it.rs"+request.args.get('viberPath')+"/external-paying?viberId="+viberId        
+    # Check if payment has already been processed
+    if session.get('payment_processed'):
+        # Redirect user to another page or show an error message
+        return 'Payment has already been processed'
+
+    # Mark payment as processed in the session
+    session['payment_processed'] = True
     
-    return redirect(url_for('payment_success', viberPath=viberPath))
-
-@app.route('/payment_success', methods=['GET'])
-def payment_success():
-    viberPath = request.args.get('viberPath')
-    return render_template('success.html', viberPath=viberPath)
-
-
+    return render_template('index.html',viberPath=viberPath)
 
 if __name__ == "__main__":    
     app.run(host="0.0.0.0", port=5000, debug=True)
