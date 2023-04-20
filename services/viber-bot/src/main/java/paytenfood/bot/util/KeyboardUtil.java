@@ -90,9 +90,9 @@ public class KeyboardUtil {
                 .setText(returnToPayment)
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())
-                .setColumns(2)
+                .setColumns(4)
                 .setSilent(true)
-                .setRows(1));
+                .setRows(4));
         return returnToPaymentKyb;
     }
     public ViberKeyboard setPaymentOption(String userId) throws URISyntaxException, JsonProcessingException {
