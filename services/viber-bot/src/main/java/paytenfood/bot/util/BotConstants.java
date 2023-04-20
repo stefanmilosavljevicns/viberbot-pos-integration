@@ -5,7 +5,8 @@ public class BotConstants {
     public static final String MESSAGE_EVENT = "message";
     public static final String START_MSG_EVENT = "conversation_started";
     public static final String navigateToCartMenu = "CRT";
-    public static final String startFinishProcess = "FNH";
+    public static final String startReservationProcess = "FNH";
+    public static final String clearCartAndFinishSession = "CLR";
     public static final String startPaymentProcess = "PYT";
     public static final String selectDeliveryTime = "TIM";
     public static final String selectCategoryFromMainMenu = "LST";
@@ -41,6 +42,9 @@ public class BotConstants {
     public static final String assecoPaymentPage = "https://entegrasyon.asseco-see.com.tr/chipcard/pay3d/";
 
     public static final String redirection = "https://sputnik-it.rs/paymentinfo";
+
+    //OTHER MESSAGES FOR VIBER
+    public static final String returnToPayment = "Povratak na odabir plaćanja";
 
 
 }

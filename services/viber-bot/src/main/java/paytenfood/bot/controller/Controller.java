@@ -17,7 +17,6 @@ import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
 import ru.multicon.viber4j.ViberBot;
 import ru.multicon.viber4j.ViberBotManager;
-import ru.multicon.viber4j.account.UserDetails;
 import ru.multicon.viber4j.incoming.Incoming;
 import ru.multicon.viber4j.incoming.IncomingImpl;
 
@@ -58,8 +57,8 @@ public class Controller {
 
         if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
             return ResponseEntity.ok().build();
-        //UserDetails userDet = bot.getUserDetails(userId);
-        //Checking if this is the user first time openning if that is true we want to show him immediately welcome message with main menu.
+
+        //  Checking if this is the user first time opening Viber Bot, if that is true we want to show him immediately welcome message with main menu.
         // Incoming class will not work in this case because user did not send any message instead we are going to parse user ViberID from default Viber log
         if (StringUtils.equals(incoming.getEvent(), START_MSG_EVENT)) {
             Gson gson = new Gson();
@@ -69,8 +68,15 @@ public class Controller {
             logger.info("Showing welcome message.");
             return ResponseEntity.ok().build();
         }
-        //If user is not in finishing phase we will go through bot menu flow
+        //Handling user input here
         else if (messageText.length() >= 3) {
+                //This IF will trigger when user is on asseco payment page. If something happens: browser crashed, accidentaly closing browser etc... We want to handle this scenario by giving him  chance to restart payment flow.
+                if (messageText.startsWith(assecoPaymentPage)){
+                    //Keyboard dok je korisnik u asseco stranici
+                    keyboardUtil.returnToPayment();
+                    logger.info("Returning user back to payment option");
+                }
+                //Going through Viber bot flow, using our 3 Character keywords for mapping different actions.
                 switch (messageText.substring(0, 3)) {
                     case selectCategoryFromMainMenu:
                         bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
@@ -91,8 +97,8 @@ public class Controller {
                             logger.info("Unable to show current cart.");
                         }
                         break;
-                        //First thing that triggers after user choosed to finish his order
-                    case startFinishProcess:
+                        //First thing that triggers after user selected FINISH RESERVATION button. First we are going to show him what items did he selected.
+                    case startReservationProcess:
                         if (httpUtil.cartChecker(userId)) {
                             StringBuilder finishMsg = new StringBuilder(stringUtils.getMessageCheckCart());
                             for (String element : httpUtil.getCartList(userId)) {
@@ -105,6 +111,7 @@ public class Controller {
                             logger.info("Unable to show current cart.");
                         }
                         break;
+                        //If the user agrees with his cart we are going to ask him to choose time.
                     case startPaymentProcess:
                         if (httpUtil.cartChecker(userId)) {
                             bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
@@ -117,6 +124,11 @@ public class Controller {
                     case selectDeliveryTime:
                         bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
                         logger.info("User selecting time.");
+                        break;
+                    case clearCartAndFinishSession:
+                        bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
+                        httpUtil.clearCart(userId);
+                        logger.info("Session finished, clearing cart.");
                         break;
                     case removingItemFromCart:
                         int newlineIndex = messageText.indexOf('\n', 3);
@@ -132,7 +144,7 @@ public class Controller {
                     case ignoreUserInput:
                         logger.info("User clicked on text label, safely ignore this log.");
                         break;
-                        //If input string doesn't match with our
+                        //If input string doesn't match with our 3 characters keywords, that means that user is picking time for reservation. That flow will be handled in default part of SWITCH
                     default:
                         LocalDateTime startTime = dateUtil.parseUserInput(messageText);
                         if(startTime != null){
@@ -153,7 +165,7 @@ public class Controller {
                         }
                         //Incorrect form giving user another chance to enter correct
                         else{
-                            bot.messageForUser(userId).postText("Pogrešan unos vremena, pokušajte ponovo");
+                            bot.messageForUser(userId).postText("Pogrešan unos vremena, pokušajte ponovo.");
                             logger.info("User failed to enter right format for time.");
                         }
                         break;
@@ -174,7 +186,7 @@ public class Controller {
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         bot.messageForUser(viberId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
         httpUtil.clearCart(viberId);
-        logger.info("User successfully payed his bill.");
+        logger.info("User successfully payed his bill, clearing cart.");
         return ResponseEntity.ok().build();
 
     }

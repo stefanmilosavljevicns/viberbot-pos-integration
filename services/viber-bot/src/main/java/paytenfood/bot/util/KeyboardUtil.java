@@ -82,7 +82,19 @@ public class KeyboardUtil {
                 .setRows(2));
         return confirmationKeyboard;
     }
-
+    public ViberKeyboard returnToPayment(){
+        ViberKeyboard returnToPaymentKyb = new ViberKeyboard();
+        confirmationKeyboard.setInputFieldState("hidden");
+        confirmationKeyboard.setType("keyboard");
+        confirmationKeyboard.addButton(new ViberButton(startPaymentProcess)
+                .setText(returnToPayment)
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getPrimarilyColor())
+                .setColumns(2)
+                .setSilent(true)
+                .setRows(1));
+        return returnToPaymentKyb;
+    }
     public ViberKeyboard setPaymentOption(String userId) throws URISyntaxException, JsonProcessingException {
         String startOnlinePayment = httpUtil.generatePaymentId(userId,stringUtils.getAssecoMerchantUser(),stringUtils.getAssecoMerchantPassword(),stringUtils.getAssecoMerchant());
         if (startOnlinePayment!=null){
@@ -97,7 +109,7 @@ public class KeyboardUtil {
                     .setColumns(3)
                     .setSilent(true)
                     .setRows(2));
-            confirmationKeyboard.addButton(new ViberButton(selectDeliveryTime)
+            confirmationKeyboard.addButton(new ViberButton(clearCartAndFinishSession)
                     .setText(stringUtils.getButtonNo())
                     .setTextSize(ViberButton.TextSize.LARGE)
                     .setBgColor(stringUtils.getSecondarilyColor())
@@ -186,7 +198,7 @@ public class KeyboardUtil {
                     .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                     .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
-        mainMenu.addButton(new ViberButton(startFinishProcess).setText(stringUtils.getButtonMenuFinishReservation())
+        mainMenu.addButton(new ViberButton(startReservationProcess).setText(stringUtils.getButtonMenuFinishReservation())
                 .setImage(stringUtils.getIconCompleteOrder())
                 .setRows(2)
                 .setSilent(true)
