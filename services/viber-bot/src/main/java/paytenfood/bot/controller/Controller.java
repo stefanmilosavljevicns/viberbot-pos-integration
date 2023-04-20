@@ -140,6 +140,7 @@ public class Controller {
                             Double totalMinutes = httpUtil.getTotalTime(userId);
                             LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
                             String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
+                            //Checking time availability
                             if (checkTime.equals("Time slot is available.")) {
                                 OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
                                 httpUtil.sendOrder(sendOrderPOS, userId);
@@ -150,8 +151,9 @@ public class Controller {
                                 logger.info("Time slot is not available giving user another chance to reserve.");
                             }
                         }
+                        //Incorrect form giving user another chance to enter correct
                         else{
-                            bot.messageForUser(userId).postText("Pogrešan unos vremena, pokušajte ponovo", keyboardUtil.getMainMenu());
+                            bot.messageForUser(userId).postText("Pogrešan unos vremena, pokušajte ponovo");
                             logger.info("User failed to enter right format for time.");
                         }
                         break;
