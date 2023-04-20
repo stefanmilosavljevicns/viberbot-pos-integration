@@ -56,8 +56,6 @@ services:
         - "9099:9099"
       stdin_open: true
       tty: true
-      depends_on:
-        - food-mongo
       networks:
         - nginx-net
 
