@@ -84,9 +84,9 @@ public class KeyboardUtil {
     }
     public ViberKeyboard returnToPayment(){
         ViberKeyboard returnToPaymentKyb = new ViberKeyboard();
-        confirmationKeyboard.setInputFieldState("hidden");
-        confirmationKeyboard.setType("keyboard");
-        confirmationKeyboard.addButton(new ViberButton(startPaymentProcess)
+        returnToPaymentKyb.setInputFieldState("hidden");
+        returnToPaymentKyb.setType("keyboard");
+        returnToPaymentKyb.addButton(new ViberButton(startPaymentProcess)
                 .setText(returnToPayment)
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())
