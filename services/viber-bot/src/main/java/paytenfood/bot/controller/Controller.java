@@ -75,6 +75,7 @@ public class Controller {
                     //Keyboard dok je korisnik u asseco stranici
                     keyboardUtil.returnToPayment();
                     logger.info("Returning user back to payment option");
+                    return ResponseEntity.ok().build();
                 }
                 //Going through Viber bot flow, using our 3 Character keywords for mapping different actions.
                 switch (messageText.substring(0, 3)) {
@@ -158,7 +159,9 @@ public class Controller {
                                 httpUtil.sendOrder(sendOrderPOS, userId);
                                 bot.messageForUser(userId).postText(stringUtils.getMessagePaymentOnline(), keyboardUtil.setPaymentOption(userId));
                                 logger.info("Finishing reservation.");
-                            } else {
+                            }
+                            //If user missed form we will redirect him to main menu
+                            else {
                                 bot.messageForUser(userId).postText(checkTime);
                                 logger.info("Time slot is not available giving user another chance to reserve.");
                             }
