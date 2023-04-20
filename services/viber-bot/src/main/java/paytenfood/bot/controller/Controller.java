@@ -72,8 +72,7 @@ public class Controller {
         else if (messageText.length() >= 3) {
                 //This IF will trigger when user is on asseco payment page. If something happens: browser crashed, accidentaly closing browser etc... We want to handle this scenario by giving him  chance to restart payment flow.
                 if (messageText.startsWith(assecoPaymentPage)){
-                    //Keyboard dok je korisnik u asseco stranici
-                    keyboardUtil.returnToPayment();
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.returnToPayment());
                     logger.info("Returning user back to payment option");
                     return ResponseEntity.ok().build();
                 }
@@ -168,7 +167,7 @@ public class Controller {
                         }
                         //Incorrect form giving user another chance to enter correct
                         else{
-                            bot.messageForUser(userId).postText("Pogrešan unos vremena, pokušajte ponovo.");
+                            bot.messageForUser(userId).postText("Pogrešan unos vremena, pokušajte ponovo.",keyboardUtil.getMainMenu());
                             logger.info("User failed to enter right format for time.");
                         }
                         break;
