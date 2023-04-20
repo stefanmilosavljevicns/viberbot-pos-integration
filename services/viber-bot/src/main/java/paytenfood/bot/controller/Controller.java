@@ -1,5 +1,6 @@
 package paytenfood.bot.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -184,11 +185,20 @@ public class Controller {
     }
     //This endpoint will be called by our page, it is being used for letting bot know if payment is OK or NOT
     @RequestMapping(method = POST, path = "${viber.bot-path}" + "/external-paying")
-    ResponseEntity<?> sendExternalMessage(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
+    ResponseEntity<?> sendExternalSuccess(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         bot.messageForUser(viberId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
         httpUtil.clearCart(viberId);
         logger.info("User successfully payed his bill, clearing cart.");
+        return ResponseEntity.ok().build();
+
+    }
+
+    @RequestMapping(method = POST, path = "${viber.bot-path}" + "/external-failure")
+    ResponseEntity<?> sendExternalFail(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {
+        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
+        bot.messageForUser(viberId).postText(stringUtils.getMessagePaymentOnline(), keyboardUtil.setPaymentOption(viberId));
+        logger.info("User failed to complete online payment, trying again.");
         return ResponseEntity.ok().build();
 
     }

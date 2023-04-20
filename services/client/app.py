@@ -1,6 +1,8 @@
 from flask import Flask,request,render_template, abort, session
+import secrets
 
 app = Flask(__name__,template_folder='templates')
+app.secret_key = secrets.token_hex(16)
 
 @app.route('/paymentinfo',methods=['POST'])
 def index():
