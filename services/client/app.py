@@ -8,7 +8,7 @@ def index():
     print("BODY:"+request.data.decode('utf-8'))
     app.logger.warning('BODY: %s', request.data.decode('utf-8'))
     app.logger.warning('Invalid referer: %s', referer)    
-    if referer != 'https://entegrasyon.asseco-see.com.tr/chipcard/pay3d/':
+    if referer != 'https://entegrasyon.asseco-see.com.tr/':
         abort(403)  # Return a 403 Forbidden error if the referer is not the expected URL    
     viberId = request.args.get('viberId')
     viberPath = "https://sputnik-it.rs"+request.args.get('viberPath')+"/external-paying?viberId="+viberId
