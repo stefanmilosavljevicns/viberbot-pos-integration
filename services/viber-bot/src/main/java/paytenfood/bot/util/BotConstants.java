@@ -38,8 +38,8 @@ public class BotConstants {
     public static final String checkTimeSlotAvailability = "/checkTimeSlotAvailability";
     public static final String addOrder = "/addOrder";
     public static final String assecoOrderConverter = "/assecoOrderConverter";
-    public static final String assecoPayingOnline = "https://test.merchantsafeunipay.com/msu/api/v2";
-    public static final String assecoPaymentPage = "https://test.merchantsafeunipay.com/chipcard/pay3d/";
+    public static final String assecoPayingOnline = "https://entegrasyon.asseco-see.com.tr/msu/api/v2";
+    public static final String assecoPaymentPage = "https://entegrasyon.asseco-see.com.tr/chipcard/pay3d/";
 
     public static final String redirection = "https://sputnik-it.rs/paymentinfo";
 
