@@ -141,9 +141,6 @@ public class HttpUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        logger.info(merchantUser);
-        logger.info(merchantPw);
-        logger.info(merchant);
         Double totalPrice = getTotalPrice(viberId);
         //Generating Form body for obtaining token
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
