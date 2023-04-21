@@ -10,18 +10,18 @@ def index():
     # Check if payment has already been processed
     if session.get('payment_processed'):
         # Redirect user to another page or show an error message
-                return 'Link nije važeći, plaćanje je već izvršeno!'
-            response_msg = request.form.get('responseMsg')
-            if response_msg == 'Approved':
-                viberId = request.args.get('viberId')
-                viberPath = "https://sputnik-it.rs"+request.args.get('viberPath')+"/external-paying?viberId="+viberId
-                session['payment_processed'] = True
-                return render_template('sucess.html',viberPath=viberPath)
-            else:
-                viberId = request.args.get('viberId')
-                viberPath = "https://sputnik-it.rs"+request.args.get('viberPath')+"/external-failure?viberId="+viberId
-                session['payment_processed'] = True
-                return render_template('fail.html',viberPath=viberPath)
+        return 'Payment has already been processed'        
+    response_msg = request.form.get('responseMsg')
+    if response_msg == 'Approved':
+        viberId = request.args.get('viberId')
+        viberPath = "https://sputnik-it.rs"+request.args.get('viberPath')+"/external-paying?viberId="+viberId     
+        session['payment_processed'] = True
+        return render_template('sucess.html',viberPath=viberPath)
+    else:
+        viberId = request.args.get('viberId')
+        viberPath = "https://sputnik-it.rs"+request.args.get('viberPath')+"/external-failure?viberId="+viberId     
+        session['payment_processed'] = True
+        return render_template('fail.html',viberPath=viberPath)
 
 
 if __name__ == "__main__":
