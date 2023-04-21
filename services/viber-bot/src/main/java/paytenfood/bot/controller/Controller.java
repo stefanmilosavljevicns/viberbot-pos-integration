@@ -1,5 +1,6 @@
 package paytenfood.bot.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,7 +18,6 @@ import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
 import ru.multicon.viber4j.ViberBot;
 import ru.multicon.viber4j.ViberBotManager;
-import ru.multicon.viber4j.account.UserDetails;
 import ru.multicon.viber4j.incoming.Incoming;
 import ru.multicon.viber4j.incoming.IncomingImpl;
 
@@ -53,14 +53,13 @@ public class Controller {
         //
         // getting info about user
         //
-        String userName = incoming.getSenderName();
         String userId = incoming.getSenderId();
         String messageText = incoming.getMessageText();
 
         if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
             return ResponseEntity.ok().build();
-        UserDetails userDet = bot.getUserDetails(userId);
-        //Checking if this is the user first time openning if that is true we want to show him immediately welcome message with main menu.
+
+        //  Checking if this is the user first time opening Viber Bot, if that is true we want to show him immediately welcome message with main menu.
         // Incoming class will not work in this case because user did not send any message instead we are going to parse user ViberID from default Viber log
         if (StringUtils.equals(incoming.getEvent(), START_MSG_EVENT)) {
             Gson gson = new Gson();
@@ -70,41 +69,15 @@ public class Controller {
             logger.info("Showing welcome message.");
             return ResponseEntity.ok().build();
         }
-        //TODO probaj ovo da ukljucis u switch isto
-        //FIRST WE NEED TO CHECK IF USER IS AT LAST STAGE OF RESERVATION
-        else if (httpUtil.getIsPayingStatus(userId)) {
-            LocalDateTime startTime = dateUtil.parseUserInput(messageText);
-            //CHECKING IF USER INPUT IS IN CORRECT FORM DAY.MONTH/HOUR:MIN
-            if (startTime == null) {
-                bot.messageForUser(userId).postText(stringUtils.getMessageErrorTime(), keyboardUtil.getMainMenu());
-                httpUtil.changeIsPayingStatus(userId, false);
-                logger.info("User failed to enter time in right format.");
-            } else {
-                //IF FORM IS CORRECT CHECKING IF TIMESLOT IS AVAILABLE
-                Double totalMinutes = httpUtil.getTotalTime(userId);
-                LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
-                String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
-                if (checkTime.equals("Time slot is available.")) {
-                    OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
-                    httpUtil.sendOrder(sendOrderPOS, userId);
-                    bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu());
-                    httpUtil.changeIsPayingStatus(userId, false);
-                    logger.info("Finishing reservation.");
-                } else {
-                    bot.messageForUser(userId).postText(checkTime);
-                    logger.info("Time slot is not available giving user another chance to reserve.");
-                }
-            }
-
-        }
-
-
-        //If user is not in finishing phase we will go through bot menu flow
+        //Handling user input here
         else if (messageText.length() >= 3) {
-            //First we have special case, if user accepted paying online  we don't wont to leave Viber without telling user that he will be redirected to payment page
-            if (messageText.startsWith(assecoPaymentPage)) {
-                //TODO NAPRAVI TASTATURU DOK JE KORISNIK NA ASSECO STRANI DA MOZE DA SE VRATI NA PLACANJE
-            } else {
+                //This IF will trigger when user is on asseco payment page. If something happens: browser crashed, accidentaly closing browser etc... We want to handle this scenario by giving him  chance to restart payment flow.
+                if (messageText.startsWith(assecoPaymentPage)){
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.returnToPayment());
+                    logger.info("Returning user back to payment option");
+                    return ResponseEntity.ok().build();
+                }
+                //Going through Viber bot flow, using our 3 Character keywords for mapping different actions.
                 switch (messageText.substring(0, 3)) {
                     case selectCategoryFromMainMenu:
                         bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
@@ -125,7 +98,8 @@ public class Controller {
                             logger.info("Unable to show current cart.");
                         }
                         break;
-                    case startFinishProcess:
+                        //First thing that triggers after user selected FINISH RESERVATION button. First we are going to show him what items did he selected.
+                    case startReservationProcess:
                         if (httpUtil.cartChecker(userId)) {
                             StringBuilder finishMsg = new StringBuilder(stringUtils.getMessageCheckCart());
                             for (String element : httpUtil.getCartList(userId)) {
@@ -138,9 +112,10 @@ public class Controller {
                             logger.info("Unable to show current cart.");
                         }
                         break;
+                        //If the user agrees with his cart we are going to ask him to choose time.
                     case startPaymentProcess:
                         if (httpUtil.cartChecker(userId)) {
-                            bot.messageForUser(userId).postText(stringUtils.getMessagePaymentOnline(), keyboardUtil.setPaymentOption(userId));
+                            bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
                             logger.info("Asking user if he agrees with his cart.");
                         } else {
                             bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu());
@@ -149,8 +124,12 @@ public class Controller {
                         break;
                     case selectDeliveryTime:
                         bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
-                        httpUtil.changeIsPayingStatus(userId, true);
                         logger.info("User selecting time.");
+                        break;
+                    case clearCartAndFinishSession:
+                        bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
+                        httpUtil.clearCart(userId);
+                        logger.info("Session finished, clearing cart.");
                         break;
                     case removingItemFromCart:
                         int newlineIndex = messageText.indexOf('\n', 3);
@@ -166,12 +145,35 @@ public class Controller {
                     case ignoreUserInput:
                         logger.info("User clicked on text label, safely ignore this log.");
                         break;
+                        //If input string doesn't match with our 3 characters keywords, that means that user is picking time for reservation. That flow will be handled in default part of SWITCH
                     default:
-                        bot.messageForUser(userId).postText("Komanda nije pronađena", keyboardUtil.getMainMenu());
-                        logger.info("Navigating to main menu.");
+                        LocalDateTime startTime = dateUtil.parseUserInput(messageText);
+                        if(startTime != null){
+                            //IF FORM IS CORRECT CHECKING IF TIMESLOT IS AVAILABLE
+                            Double totalMinutes = httpUtil.getTotalTime(userId);
+                            LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
+                            String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
+                            //Checking time availability
+                            if (checkTime.equals("Time slot is available.")) {
+                                OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
+                                httpUtil.sendOrder(sendOrderPOS, userId);
+                                bot.messageForUser(userId).postText(stringUtils.getMessagePaymentOnline(), keyboardUtil.setPaymentOption(userId));
+                                logger.info("Finishing reservation.");
+                            }
+                            //If user missed form we will redirect him to main menu
+                            else {
+                                bot.messageForUser(userId).postText(checkTime);
+                                logger.info("Time slot is not available giving user another chance to reserve.");
+                            }
+                        }
+                        //Incorrect form giving user another chance to enter correct
+                        else{
+                            bot.messageForUser(userId).postText("Pogrešan unos vremena, pokušajte ponovo.",keyboardUtil.getMainMenu());
+                            logger.info("User failed to enter right format for time.");
+                        }
                         break;
                 }
-            }
+
         } else {
             if (!StringUtils.equals(ignoreUserInput, messageText)) {
                 bot.messageForUser(userId).postText("Komanda nije pronađena", keyboardUtil.getMainMenu());
@@ -181,21 +183,23 @@ public class Controller {
 
         return ResponseEntity.ok().build();
     }
-
-    //TODO zameni viberbot za promenljivu iz BotConstants-a
+    //This endpoint will be called by our page, it is being used for letting bot know if payment is OK or NOT
     @RequestMapping(method = POST, path = "${viber.bot-path}" + "/external-paying")
-    ResponseEntity<?> sendExternalMessage(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
+    ResponseEntity<?> sendExternalSuccess(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
-        bot.messageForUser(viberId).postText(stringUtils.getMessageSuccessReservation());
-        httpUtil.changeIsPayingStatus(viberId, true);
-        bot.messageForUser(viberId).postText(stringUtils.getMessageCheckTime());
-        logger.info("User successfully payed his bill.");
-        logger.info("User selecting time.");
+        bot.messageForUser(viberId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
+        httpUtil.clearCart(viberId);
+        logger.info("User successfully payed his bill, clearing cart.");
         return ResponseEntity.ok().build();
 
     }
 
+    @RequestMapping(method = POST, path = "${viber.bot-path}" + "/external-failure")
+    ResponseEntity<?> sendExternalFail(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {
+        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
+        bot.messageForUser(viberId).postText(failedPayment, keyboardUtil.setPaymentOption(viberId));
+        logger.info("User failed to complete online payment, trying again.");
+        return ResponseEntity.ok().build();
 
+    }
 }
-        
-

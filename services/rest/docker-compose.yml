@@ -6,6 +6,7 @@ services:
       container_name: rest
       environment:
         - "spring.data.mongodb.uri=mongodb://root:test@food-mongo:27055/test?authSource=admin&authMechanism=SCRAM-SHA-1"
+        - "rest.path=/api/v1"
       ports:
         - "9097:9097"
       stdin_open: true

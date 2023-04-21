@@ -18,7 +18,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("${rest.path}")
 public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
