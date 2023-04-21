@@ -21,7 +21,7 @@ services:
         -  'text.no-button=<b><font color="#494E67">NE</b>'
         -  'text.standard-button=<b><font color="#494E67">%s</b>'
         -  'text.item-description=<font color="#494E67"><b>%s</b><br><b>OPIS</b>: %s. <br><b>CENA</b>: %s RSD'
-        -  'text.add-cart-item=<br><br><br><font color="#494E67"><b>REZERVI\u0160I</b></font>'
+        -  'text.add-cart-item=<br><br><br><font color="#494E67"><b>REZERVIŠI</b></font>'
         -  'text.price-format=<b><font color="#494E67">%s RSD</b>'
         -  "text.remove-cart-item=<br><br><font color=\"#494E67\"><b>UKLONI</b></font>"
         -  "icon.cart=https://sputnik-it.rs/images/Izabrane usluge frizer.png"
@@ -41,7 +41,6 @@ services:
         -  "asseco.merchant-user=api.test@payten.com"
         -  "asseco.merchant-password=Hephr=R4SKNycaLf"
         -  "server.port=9945"
-        -  'LANG=C.UTF-8'
       depends_on:
         - frizerskisalon-rest
       networks:
