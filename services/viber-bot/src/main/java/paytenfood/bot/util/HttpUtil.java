@@ -155,7 +155,7 @@ public class HttpUtil {
         map.add("SESSIONTYPE", "PAYMENTSESSION");
         map.add("MERCHANTPAYMENTID", LocalDateTime.now() + "_" + viberId);
         map.add("AMOUNT", totalPrice);
-        map.add("CURRENCY", "RSD");
+        map.add("CURRENCY", "TRY");
         map.add("RETURNURL", redirection + "?viberId=" + viberId + "&viberPath=" + stringUtils.getBotPath());
         map.add("ORDER", orderJson);
         RestTemplate restTemplate = new RestTemplate();
