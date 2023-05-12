@@ -28,6 +28,13 @@ public class OrderController {
         return ResponseEntity.ok(orderRepository.findAll());
     }
 
+    @GetMapping("/getAllActiveDates")
+    public ResponseEntity<List<Order>> getOrdersWithin24Hours() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime twentyFourHoursAgo = currentTime.minusHours(24);
+        return (ResponseEntity<List<Order>>) orderRepository.findByStartTimeGreaterThan(twentyFourHoursAgo);
+
+    }
     @PostMapping("/addOrder")
     public ResponseEntity<Order> save(@RequestBody Order order) {
         return ResponseEntity.ok(orderRepository.save(order));
