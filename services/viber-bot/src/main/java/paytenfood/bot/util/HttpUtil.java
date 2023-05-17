@@ -102,7 +102,7 @@ public class HttpUtil {
 
         logger.info(String.format(httpLogFormat, addItemToCart, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
-    //REMOVING ITEM FROM CART
+    //We are using this method to remove item from user cart
     public void removeServiceFromCart(String viberId, MenuItem itemName) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + removeItemFromCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));

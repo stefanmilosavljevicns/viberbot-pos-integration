@@ -8,5 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 
     public interface OrderRepository extends MongoRepository<Order, String> {
         List<Order> findByStartTimeLessThanAndEndTimeGreaterThan(LocalDateTime end, LocalDateTime start);
+        List<Order> findByStartTimeGreaterThan(LocalDateTime twentyFourHoursAgo);
+
 
     }

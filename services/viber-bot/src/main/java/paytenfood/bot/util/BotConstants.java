@@ -27,6 +27,7 @@ public class BotConstants {
     public static final String addItemToCart = "/addItemToCart";
     public static final String removeItemFromCart = "/removeItemFromCart";
     public static final String getCart = "/getCart";
+    public static final String getOrdersWithin24Hourse = "/getAllActiveDates";
     public static final String checkIfCartIsEmpty = "/checkIfCartIsEmpty";
     public static final String checkPayingStatus = "/checkPayingStatus";
     public static final String changePayingStatus = "/changePayingStatus";
