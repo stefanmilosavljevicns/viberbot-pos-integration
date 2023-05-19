@@ -6,11 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import paytenfood.bot.model.MenuItem;
 import paytenfood.bot.model.OrderPOS;
 import paytenfood.bot.util.DateUtil;
@@ -199,6 +197,17 @@ public class Controller {
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         bot.messageForUser(viberId).postText(failedPayment, keyboardUtil.setPaymentOption(viberId));
         logger.info("User failed to complete online payment, trying again.");
+        return ResponseEntity.ok().build();
+
+    }
+
+    @PutMapping("${viber.bot-path}" + "/updateStartTime")
+    ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {
+        LocalDateTime startTime = dateUtil.parseUserInput(start);
+        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
+        httpUtil.updateStartTime(viberId,startTime);
+        bot.messageForUser(viberId).postText("Vas zakazani termin je promenjen, vreme novog termina je: " + start, keyboardUtil.getMainMenu());
+        logger.info("We are sending user information that merchant changed his start time");
         return ResponseEntity.ok().build();
 
     }

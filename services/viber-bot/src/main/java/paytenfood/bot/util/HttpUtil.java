@@ -246,6 +246,15 @@ public class HttpUtil {
         ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
         logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
     }
+    public void updateStartTime(String viberId,LocalDateTime startDate) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) + "?start=" + URLEncoder.encode(String.valueOf(startDate)));
+        HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
+        ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
+        logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
+    }
     public MenuItem getItemByName(String itemName) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<MenuItem> responseEntity = restTemplate.getForEntity(stringUtils.getRestAdress()+getItemByName.concat(itemName), MenuItem.class);
