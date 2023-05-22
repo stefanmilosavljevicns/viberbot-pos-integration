@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -205,7 +206,9 @@ public class Controller {
     ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {        
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         httpUtil.updateStartTime(viberId,start);
-        bot.messageForUser(viberId).postText("Vas zakazani termin je promenjen, vreme novog termina je: " + start, keyboardUtil.getMainMenu());
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        LocalDateTime startDate = LocalDateTime.parse(start, formatter);
+        bot.messageForUser(viberId).postText("Vaš zakazani termin je promenjen, vreme novog termina je: " + startDate.getDayOfMonth()+"."+startDate.getMonthValue() + startDate.getHour()+":"+startDate.getMinute(), keyboardUtil.getMainMenu());
         logger.info("We are sending user information that merchant changed his start time");
         return ResponseEntity.ok().build();
 
