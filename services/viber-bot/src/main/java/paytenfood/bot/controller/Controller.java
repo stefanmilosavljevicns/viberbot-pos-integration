@@ -208,7 +208,7 @@ public class Controller {
         httpUtil.updateStartTime(viberId,start);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         LocalDateTime startDate = LocalDateTime.parse(start, formatter);
-        bot.messageForUser(viberId).postText("Vaš zakazani termin je promenjen, vreme novog termina je: " + startDate.getDayOfMonth()+"."+startDate.getMonthValue() + startDate.getHour()+":"+startDate.getMinute(), keyboardUtil.getMainMenu());
+        bot.messageForUser(viberId).postText("Vaš zakazani termin je promenjen, vreme novog termina je: " + startDate.getMonthValue() + "." + startDate.getDayOfMonth()+" u "+ startDate.getHour()+":"+startDate.getMinute(), keyboardUtil.getMainMenu());
         logger.info("We are sending user information that merchant changed his start time");
         return ResponseEntity.ok().build();
 
