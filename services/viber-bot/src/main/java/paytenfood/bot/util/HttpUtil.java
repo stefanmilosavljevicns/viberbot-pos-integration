@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,6 +24,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static paytenfood.bot.util.BotConstants.*;
@@ -264,7 +266,14 @@ public class HttpUtil {
         MenuItem model = responseEntity.getBody();
         return model;
     }
-
+    public ArrayList<OrderPOS> get24HOrderPOS () {
+        RestTemplate restTemplate = new RestTemplate();
+        String endpointUrl = stringUtils.getRestAdress() + getOrdersWithin24Hourse;      
+        ParameterizedTypeReference<ArrayList<OrderPOS>> responseType = new ParameterizedTypeReference<ArrayList<OrderPOS>>() {};                
+        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(endpointUrl, HttpMethod.GET, null, responseType);                
+        ArrayList<OrderPOS> orderList = responseEntity.getBody();
+        return orderList;
+    }
 
 }
 

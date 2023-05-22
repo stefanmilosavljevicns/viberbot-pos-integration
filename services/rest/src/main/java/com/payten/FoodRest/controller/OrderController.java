@@ -31,10 +31,14 @@ public class OrderController {
     }
 
     @GetMapping("/getAllActiveDates")
-    public ResponseEntity<List<Order>> getOrdersWithin24Hours() {
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime twentyFourHoursAgo = currentTime.minusHours(24);
-        return (ResponseEntity<List<Order>>) orderRepository.findByStartTimeGreaterThan(twentyFourHoursAgo);
+    public ResponseEntity<List<Order>> getOrdersWithin24Hours() {        
+        LocalDateTime startTime = LocalDateTime.now().plusDays(1)
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
+        LocalDateTime endTime = startTime.plusDays(1);
+        return (ResponseEntity<List<Order>>) orderRepository.findUsersToRemindForReservation(startTime,endTime);
 
     }
     @PostMapping("/addOrder")
