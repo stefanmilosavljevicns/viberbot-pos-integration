@@ -206,15 +206,6 @@ public class HttpUtil {
 
     }
 
-    public void changeIsPayingStatus(String viberId, Boolean payingStatus) throws URISyntaxException, UnsupportedEncodingException {
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + changePayingStatus + "?payingStatus=" + URLEncoder.encode(String.valueOf(payingStatus), StandardCharsets.UTF_8) + "&viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
-        logger.info(String.format(httpLogFormat, changePayingStatus, responseEntity.getStatusCode(), responseEntity.getBody()));
-    }
 
     //In this endpoint we are sending order to POS and clearing cart for customer
     public void sendOrder(OrderPOS orderPOS, String viberId) throws URISyntaxException {
@@ -251,10 +242,20 @@ public class HttpUtil {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        HttpEntity<String> requestEntity = new HttpEntity<>(startDate.toString(), headers);
+        URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) +"?startDate="+startDate.toString());
+        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);        
         ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
         logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
+    }
+    
+    public void changeIsPayingStatus(String viberId, Boolean payingStatus) throws URISyntaxException, UnsupportedEncodingException {
+        RestTemplate restTemplate = new RestTemplate();
+        URI uri = new URI(stringUtils.getRestAdress() + changePayingStatus + "?payingStatus=" + URLEncoder.encode(String.valueOf(payingStatus), StandardCharsets.UTF_8) + "&viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
+        logger.info(String.format(httpLogFormat, changePayingStatus, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
     public MenuItem getItemByName(String itemName) {
         RestTemplate restTemplate = new RestTemplate();
