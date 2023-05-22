@@ -89,19 +89,7 @@ public class HttpUtil {
         return status;
     }
 
-    //Inserting selected service to DB in case User doesn't have field in DB here we create it.
-    public void addServiceToCart(String viberId, MenuItem itemName) throws URISyntaxException, UnsupportedEncodingException {
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<MenuItem> requestEntity = new HttpEntity<>(itemName, headers);
-
-        ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, MenuItem.class);
-
-        logger.info(String.format(httpLogFormat, addItemToCart, responseEntity.getStatusCode(), responseEntity.getBody()));
-    }
     //We are using this method to remove item from user cart
     public void removeServiceFromCart(String viberId, MenuItem itemName) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
@@ -246,13 +234,26 @@ public class HttpUtil {
         ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
         logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
     }
+        //Inserting selected service to DB in case User doesn't have field in DB here we create it.
+        public void addServiceToCart(String viberId, MenuItem itemName) throws URISyntaxException, UnsupportedEncodingException {
+            RestTemplate restTemplate = new RestTemplate();
+            URI uri = new URI(stringUtils.getRestAdress() + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+    
+            HttpEntity<MenuItem> requestEntity = new HttpEntity<>(itemName, headers);
+    
+            ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, MenuItem.class);
+    
+            logger.info(String.format(httpLogFormat, addItemToCart, responseEntity.getStatusCode(), responseEntity.getBody()));
+        }
     public void updateStartTime(String viberId,LocalDateTime startDate) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) + "?start=" + startDate);
-        HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
-        ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
+        URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        HttpEntity<String> requestEntity = new HttpEntity<>(startDate.toString(), headers);
+        ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
         logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
     }
     public MenuItem getItemByName(String itemName) {

@@ -124,7 +124,7 @@ public class OrderController {
     //Update-ujemo termin tako sto unesemo viberId od korisnikovog termina koji zelimo da promenimo. Na osnovu viberId-a dobijamo instancu Order objekta. U njemu prvo uzimamo ukupnu duzinu termina (od startTime-a do endTime-a) zatim prosledjujemo
     // iz query parametra novi startTime a endTime dobijamo uvecavanjem novog starTtime-a za ukupnu duzinu termina koju smo prethodno izracunali (promenljiva reservationDuration)
     @PutMapping("/updateStartTime")
-    public ResponseEntity<Order> updateStartTime(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+    public ResponseEntity<Order> updateStartTime(@RequestBody LocalDateTime start,
                                                  @RequestParam("viberId") String viberId) {
         Optional<Order> existingOrder = Optional.ofNullable(orderRepository.findByViberId(viberId));
         if (existingOrder.isEmpty()) {
