@@ -250,7 +250,7 @@ public class HttpUtil {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) + "?start=" + URLEncoder.encode(String.valueOf(startDate)));
+        URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) + "?start=" + startDate);
         HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
         ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
         logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
