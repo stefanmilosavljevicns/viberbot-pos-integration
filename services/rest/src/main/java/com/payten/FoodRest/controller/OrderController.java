@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,16 +125,18 @@ public class OrderController {
     //Update-ujemo termin tako sto unesemo viberId od korisnikovog termina koji zelimo da promenimo. Na osnovu viberId-a dobijamo instancu Order objekta. U njemu prvo uzimamo ukupnu duzinu termina (od startTime-a do endTime-a) zatim prosledjujemo
     // iz query parametra novi startTime a endTime dobijamo uvecavanjem novog starTtime-a za ukupnu duzinu termina koju smo prethodno izracunali (promenljiva reservationDuration)
     @PutMapping("/updateStartTime")
-    public ResponseEntity<Order> updateStartTime(@RequestParam("startDate") LocalDateTime start,
+    public ResponseEntity<Order> updateStartTime(@RequestParam("startDate") String start,
                                                  @RequestParam("viberId") String viberId) {
         Optional<Order> existingOrder = Optional.ofNullable(orderRepository.findByViberId(viberId));
         if (existingOrder.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        LocalDateTime startDate = LocalDateTime.parse(start, formatter);
         Duration reservationDuration = Duration.between(existingOrder.get().getStartTime(), existingOrder.get().getEndTime());
         Order updatedOrder = existingOrder.get();
-        updatedOrder.setStartTime(start);
-        updatedOrder.setEndTime(start.plusMinutes(reservationDuration.toMinutes()));
+        updatedOrder.setStartTime(startDate);
+        updatedOrder.setEndTime(startDate.plusMinutes(reservationDuration.toMinutes()));
         orderRepository.save(updatedOrder);
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }

@@ -202,10 +202,10 @@ public class Controller {
     }
 
     @PutMapping("${viber.bot-path}" + "/updateStartTime")
-    ResponseEntity<?> updateStartTime(@RequestParam("startDate") LocalDateTime start, @RequestParam("viberId") String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {        
+    ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {        
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         httpUtil.updateStartTime(viberId,start);
-        bot.messageForUser(viberId).postText("Vas zakazani termin je promenjen, vreme novog termina je: " + start.getHour() +":"+start.getMinute(), keyboardUtil.getMainMenu());
+        bot.messageForUser(viberId).postText("Vas zakazani termin je promenjen, vreme novog termina je: " + start, keyboardUtil.getMainMenu());
         logger.info("We are sending user information that merchant changed his start time");
         return ResponseEntity.ok().build();
 
