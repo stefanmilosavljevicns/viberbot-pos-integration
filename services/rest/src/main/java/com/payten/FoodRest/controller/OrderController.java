@@ -127,12 +127,13 @@ public class OrderController {
     @PutMapping("/updateStartTime")
     public ResponseEntity<Order> updateStartTime(@RequestParam("startDate") String start,
                                                  @RequestParam("viberId") String viberId) {
-        Optional<Order> existingOrder = Optional.ofNullable(orderRepository.findByViberId(viberId));
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        LocalDateTime startDate = LocalDateTime.parse(start, formatter);
+        Optional<Order> existingOrder = Optional.ofNullable(orderRepository.findByViberId(viberId,startDate));
         if (existingOrder.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        LocalDateTime startDate = LocalDateTime.parse(start, formatter);
+
         Duration reservationDuration = Duration.between(existingOrder.get().getStartTime(), existingOrder.get().getEndTime());
         Order updatedOrder = existingOrder.get();
         updatedOrder.setStartTime(startDate);
