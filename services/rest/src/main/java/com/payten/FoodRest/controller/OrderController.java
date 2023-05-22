@@ -38,7 +38,8 @@ public class OrderController {
                 .withSecond(0)
                 .withNano(0);
         LocalDateTime endTime = startTime.plusDays(1);
-        return (ResponseEntity<List<Order>>) orderRepository.findUsersToRemindForReservation(startTime,endTime);
+        List<Order> orders = orderRepository.findUsersToRemindForReservation(startTime, endTime);
+        return ResponseEntity.ok(orders);
 
     }
     @PostMapping("/addOrder")
