@@ -30,8 +30,9 @@ public class OrderReminderScheduler {
     private DateUtil dateUtil;
     @Autowired
     private KeyboardUtil keyboardUtil;
-    @Scheduled(cron = "0 */2 * * * ?") // Trigger at 2 pm every day
+    @Scheduled(cron = "0 */2 * * * ?") // Trigger every 2 minutes
     public void remindUserForIncomingReservation() {
+        logger.info("RADIM");
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         ArrayList<OrderPOS> activeUsers = new ArrayList<>();
         activeUsers = httpUtil.get24HOrderPOS();
