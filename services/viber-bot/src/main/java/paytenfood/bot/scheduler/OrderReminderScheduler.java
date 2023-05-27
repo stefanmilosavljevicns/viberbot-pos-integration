@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import paytenfood.bot.model.OrderPOS;
-import paytenfood.bot.util.DateUtil;
 import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
 import ru.multicon.viber4j.ViberBot;
@@ -24,9 +23,8 @@ public class OrderReminderScheduler {
     private HttpUtil httpUtil;
     @Autowired
     private KeyboardUtil keyboardUtil;
-    @Scheduled(cron = "0 */2 * * * ?") // Trigger every 2 minutes
-    public void remindUserForIncomingReservation() {
-        logger.info("RADIM");
+    @Scheduled(cron = "0 0 14 * * *") // Trigger at 2 pm every day
+    public void remindUserForIncomingReservation() {        
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         ArrayList<OrderPOS> activeUsers = new ArrayList<>();
         activeUsers = httpUtil.get24HOrderPOS();
