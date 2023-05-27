@@ -6,11 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import paytenfood.bot.model.OrderPOS;
 import paytenfood.bot.util.DateUtil;
 import paytenfood.bot.util.HttpUtil;
@@ -26,8 +22,6 @@ public class OrderReminderScheduler {
     public paytenfood.bot.util.StringUtils stringUtils;
     @Autowired
     private HttpUtil httpUtil;
-    @Autowired
-    private DateUtil dateUtil;
     @Autowired
     private KeyboardUtil keyboardUtil;
     @Scheduled(cron = "0 */2 * * * ?") // Trigger every 2 minutes
