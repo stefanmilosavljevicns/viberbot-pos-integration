@@ -124,8 +124,6 @@ public class Controller {
                         }
                         break;
                     case selectDayReservation:
-                        LocalDate.parse(messageText.substring(3));
-                        logger.info(messageText.substring(3));
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                         LocalDate localDate = LocalDate.parse(messageText.substring(3), formatter);
                         List<LocalDateTime> allSlots = httpUtil.checkFreeTimeSlots(localDate,httpUtil.getTotalTime(userId).intValue());
