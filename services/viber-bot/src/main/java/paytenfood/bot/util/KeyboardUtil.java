@@ -82,6 +82,7 @@ public class KeyboardUtil {
                             .setTextSize(ViberButton.TextSize.MEDIUM)
                             .setTextHAlign(ViberButton.TextAlign.LEFT));
         }
+        logger.info("TEST");
         return confirmationKeyboard;
     }
     public ViberKeyboard setYesNo(){
