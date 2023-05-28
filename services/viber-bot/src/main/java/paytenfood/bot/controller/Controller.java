@@ -134,8 +134,7 @@ public class Controller {
                         logger.info("User selecting time.");
                         break;
                     case sendOrderToPOS:
-                            LocalDateTime startTime = dateUtil.parseUserInput(messageText.substring(3));
-                            logger.info(startTime.toString());
+                            LocalDateTime startTime = LocalDateTime.parse(messageText.substring(3));
                             //IF FORM IS CORRECT CHECKING IF TIMESLOT IS AVAILABLE
                             Double totalMinutes = httpUtil.getTotalTime(userId);
                             LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
