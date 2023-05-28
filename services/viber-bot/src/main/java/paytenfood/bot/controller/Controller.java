@@ -115,7 +115,7 @@ public class Controller {
                     case startPaymentProcess:
                     //OVDE MENJAJ BIRANJE VREMENA
                         if (httpUtil.cartChecker(userId)) {
-                            bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
+                            bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime(), keyboardUtil.setDayPicker());
                             logger.info("Asking user if he agrees with his cart.");
                         } else {
                             bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu());

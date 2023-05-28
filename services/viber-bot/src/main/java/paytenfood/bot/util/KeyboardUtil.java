@@ -73,7 +73,7 @@ public class KeyboardUtil {
         dayPicker.setInputFieldState("hidden");
         dayPicker.setType("keyboard");
         for (LocalDateTime availableDay : availableDays) {
-            dayPicker.addButton(new ViberButton(String.format(selectDayReservation + "%s", availableDay.toString()))
+            dayPicker.addButton(new ViberButton(ignoreUserInput)
                     .setBgColor(whiteColor)
                     .setText(String.format(stringUtils.getButtonStandard(), dateUtil.translateDayValue(availableDay.getDayOfWeek().getValue())))
                     .setColumns(3)
