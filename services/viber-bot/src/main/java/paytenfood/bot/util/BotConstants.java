@@ -8,6 +8,7 @@ public class BotConstants {
     public static final String startReservationProcess = "FNH";
     public static final String clearCartAndFinishSession = "CLR";
     public static final String startPaymentProcess = "PYT";
+    public static final String selectDayReservation = "DAY";
     public static final String selectDeliveryTime = "TIM";
     public static final String selectCategoryFromMainMenu = "LST";
     public static final String navigateToMainMenu = "RTS";

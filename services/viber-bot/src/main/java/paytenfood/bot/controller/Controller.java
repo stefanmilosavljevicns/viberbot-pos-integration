@@ -113,8 +113,9 @@ public class Controller {
                         break;
                         //If the user agrees with his cart we are going to ask him to choose time.
                     case startPaymentProcess:
+                    //OVDE MENJAJ BIRANJE VREMENA
                         if (httpUtil.cartChecker(userId)) {
-                            bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
+                            bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime(), keyboardUtil.setDayPicker());
                             logger.info("Asking user if he agrees with his cart.");
                         } else {
                             bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu());

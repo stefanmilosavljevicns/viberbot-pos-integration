@@ -11,7 +11,11 @@ import ru.multicon.viber4j.keyboard.ViberKeyboard;
 
 
 import java.net.URISyntaxException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static paytenfood.bot.util.BotConstants.*;
 
@@ -24,6 +28,8 @@ public class KeyboardUtil {
     private ViberKeyboard mainMenu;
     @Autowired
     private StringUtils stringUtils;
+    @Autowired
+    private DateUtil dateUtil;
     private ViberKeyboard confirmationKeyboard;
 
     public ViberKeyboard getMainMenu() {
@@ -61,7 +67,23 @@ public class KeyboardUtil {
                     .setSilent(true));
         return listMenu;
     }
-
+    public ViberKeyboard setDayPicker(){
+        List<LocalDateTime> availableDays = dateUtil.getWorkingWeekDates();
+        confirmationKeyboard = new ViberKeyboard();
+        confirmationKeyboard.setInputFieldState("hidden");
+        confirmationKeyboard.setType("keyboard");
+        for (int i = 0; i < availableDays.size() - 1; i++) {
+            confirmationKeyboard.addButton(new ViberButton(String.format(selectDayReservation+"%s", availableDays.get(i).toString()))
+                            .setBgColor(whiteColor)
+                            .setText(String.format(stringUtils.getButtonStandard(), dateUtil.translateDayValue(availableDays.get(i).getDayOfWeek().getValue())))
+                            .setColumns(3)
+                            .setRows(3)
+                            .setSilent(true)
+                            .setTextSize(ViberButton.TextSize.MEDIUM)
+                            .setTextHAlign(ViberButton.TextAlign.LEFT));
+        }
+        return confirmationKeyboard;
+    }
     public ViberKeyboard setYesNo(){
         confirmationKeyboard = new ViberKeyboard();
         confirmationKeyboard.setInputFieldState("hidden");
