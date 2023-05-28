@@ -22,10 +22,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static paytenfood.bot.util.BotConstants.*;
 
@@ -197,7 +196,18 @@ public class HttpUtil {
         return time;
 
     }
-
+    public List<LocalDateTime> checkFreeTimeSlots(LocalDate time, int totalTime) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+        URI uri = new URI(stringUtils.getRestAdress() + checkTimeSlotAvailability + "?localDate=" + URLEncoder.encode(String.valueOf(time), StandardCharsets.UTF_8) + "&totalMinutes=" + URLEncoder.encode(String.valueOf(totalTime), StandardCharsets.UTF_8));
+        ResponseEntity<LocalDateTime[]> response = restTemplate.getForEntity(uri, LocalDateTime[].class);
+        LocalDateTime[] dateTimeArray = response.getBody();
+        List<LocalDateTime> freeTimeSlots = new ArrayList<>();
+        if (dateTimeArray != null) {
+            Collections.addAll(freeTimeSlots, dateTimeArray);
+        }
+        logger.info(String.format(httpLogFormat, checkTimeSlotAvailability, response.getStatusCode(), Arrays.toString(response.getBody())));
+        return freeTimeSlots;
+    }
     public Double getTotalPrice(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + getTotalPrice + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));

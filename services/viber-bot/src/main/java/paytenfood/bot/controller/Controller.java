@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import paytenfood.bot.model.MenuItem;
@@ -22,8 +21,10 @@ import ru.multicon.viber4j.incoming.IncomingImpl;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -121,6 +122,11 @@ public class Controller {
                             bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu());
                             logger.info("Unable to show current cart.");
                         }
+                        break;
+                    case selectDayReservation:
+                        List<LocalDateTime> allSlots = httpUtil.checkFreeTimeSlots(LocalDate.parse(messageText.substring(3)),httpUtil.getTotalTime(userId).intValue());
+                        bot.messageForUser(userId).postText("Izaberite termin kako bi završili rezervaciju",keyboardUtil.setHourPicker(allSlots));
+                        logger.info("Showing user: " + userId +"list of free time slots.");
                         break;
                     case selectDeliveryTime:
                         bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());

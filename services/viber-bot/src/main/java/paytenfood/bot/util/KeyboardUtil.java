@@ -103,6 +103,37 @@ public class KeyboardUtil {
         logger.info(availableDays.toString());
         return dayPicker;
     }
+    public ViberKeyboard setHourPicker(List<LocalDateTime> freeTimeSlots){
+        ViberKeyboard hourPicker = new ViberKeyboard();
+        hourPicker.setInputFieldState("hidden");
+        boolean ticker = true;
+        hourPicker.setType("keyboard");
+        for (LocalDateTime availableSlot : freeTimeSlots) {
+            ViberButton viberButton = new ViberButton((String.format(selectDayReservation + "%s", availableSlot)))
+                    .setText(String.format(stringUtils.getButtonStandard(), availableSlot.getHour() +":"+availableSlot.getMinute()))
+                    .setColumns(24)
+                    .setRows(1)
+                    .setSilent(true)
+                    .setTextSize(ViberButton.TextSize.MEDIUM)
+                    .setTextHAlign(ViberButton.TextAlign.MIDDLE);
+            if(ticker){
+                viberButton.setBgColor(stringUtils.getPrimarilyColor());
+                ticker = false;
+            }
+            else{
+                viberButton.setBgColor(stringUtils.getSecondarilyColor());
+                ticker = true;
+            }
+            hourPicker.addButton(viberButton);
+
+        }
+        hourPicker.addButton(new ViberButton(navigateToMainMenu)
+                .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setSilent(true)
+                .setBgColor(stringUtils.getPrimarilyColor()));
+        return hourPicker;
+    }
     public ViberKeyboard setYesNo(){
         confirmationKeyboard = new ViberKeyboard();
         confirmationKeyboard.setInputFieldState("hidden");

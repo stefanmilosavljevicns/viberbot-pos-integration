@@ -39,6 +39,7 @@ public class BotConstants {
     public static final String clearCart = "/clearCart";
     public static final String updateStartTime = "/updateStartTime";
     public static final String checkTimeSlotAvailability = "/checkTimeSlotAvailability";
+    public static final String checkFreeTimeSlots = "/checkFreeTimeSlots";
     public static final String addOrder = "/addOrder";
     public static final String assecoOrderConverter = "/assecoOrderConverter";
     public static final String assecoPayingOnline = "https://entegrasyon.asseco-see.com.tr/msu/api/v2";
