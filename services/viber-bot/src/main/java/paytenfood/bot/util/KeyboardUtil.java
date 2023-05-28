@@ -41,16 +41,16 @@ public class KeyboardUtil {
         ViberKeyboard listMenu = new ViberKeyboard();
         listMenu.setInputFieldState("hidden");
         listMenu.setType("keyboard");
-        for (int i = 0; i < menuItems.size(); i++) {
+        for (MenuItem menuItem : menuItems) {
             listMenu.addButton(new ViberButton(ignoreUserInput)
-                    .setBgColor(whiteColor)
-                    .setText(String.format(stringUtils.getButtonDescription(), menuItems.get(i).getName(), menuItems.get(i).getDescription(), menuItems.get(i).getPrice()))
-                    .setColumns(4)
-                    .setRows(2)
-                    .setSilent(true)
-                    .setTextSize(ViberButton.TextSize.MEDIUM)
-                    .setTextHAlign(ViberButton.TextAlign.LEFT))
-                    .addButton(new ViberButton(String.format(addingItemToCart+"%s", menuItems.get(i).getName()))
+                            .setBgColor(whiteColor)
+                            .setText(String.format(stringUtils.getButtonDescription(), menuItem.getName(), menuItem.getDescription(), menuItem.getPrice()))
+                            .setColumns(4)
+                            .setRows(2)
+                            .setSilent(true)
+                            .setTextSize(ViberButton.TextSize.MEDIUM)
+                            .setTextHAlign(ViberButton.TextAlign.LEFT))
+                    .addButton(new ViberButton(String.format(addingItemToCart + "%s", menuItem.getName()))
                             .setImage(stringUtils.getIconAddItem())
                             .setText(stringUtils.getButtonAddCartItem())
                             .setSilent(true)
@@ -69,21 +69,21 @@ public class KeyboardUtil {
     }
     public ViberKeyboard setDayPicker(){
         List<LocalDateTime> availableDays = dateUtil.getWorkingWeekDates();
-        confirmationKeyboard = new ViberKeyboard();
-        confirmationKeyboard.setInputFieldState("hidden");
-        confirmationKeyboard.setType("keyboard");
-        for (int i = 0; i < availableDays.size() - 1; i++) {
-            confirmationKeyboard.addButton(new ViberButton(String.format(selectDayReservation+"%s", availableDays.get(i).toString()))
-                            .setBgColor(whiteColor)
-                            .setText(String.format(stringUtils.getButtonStandard(), dateUtil.translateDayValue(availableDays.get(i).getDayOfWeek().getValue())))
-                            .setColumns(3)
-                            .setRows(3)
-                            .setSilent(true)
-                            .setTextSize(ViberButton.TextSize.MEDIUM)
-                            .setTextHAlign(ViberButton.TextAlign.LEFT));
+        ViberKeyboard dayPicker = new ViberKeyboard();
+        dayPicker.setInputFieldState("hidden");
+        dayPicker.setType("keyboard");
+        for (LocalDateTime availableDay : availableDays) {
+            dayPicker.addButton(new ViberButton(String.format(selectDayReservation + "%s", availableDay.toString()))
+                    .setBgColor(whiteColor)
+                    .setText(String.format(stringUtils.getButtonStandard(), dateUtil.translateDayValue(availableDay.getDayOfWeek().getValue())))
+                    .setColumns(3)
+                    .setRows(3)
+                    .setSilent(true)
+                    .setTextSize(ViberButton.TextSize.MEDIUM)
+                    .setTextHAlign(ViberButton.TextAlign.LEFT));
         }
-        logger.info("TEST");
-        return confirmationKeyboard;
+        logger.info(availableDays.toString());
+        return dayPicker;
     }
     public ViberKeyboard setYesNo(){
         confirmationKeyboard = new ViberKeyboard();
