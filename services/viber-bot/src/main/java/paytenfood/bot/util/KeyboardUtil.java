@@ -71,15 +71,25 @@ public class KeyboardUtil {
         List<LocalDateTime> availableDays = dateUtil.getWorkingWeekDates();
         ViberKeyboard dayPicker = new ViberKeyboard();
         dayPicker.setInputFieldState("hidden");
+        boolean ticker = true;
         dayPicker.setType("keyboard");
         for (LocalDateTime availableDay : availableDays) {
-            dayPicker.addButton(new ViberButton(String.format(selectDayReservation + "%s", availableDay.toString()))
-                    .setText(String.format(dateUtil.translateDayValue(availableDay.getDayOfWeek().getValue())))
+            ViberButton viberButton = new ViberButton((String.format(selectDayReservation + "%s", availableDay.toString())))
+                    .setText(String.format(stringUtils.getButtonStandard(), dateUtil.translateDayValue(availableDay.getDayOfWeek().getValue()) + " (" + availableDay.getDayOfMonth() + "." + availableDay.getMonthValue() + ")"))
                     .setColumns(6)
                     .setRows(1)
                     .setSilent(true)
                     .setTextSize(ViberButton.TextSize.MEDIUM)
-                    .setTextHAlign(ViberButton.TextAlign.LEFT));
+                    .setTextHAlign(ViberButton.TextAlign.MIDDLE);
+            if(ticker){
+                viberButton.setBgColor(stringUtils.getPrimarilyColor());
+                ticker = false;
+            }
+            else{
+                viberButton.setBgColor(stringUtils.getSecondarilyColor());
+                ticker = true;
+            }
+            dayPicker.addButton(viberButton);
         }
         logger.info(availableDays.toString());
         return dayPicker;
