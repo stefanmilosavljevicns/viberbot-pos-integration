@@ -124,7 +124,10 @@ public class Controller {
                         }
                         break;
                     case selectDayReservation:
-                        List<LocalDateTime> allSlots = httpUtil.checkFreeTimeSlots(LocalDate.parse(messageText.substring(3)),httpUtil.getTotalTime(userId).intValue());
+                        LocalDate.parse(messageText.substring(3));
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                        LocalDate localDate = LocalDate.parse(messageText.substring(3), formatter);
+                        List<LocalDateTime> allSlots = httpUtil.checkFreeTimeSlots(localDate,httpUtil.getTotalTime(userId).intValue());
                         bot.messageForUser(userId).postText("Izaberite termin kako bi završili rezervaciju",keyboardUtil.setHourPicker(allSlots));
                         logger.info("Showing user: " + userId +"list of free time slots.");
                         break;
