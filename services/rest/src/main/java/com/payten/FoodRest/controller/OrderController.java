@@ -51,7 +51,7 @@ public class OrderController {
     }
     @GetMapping("/checkFreeTimeSlots")
     public List<LocalDateTime> getDateTimes(
-            @RequestParam("localDate") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate localDate,
+            @RequestParam("localDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate,
             @RequestParam("totalMinutes") int totalMinutes
     ) {
         LocalTime startTime = LocalTime.of(7, 0);  // 7am
