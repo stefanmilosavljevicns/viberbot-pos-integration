@@ -109,7 +109,7 @@ public class KeyboardUtil {
         boolean ticker = true;
         hourPicker.setType("keyboard");
         for (LocalDateTime availableSlot : freeTimeSlots) {
-            ViberButton viberButton = new ViberButton((String.format(selectDayReservation + "%s", availableSlot)))
+            ViberButton viberButton = new ViberButton((String.format(sendOrderToPOS + "%s", availableSlot)))
                     .setText(String.format(stringUtils.getButtonStandard(), availableSlot.getHour() +":"+availableSlot.getMinute()))
                     .setColumns(6)
                     .setRows(1)

@@ -15,6 +15,7 @@ public class BotConstants {
     public static final String ignoreUserInput = "IGR";
     public static final String addingItemToCart = "ADD";
     public static final String removingItemFromCart = "RMV";
+    public static final String sendOrderToPOS = "POS";
     //LOG FORMAT
     public static final String httpLogFormat = "||Calling endpoint: %s ||Response status: %s ||Response body: %s";
 

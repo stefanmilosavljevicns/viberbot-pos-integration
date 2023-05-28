@@ -178,15 +178,6 @@ public class HttpUtil {
         return responseEntity.getBody();
     }
 
-    public Boolean getIsPayingStatus(String viberId) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + checkPayingStatus + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
-        logger.info(String.format(httpLogFormat, checkPayingStatus, responseEntity.getStatusCode(), responseEntity.getBody()));
-        Boolean status = Boolean.valueOf(responseEntity.getBody());
-        return status;
-    }
-
     public Double getTotalTime(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + getTotalTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
