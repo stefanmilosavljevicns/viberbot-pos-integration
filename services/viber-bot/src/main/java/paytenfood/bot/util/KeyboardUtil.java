@@ -74,10 +74,9 @@ public class KeyboardUtil {
         dayPicker.setType("keyboard");
         for (LocalDateTime availableDay : availableDays) {
             dayPicker.addButton(new ViberButton(String.format(selectDayReservation + "%s", availableDay.toString()))
-                    .setBgColor(whiteColor)
                     .setText(String.format(dateUtil.translateDayValue(availableDay.getDayOfWeek().getValue())))
-                    .setColumns(4)
-                    .setRows(4)
+                    .setColumns(6)
+                    .setRows(1)
                     .setSilent(true)
                     .setTextSize(ViberButton.TextSize.MEDIUM)
                     .setTextHAlign(ViberButton.TextAlign.LEFT));
