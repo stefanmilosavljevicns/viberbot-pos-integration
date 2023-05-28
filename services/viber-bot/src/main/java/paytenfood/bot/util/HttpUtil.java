@@ -198,14 +198,14 @@ public class HttpUtil {
     }
     public List<LocalDateTime> checkFreeTimeSlots(LocalDate time, int totalTime) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + checkTimeSlotAvailability + "?localDate=" + URLEncoder.encode(String.valueOf(time), StandardCharsets.UTF_8) + "&totalMinutes=" + URLEncoder.encode(String.valueOf(totalTime), StandardCharsets.UTF_8));
+        URI uri = new URI(stringUtils.getRestAdress() + checkFreeTimeSlots + "?localDate=" + URLEncoder.encode(String.valueOf(time), StandardCharsets.UTF_8) + "&totalMinutes=" + URLEncoder.encode(String.valueOf(totalTime), StandardCharsets.UTF_8));
         ResponseEntity<LocalDateTime[]> response = restTemplate.getForEntity(uri, LocalDateTime[].class);
         LocalDateTime[] dateTimeArray = response.getBody();
         List<LocalDateTime> freeTimeSlots = new ArrayList<>();
         if (dateTimeArray != null) {
             Collections.addAll(freeTimeSlots, dateTimeArray);
         }
-        logger.info(String.format(httpLogFormat, checkTimeSlotAvailability, response.getStatusCode(), Arrays.toString(response.getBody())));
+        logger.info(String.format(httpLogFormat, checkFreeTimeSlots, response.getStatusCode(), Arrays.toString(response.getBody())));
         return freeTimeSlots;
     }
     public Double getTotalPrice(String viberId) throws URISyntaxException {
