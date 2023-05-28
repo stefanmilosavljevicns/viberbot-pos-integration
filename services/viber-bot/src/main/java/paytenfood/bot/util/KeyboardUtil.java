@@ -111,7 +111,7 @@ public class KeyboardUtil {
         for (LocalDateTime availableSlot : freeTimeSlots) {
             ViberButton viberButton = new ViberButton((String.format(selectDayReservation + "%s", availableSlot)))
                     .setText(String.format(stringUtils.getButtonStandard(), availableSlot.getHour() +":"+availableSlot.getMinute()))
-                    .setColumns(24)
+                    .setColumns(6)
                     .setRows(1)
                     .setSilent(true)
                     .setTextSize(ViberButton.TextSize.MEDIUM)
