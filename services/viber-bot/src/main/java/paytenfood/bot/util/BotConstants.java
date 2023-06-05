@@ -8,12 +8,14 @@ public class BotConstants {
     public static final String startReservationProcess = "FNH";
     public static final String clearCartAndFinishSession = "CLR";
     public static final String startPaymentProcess = "PYT";
+    public static final String selectDayReservation = "DAY";
     public static final String selectDeliveryTime = "TIM";
     public static final String selectCategoryFromMainMenu = "LST";
     public static final String navigateToMainMenu = "RTS";
     public static final String ignoreUserInput = "IGR";
     public static final String addingItemToCart = "ADD";
     public static final String removingItemFromCart = "RMV";
+    public static final String sendOrderToPOS = "POS";
     //LOG FORMAT
     public static final String httpLogFormat = "||Calling endpoint: %s ||Response status: %s ||Response body: %s";
 
@@ -36,7 +38,9 @@ public class BotConstants {
     public static final String convertToOrderModel = "/convertToOrderModel";
     public static final String getItemByName = "/getItemByName/";
     public static final String clearCart = "/clearCart";
+    public static final String updateStartTime = "/updateStartTime";
     public static final String checkTimeSlotAvailability = "/checkTimeSlotAvailability";
+    public static final String checkFreeTimeSlots = "/checkFreeTimeSlots";
     public static final String addOrder = "/addOrder";
     public static final String assecoOrderConverter = "/assecoOrderConverter";
     public static final String assecoPayingOnline = "https://entegrasyon.asseco-see.com.tr/msu/api/v2";

@@ -19,7 +19,10 @@ public class OrderPOS {
         this.state = state;
         this.viberID = viberID;
     }
-
+    
+    public OrderPOS() {
+        // Default constructor for JSON deserilization
+      }
     public ArrayList<String> getDescription() {
         return description;
     }

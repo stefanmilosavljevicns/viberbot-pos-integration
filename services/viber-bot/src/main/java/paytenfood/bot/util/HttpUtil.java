@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -21,9 +22,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 import static paytenfood.bot.util.BotConstants.*;
 
@@ -89,19 +90,7 @@ public class HttpUtil {
         return status;
     }
 
-    //Inserting selected service to DB in case User doesn't have field in DB here we create it.
-    public void addServiceToCart(String viberId, MenuItem itemName) throws URISyntaxException, UnsupportedEncodingException {
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<MenuItem> requestEntity = new HttpEntity<>(itemName, headers);
-
-        ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, MenuItem.class);
-
-        logger.info(String.format(httpLogFormat, addItemToCart, responseEntity.getStatusCode(), responseEntity.getBody()));
-    }
     //We are using this method to remove item from user cart
     public void removeServiceFromCart(String viberId, MenuItem itemName) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
@@ -189,15 +178,6 @@ public class HttpUtil {
         return responseEntity.getBody();
     }
 
-    public Boolean getIsPayingStatus(String viberId) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + checkPayingStatus + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
-        logger.info(String.format(httpLogFormat, checkPayingStatus, responseEntity.getStatusCode(), responseEntity.getBody()));
-        Boolean status = Boolean.valueOf(responseEntity.getBody());
-        return status;
-    }
-
     public Double getTotalTime(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + getTotalTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
@@ -207,7 +187,18 @@ public class HttpUtil {
         return time;
 
     }
-
+    public List<LocalDateTime> checkFreeTimeSlots(LocalDate time, int totalTime) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+        URI uri = new URI(stringUtils.getRestAdress() + checkFreeTimeSlots + "?localDate=" + URLEncoder.encode(String.valueOf(time), StandardCharsets.UTF_8) + "&totalMinutes=" + URLEncoder.encode(String.valueOf(totalTime), StandardCharsets.UTF_8));
+        ResponseEntity<LocalDateTime[]> response = restTemplate.getForEntity(uri, LocalDateTime[].class);
+        LocalDateTime[] dateTimeArray = response.getBody();
+        List<LocalDateTime> freeTimeSlots = new ArrayList<>();
+        if (dateTimeArray != null) {
+            Collections.addAll(freeTimeSlots, dateTimeArray);
+        }
+        logger.info(String.format(httpLogFormat, checkFreeTimeSlots, response.getStatusCode(), Arrays.toString(response.getBody())));
+        return freeTimeSlots;
+    }
     public Double getTotalPrice(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + getTotalPrice + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
@@ -218,15 +209,6 @@ public class HttpUtil {
 
     }
 
-    public void changeIsPayingStatus(String viberId, Boolean payingStatus) throws URISyntaxException, UnsupportedEncodingException {
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + changePayingStatus + "?payingStatus=" + URLEncoder.encode(String.valueOf(payingStatus), StandardCharsets.UTF_8) + "&viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
-        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
-        logger.info(String.format(httpLogFormat, changePayingStatus, responseEntity.getStatusCode(), responseEntity.getBody()));
-    }
 
     //In this endpoint we are sending order to POS and clearing cart for customer
     public void sendOrder(OrderPOS orderPOS, String viberId) throws URISyntaxException {
@@ -246,6 +228,38 @@ public class HttpUtil {
         ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
         logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
     }
+        //Inserting selected service to DB in case User doesn't have field in DB here we create it.
+        public void addServiceToCart(String viberId, MenuItem itemName) throws URISyntaxException, UnsupportedEncodingException {
+            RestTemplate restTemplate = new RestTemplate();
+            URI uri = new URI(stringUtils.getRestAdress() + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+    
+            HttpEntity<MenuItem> requestEntity = new HttpEntity<>(itemName, headers);
+    
+            ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, MenuItem.class);
+    
+            logger.info(String.format(httpLogFormat, addItemToCart, responseEntity.getStatusCode(), responseEntity.getBody()));
+        }
+    public void updateStartTime(String viberId,String startDate) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) +"&startDate="+startDate);
+        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);        
+        ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
+        logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
+    }
+    
+    public void changeIsPayingStatus(String viberId, Boolean payingStatus) throws URISyntaxException, UnsupportedEncodingException {
+        RestTemplate restTemplate = new RestTemplate();
+        URI uri = new URI(stringUtils.getRestAdress() + changePayingStatus + "?payingStatus=" + URLEncoder.encode(String.valueOf(payingStatus), StandardCharsets.UTF_8) + "&viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
+        logger.info(String.format(httpLogFormat, changePayingStatus, responseEntity.getStatusCode(), responseEntity.getBody()));
+    }
     public MenuItem getItemByName(String itemName) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<MenuItem> responseEntity = restTemplate.getForEntity(stringUtils.getRestAdress()+getItemByName.concat(itemName), MenuItem.class);
@@ -253,7 +267,14 @@ public class HttpUtil {
         MenuItem model = responseEntity.getBody();
         return model;
     }
-
+    public ArrayList<OrderPOS> get24HOrderPOS () {
+        RestTemplate restTemplate = new RestTemplate();
+        String endpointUrl = stringUtils.getRestAdress() + getOrdersWithin24Hourse;      
+        ParameterizedTypeReference<ArrayList<OrderPOS>> responseType = new ParameterizedTypeReference<ArrayList<OrderPOS>>() {};                
+        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(endpointUrl, HttpMethod.GET, null, responseType);                
+        ArrayList<OrderPOS> orderList = responseEntity.getBody();
+        return orderList;
+    }
 
 }
 

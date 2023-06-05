@@ -7,10 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import paytenfood.bot.model.MenuItem;
 import paytenfood.bot.model.OrderPOS;
 import paytenfood.bot.util.DateUtil;
@@ -24,7 +21,10 @@ import ru.multicon.viber4j.incoming.IncomingImpl;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -115,16 +115,43 @@ public class Controller {
                         //If the user agrees with his cart we are going to ask him to choose time.
                     case startPaymentProcess:
                         if (httpUtil.cartChecker(userId)) {
-                            bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
+                            bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime(), keyboardUtil.setDayPicker());
                             logger.info("Asking user if he agrees with his cart.");
                         } else {
                             bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu());
                             logger.info("Unable to show current cart.");
                         }
                         break;
+                    case selectDayReservation:
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                        LocalDate localDate = LocalDate.parse(messageText.substring(3), formatter);
+                        List<LocalDateTime> allSlots = httpUtil.checkFreeTimeSlots(localDate,httpUtil.getTotalTime(userId).intValue());
+                        bot.messageForUser(userId).postText("Izaberite termin kako bi završili rezervaciju",keyboardUtil.setHourPicker(allSlots));
+                        logger.info("Showing user: " + userId +"list of free time slots.");
+                        break;
                     case selectDeliveryTime:
                         bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
                         logger.info("User selecting time.");
+                        break;
+                    case sendOrderToPOS:
+                            LocalDateTime startTime = LocalDateTime.parse(messageText.substring(3));
+                            //IF FORM IS CORRECT CHECKING IF TIMESLOT IS AVAILABLE
+                            Double totalMinutes = httpUtil.getTotalTime(userId);
+                            LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
+                            String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
+                            //Checking time availability in case multiple users try to reserve in same time
+                            if (checkTime.equals("Time slot is available.")) {
+                                OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
+                                httpUtil.sendOrder(sendOrderPOS, userId);
+                                //Sklanjam placanje online zbog zahteva Payten-a ukoliko zelimo da vratimo sklonicemo komentar sa linije 148
+                                //bot.messageForUser(userId).postText(stringUtils.getMessagePaymentOnline(), keyboardUtil.setPaymentOption(userId));
+                                bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
+                                httpUtil.clearCart(userId);
+                                logger.info("Session finished, clearing cart.");
+                            }
+                            else{
+                                bot.messageForUser(userId).postText("Došlo je do greške ili je termin upravo neko rezervisao pre Vas, vraćam Vas na početak",keyboardUtil.getMainMenu());
+                            }
                         break;
                     case clearCartAndFinishSession:
                         bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
@@ -145,35 +172,7 @@ public class Controller {
                     case ignoreUserInput:
                         logger.info("User clicked on text label, safely ignore this log.");
                         break;
-                        //If input string doesn't match with our 3 characters keywords, that means that user is picking time for reservation. That flow will be handled in default part of SWITCH
-                    default:
-                        LocalDateTime startTime = dateUtil.parseUserInput(messageText);
-                        if(startTime != null){
-                            //IF FORM IS CORRECT CHECKING IF TIMESLOT IS AVAILABLE
-                            Double totalMinutes = httpUtil.getTotalTime(userId);
-                            LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
-                            String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
-                            //Checking time availability
-                            if (checkTime.equals("Time slot is available.")) {
-                                OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
-                                httpUtil.sendOrder(sendOrderPOS, userId);
-                                bot.messageForUser(userId).postText(stringUtils.getMessagePaymentOnline(), keyboardUtil.setPaymentOption(userId));
-                                logger.info("Finishing reservation.");
-                            }
-                            //If user missed form we will redirect him to main menu
-                            else {
-                                bot.messageForUser(userId).postText(checkTime);
-                                logger.info("Time slot is not available giving user another chance to reserve.");
-                            }
-                        }
-                        //Incorrect form giving user another chance to enter correct
-                        else{
-                            bot.messageForUser(userId).postText("Pogrešan unos vremena, pokušajte ponovo.",keyboardUtil.getMainMenu());
-                            logger.info("User failed to enter right format for time.");
-                        }
-                        break;
                 }
-
         } else {
             if (!StringUtils.equals(ignoreUserInput, messageText)) {
                 bot.messageForUser(userId).postText("Komanda nije pronađena", keyboardUtil.getMainMenu());
@@ -199,6 +198,18 @@ public class Controller {
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         bot.messageForUser(viberId).postText(failedPayment, keyboardUtil.setPaymentOption(viberId));
         logger.info("User failed to complete online payment, trying again.");
+        return ResponseEntity.ok().build();
+
+    }
+
+    @PutMapping("${viber.bot-path}" + "/updateStartTime")
+    ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {        
+        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
+        httpUtil.updateStartTime(viberId,start);
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        LocalDateTime startDate = LocalDateTime.parse(start, formatter);
+        bot.messageForUser(viberId).postText("Vaš zakazani termin je promenjen, vreme novog termina je: " + startDate.getDayOfMonth()+"."+startDate.getMonthValue()+". u " + startDate.getHour()+":"+startDate.getMinute(), keyboardUtil.getMainMenu());
+        logger.info("We are sending user information that merchant changed his start time");
         return ResponseEntity.ok().build();
 
     }
