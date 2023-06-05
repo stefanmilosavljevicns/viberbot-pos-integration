@@ -48,7 +48,7 @@ public class DateUtil {
     public String translateDayValue(int value){
         switch (value) {
             case 1:
-                    return "Ponedeljak";
+                return "Ponedeljak";
             case 2:
                 return "Utorak";
             case 3:
