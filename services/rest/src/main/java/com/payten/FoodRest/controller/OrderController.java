@@ -177,9 +177,9 @@ public class OrderController {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            URI uri = new URI("http://bot:9943/dentalcare-bot?viberId=" + URLEncoder.encode(updatedOrder.getViberID(), StandardCharsets.UTF_8) +"&startDate="+startDate);
+            URI uri = new URI("http://bot:9943/dentalcare-bot/updateStartTime?viberId=" + URLEncoder.encode(updatedOrder.getViberID(), StandardCharsets.UTF_8) +"&startDate="+startDate);
             HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
-            ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
+            ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, String.class);
             logger.info(responseEntityPut.getStatusCode().toString() + responseEntityPut.getBody());
         }
         orderRepository.save(updatedOrder);

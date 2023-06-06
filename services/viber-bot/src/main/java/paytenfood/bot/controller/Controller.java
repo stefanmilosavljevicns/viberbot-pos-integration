@@ -202,7 +202,7 @@ public class Controller {
 
     }
 
-    @PutMapping("${viber.bot-path}" + "/updateStartTime")
+    @RequestMapping(method = POST,path = "${viber.bot-path}" + "/updateStartTime")
     ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {        
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
