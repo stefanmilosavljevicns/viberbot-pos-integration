@@ -42,7 +42,7 @@ public class OrderController {
         return ResponseEntity.ok(orderRepository.save(order));
     }
     @PostMapping("/POSReservation")
-    public ResponseEntity<Order> posReservation(@RequestBody @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @RequestBody ArrayList<String> service) {
+    public ResponseEntity<Order> posReservation(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @RequestBody ArrayList<String> service) {
         Order order = new Order();
         ArrayList<String> listOfServices = new ArrayList<>();
         order.setStartTime(start);
