@@ -5,6 +5,8 @@ import com.payten.FoodRest.model.Order;
 import com.payten.FoodRest.model.OrderState;
 import com.payten.FoodRest.repository.MenuRepository;
 import com.payten.FoodRest.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -31,6 +33,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("${rest.path}")
 public class OrderController {
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -170,12 +173,14 @@ public class OrderController {
         updatedOrder.setStartTime(startDate);
         updatedOrder.setEndTime(startDate.plusMinutes(reservationDuration.toMinutes()));
         if(updatedOrder.getViberID() != null){
+            logger.info("Inside loop");
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            URI uri = new URI("http://bot:9943/api/v1/dentalcare-bot?viberId=" + URLEncoder.encode(updatedOrder.getViberID(), StandardCharsets.UTF_8) +"&startDate="+startDate);
+            URI uri = new URI("http://bot:9943/dentalcare-bot?viberId=" + URLEncoder.encode(updatedOrder.getViberID(), StandardCharsets.UTF_8) +"&startDate="+startDate);
             HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
             ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
+            logger.info(responseEntityPut.getStatusCode().toString() + responseEntityPut.getBody());
         }
         orderRepository.save(updatedOrder);
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
