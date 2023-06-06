@@ -55,7 +55,7 @@ public class OrderController {
             order.setEndTime(start.plusMinutes(menu.getTime()));
             order.setState(OrderState.IN_PROGRESS);
             order.setDescription(listOfServices);
-            return ResponseEntity.ok(order);
+            return ResponseEntity.ok(orderRepository.save(order));
         }
         else{
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
