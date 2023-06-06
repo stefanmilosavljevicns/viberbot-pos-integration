@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.repository.Query;
         List<Order> findUsersToRemindForReservation(LocalDateTime start, LocalDateTime end);          
         List<Order> findByStartTimeLessThanAndEndTimeGreaterThan(LocalDateTime end, LocalDateTime start);
         List<Order> findByStartTimeGreaterThan(LocalDateTime twentyFourHoursAgo);
-        @Query(value = "{ 'viberID' : ?0, 'state' : { $nin: [ 'COMPLETED', 'DECLINED' ] } }")
-        Order findByViberId(String name);
+        @Query(value = "{ 'id' : ?0, 'state' : { $nin: [ 'COMPLETED', 'DECLINED' ] } }")
+        Order findByIdAndCheckTime(String name);
 
     }
