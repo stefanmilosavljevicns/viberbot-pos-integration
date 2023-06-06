@@ -9,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -154,7 +158,7 @@ public class OrderController {
     // iz query parametra novi startTime a endTime dobijamo uvecavanjem novog starTtime-a za ukupnu duzinu termina koju smo prethodno izracunali (promenljiva reservationDuration)
     @PutMapping("/updateStartTime")
     public ResponseEntity<Order> updateStartTime(@RequestBody String start,
-                                                 @RequestParam("orderID") String viberId) {
+                                                 @RequestParam("orderID") String viberId) throws URISyntaxException {
         Optional<Order> existingOrder = Optional.ofNullable(orderRepository.findByIdAndCheckTime(viberId));
         if (existingOrder.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -165,6 +169,14 @@ public class OrderController {
         Order updatedOrder = existingOrder.get();
         updatedOrder.setStartTime(startDate);
         updatedOrder.setEndTime(startDate.plusMinutes(reservationDuration.toMinutes()));
+        if(updatedOrder.getViberID() != null){
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            URI uri = new URI("http://bot:9943/api/v1/dentalcare-bot?viberId=" + URLEncoder.encode(updatedOrder.getViberID(), StandardCharsets.UTF_8) +"&startDate="+startDate);
+            HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
+            ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
+        }
         orderRepository.save(updatedOrder);
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
