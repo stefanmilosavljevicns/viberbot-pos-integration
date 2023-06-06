@@ -1,7 +1,9 @@
 package com.payten.FoodRest.controller;
 
+import com.payten.FoodRest.model.Menu;
 import com.payten.FoodRest.model.Order;
 import com.payten.FoodRest.model.OrderState;
+import com.payten.FoodRest.repository.MenuRepository;
 import com.payten.FoodRest.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -27,7 +29,8 @@ import java.util.Optional;
 public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
-
+    @Autowired
+    private MenuRepository menuRepository;
     @GetMapping("/getOrders")
     public ResponseEntity<List<Order>> findAll() {
         return ResponseEntity.ok(orderRepository.findAll());
@@ -37,6 +40,26 @@ public class OrderController {
     @PostMapping("/addOrder")
     public ResponseEntity<Order> save(@RequestBody Order order) {
         return ResponseEntity.ok(orderRepository.save(order));
+    }
+    @PostMapping("/POSReservation")
+    public ResponseEntity<Order> posReservation(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @RequestParam("service") String service) {
+        Order order = new Order();
+        Menu menu = menuRepository.findByName(service);
+        if(menu.getName() != null){
+            //Proveravam sa Pex-om jel moze da prihvati vise usluga sa jednim zakazivanjem, ako ne moze castovacu ovo u String
+            ArrayList<String> listOfServices = new ArrayList<>();
+            listOfServices.add(menu.getName());
+            order.setPrice(menu.getPrice());
+            order.setViberID(null);
+            order.setStartTime(start);
+            order.setEndTime(start.plusMinutes(menu.getTime()));
+            order.setState(OrderState.IN_PROGRESS);
+            order.setDescription(listOfServices);
+            return ResponseEntity.ok(order);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
     @GetMapping("/getAllActiveDates")
     public ResponseEntity<List<Order>> getOrdersWithin24Hours() {
