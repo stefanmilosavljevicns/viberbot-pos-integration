@@ -86,7 +86,7 @@ public class Controller {
                     case addingItemToCart:
                         MenuItem addList = httpUtil.getItemByName(messageText.substring(3));
                         httpUtil.addServiceToCart(userId, addList);
-                        bot.messageForUser(userId).postText("Dodajem na listu " + messageText.substring(3), keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText("Adding to cart " + messageText.substring(3), keyboardUtil.getMainMenu());
                         logger.info("Adding to cart: " + messageText.substring(3));
                         break;
                     case navigateToCartMenu:
