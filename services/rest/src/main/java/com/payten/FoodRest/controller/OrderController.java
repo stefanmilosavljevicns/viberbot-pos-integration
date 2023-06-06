@@ -42,24 +42,27 @@ public class OrderController {
         return ResponseEntity.ok(orderRepository.save(order));
     }
     @PostMapping("/POSReservation")
-    public ResponseEntity<Order> posReservation(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @RequestParam("service") String service) {
+    public ResponseEntity<Order> posReservation(@RequestBody @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @RequestBody ArrayList<String> service) {
         Order order = new Order();
-        Menu menu = menuRepository.findByName(service);
-        if(menu.getName() != null){
+        ArrayList<String> listOfServices = new ArrayList<>();
+        order.setStartTime(start);
+        order.setViberID(null);
+        order.setPrice(0.0);
+        order.setState(OrderState.IN_PROGRESS);
+        for(String menuItem : service){
             //Proveravam sa Pex-om jel moze da prihvati vise usluga sa jednim zakazivanjem, ako ne moze castovacu ovo u String
-            ArrayList<String> listOfServices = new ArrayList<>();
-            listOfServices.add(menu.getName());
-            order.setPrice(menu.getPrice());
-            order.setViberID(null);
-            order.setStartTime(start);
-            order.setEndTime(start.plusMinutes(menu.getTime()));
-            order.setState(OrderState.IN_PROGRESS);
-            order.setDescription(listOfServices);
-            return ResponseEntity.ok(orderRepository.save(order));
+            Menu menu = menuRepository.findByName(menuItem);
+            if(menu.getName() != null){
+                listOfServices.add(menu.getName());
+                order.setPrice(order.getPrice()+menu.getPrice());
+                order.setEndTime(start.plusMinutes(menu.getTime()));
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
         }
-        else{
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+        order.setDescription(listOfServices);
+        return ResponseEntity.ok(orderRepository.save(order));
     }
     @GetMapping("/getAllActiveDates")
     public ResponseEntity<List<Order>> getOrdersWithin24Hours() {
