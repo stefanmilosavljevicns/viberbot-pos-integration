@@ -207,7 +207,7 @@ public class Controller {
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         LocalDateTime startDate = LocalDateTime.parse(start, formatter);
-        bot.messageForUser(viberId).postText("Your dental timeslot has changed, new timeslot is: " + startDate.getDayOfMonth()+"."+startDate.getMonthValue()+". u " + startDate.getHour()+":"+startDate.getMinute(), keyboardUtil.getMainMenu());
+        bot.messageForUser(viberId).postText("Your dental timeslot has changed, new timeslot is: " + startDate.getDayOfMonth()+"."+startDate.getMonthValue()+". at " + startDate.getHour()+":"+startDate.getMinute(), keyboardUtil.getMainMenu());
         logger.info("We are sending user information that merchant changed his start time");
         return ResponseEntity.ok().build();
 
