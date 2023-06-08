@@ -56,7 +56,7 @@ public class OrderController {
         order.setViberID(null);
         order.setPrice(0.0);
         order.setState(OrderState.IN_PROGRESS);
-        for(String menuItem : request.getOrderId()){
+        for(String menuItem : request.getServices()){
             //Proveravam sa Pex-om jel moze da prihvati vise usluga sa jednim zakazivanjem, ako ne moze castovacu ovo u String
             Menu menu = menuRepository.findByName(menuItem);
             if(menu.getName() != null){
@@ -211,7 +211,7 @@ class UpdateRequestPOS {
 class AddRequestPOS {
     private LocalDateTime start;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private ArrayList<String> orderId;
+    private ArrayList<String> services;
 
     public LocalDateTime getStart() {
         return start;
@@ -221,11 +221,11 @@ class AddRequestPOS {
         this.start = start;
     }
 
-    public ArrayList<String> getOrderId() {
-        return orderId;
+    public ArrayList<String> getServices() {
+        return services;
     }
 
-    public void setOrderId(ArrayList<String> orderId) {
-        this.orderId = orderId;
+    public void setServices(ArrayList<String> services) {
+        this.services = services;
     }
 }
