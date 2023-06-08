@@ -162,7 +162,7 @@ public class Controller {
                         int newlineIndex = messageText.indexOf('\n', 3);
                         MenuItem rmvList = httpUtil.getItemByName(messageText.substring(3, newlineIndex));
                         httpUtil.removeServiceFromCart(userId, rmvList);
-                        bot.messageForUser(userId).postText("Uklanjam " + messageText.substring(3, newlineIndex), keyboardUtil.setCartList(userId));
+                        bot.messageForUser(userId).postText("Removing " + messageText.substring(3, newlineIndex), keyboardUtil.setCartList(userId));
                         logger.info("Trying to remove: " + messageText.substring(3));
                         break;
                     case navigateToMainMenu:

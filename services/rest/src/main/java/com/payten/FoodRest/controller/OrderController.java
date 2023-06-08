@@ -49,20 +49,20 @@ public class OrderController {
         return ResponseEntity.ok(orderRepository.save(order));
     }
     @PostMapping("/POSReservation")
-    public ResponseEntity<Order> posReservation(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start, @RequestBody ArrayList<String> service) {
+    public ResponseEntity<Order> posReservation(@RequestBody AddRequestPOS request) {
         Order order = new Order();
         ArrayList<String> listOfServices = new ArrayList<>();
-        order.setStartTime(start);
+        order.setStartTime(request.getStart());
         order.setViberID(null);
         order.setPrice(0.0);
         order.setState(OrderState.IN_PROGRESS);
-        for(String menuItem : service){
+        for(String menuItem : request.getOrderId()){
             //Proveravam sa Pex-om jel moze da prihvati vise usluga sa jednim zakazivanjem, ako ne moze castovacu ovo u String
             Menu menu = menuRepository.findByName(menuItem);
             if(menu.getName() != null){
                 listOfServices.add(menu.getName());
                 order.setPrice(order.getPrice()+menu.getPrice());
-                order.setEndTime(start.plusMinutes(menu.getTime()));
+                order.setEndTime(order.getStartTime().plusMinutes(menu.getTime()));
             }
             else{
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -160,14 +160,14 @@ public class OrderController {
     //Update-ujemo termin tako sto unesemo viberId od korisnikovog termina koji zelimo da promenimo. Na osnovu viberId-a dobijamo instancu Order objekta. U njemu prvo uzimamo ukupnu duzinu termina (od startTime-a do endTime-a) zatim prosledjujemo
     // iz query parametra novi startTime a endTime dobijamo uvecavanjem novog starTtime-a za ukupnu duzinu termina koju smo prethodno izracunali (promenljiva reservationDuration)
     @PutMapping("/updateStartTime")
-    public ResponseEntity<Order> updateStartTime(@RequestBody String start,
-                                                 @RequestParam("orderID") String viberId) throws URISyntaxException {
-        Optional<Order> existingOrder = Optional.ofNullable(orderRepository.findByIdAndCheckTime(viberId));
+    public ResponseEntity<Order> updateStartTime(@RequestBody UpdateRequestPOS request)
+                                                 throws URISyntaxException {
+        Optional<Order> existingOrder = Optional.ofNullable(orderRepository.findByIdAndCheckTime(request.getOrderId()));
         if (existingOrder.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        LocalDateTime startDate = LocalDateTime.parse(start, formatter);
+        LocalDateTime startDate = LocalDateTime.parse(request.getStart(), formatter);
         Duration reservationDuration = Duration.between(existingOrder.get().getStartTime(), existingOrder.get().getEndTime());
         Order updatedOrder = existingOrder.get();
         updatedOrder.setStartTime(startDate);
@@ -187,4 +187,45 @@ public class OrderController {
     }
 
 
+}
+class UpdateRequestPOS {
+    private String start;
+    private String orderId;
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+}
+class AddRequestPOS {
+    private LocalDateTime start;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private ArrayList<String> orderId;
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public ArrayList<String> getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(ArrayList<String> orderId) {
+        this.orderId = orderId;
+    }
 }

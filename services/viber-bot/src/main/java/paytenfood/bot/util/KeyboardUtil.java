@@ -109,13 +109,26 @@ public class KeyboardUtil {
         boolean ticker = true;
         hourPicker.setType("keyboard");
         for (LocalDateTime availableSlot : freeTimeSlots) {
-            ViberButton viberButton = new ViberButton((String.format(sendOrderToPOS + "%s", availableSlot)))
-                    .setText(String.format(stringUtils.getButtonStandard(), availableSlot.getHour() +":"+availableSlot.getMinute()))
-                    .setColumns(6)
-                    .setRows(1)
-                    .setSilent(true)
-                    .setTextSize(ViberButton.TextSize.MEDIUM)
-                    .setTextHAlign(ViberButton.TextAlign.MIDDLE);
+            int minutes = availableSlot.getMinute();
+            ViberButton viberButton = null;
+            if(minutes == 0){
+                viberButton = new ViberButton((String.format(sendOrderToPOS + "%s", availableSlot)))
+                        .setText(String.format(stringUtils.getButtonStandard(), availableSlot.getHour() +":00"))
+                        .setColumns(6)
+                        .setRows(1)
+                        .setSilent(true)
+                        .setTextSize(ViberButton.TextSize.MEDIUM)
+                        .setTextHAlign(ViberButton.TextAlign.MIDDLE);
+            }
+            else{
+                viberButton = new ViberButton((String.format(sendOrderToPOS + "%s", availableSlot)))
+                        .setText(String.format(stringUtils.getButtonStandard(), availableSlot.getHour() +":"+availableSlot.getMinute()))
+                        .setColumns(6)
+                        .setRows(1)
+                        .setSilent(true)
+                        .setTextSize(ViberButton.TextSize.MEDIUM)
+                        .setTextHAlign(ViberButton.TextAlign.MIDDLE);
+            }
             if(ticker){
                 viberButton.setBgColor(stringUtils.getPrimarilyColor());
                 ticker = false;
