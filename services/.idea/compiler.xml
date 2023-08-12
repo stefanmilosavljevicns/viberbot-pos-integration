@@ -11,11 +11,6 @@
         <module name="bot" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="bot" target="17" />
-      <module name="FoodRest" target="17" />
-      <module name="viber4j" target="11" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

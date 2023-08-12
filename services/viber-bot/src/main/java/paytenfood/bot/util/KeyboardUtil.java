@@ -32,11 +32,9 @@ public class KeyboardUtil {
     @Autowired
     private DateUtil dateUtil;
     private ViberKeyboard confirmationKeyboard;
-
     public ViberKeyboard getMainMenu() {
         return mainMenu;
     }
-
     public ViberKeyboard setListMenu(String listName) throws JsonProcessingException {
         ArrayList<MenuItem> menuItems = httpUtil.getServiceList(listName);
         ViberKeyboard listMenu = new ViberKeyboard();
@@ -167,41 +165,8 @@ public class KeyboardUtil {
                 .setRows(4));
         return returnToPaymentKyb;
     }
-    public ViberKeyboard setPaymentOption(String userId) throws URISyntaxException, JsonProcessingException {
-        String startOnlinePayment = httpUtil.generatePaymentId(userId,stringUtils.getAssecoMerchantUser(),stringUtils.getAssecoMerchantPassword(),stringUtils.getAssecoMerchant());
-        if (startOnlinePayment!=null){
-            confirmationKeyboard = new ViberKeyboard();
-            confirmationKeyboard.setInputFieldState("hidden");
-            confirmationKeyboard.setType("keyboard");
-            confirmationKeyboard.addButton(ViberButton.createButtonForUrl(assecoPaymentPage+startOnlinePayment)
-                    .setText(stringUtils.getButtonYes())
-                    .setOpenURLType(ViberButton.OpenURLType.EXTERNAL)
-                    .setTextSize(ViberButton.TextSize.LARGE)
-                    .setBgColor(stringUtils.getPrimarilyColor())
-                    .setColumns(3)
-                    .setSilent(true)
-                    .setRows(2));
-            confirmationKeyboard.addButton(new ViberButton(clearCartAndFinishSession)
-                    .setText(stringUtils.getButtonNo())
-                    .setTextSize(ViberButton.TextSize.LARGE)
-                    .setBgColor(stringUtils.getSecondarilyColor())
-                    .setSilent(true)
-                    .setColumns(3)
-                    .setRows(2));
-            return confirmationKeyboard;
-        }
-        else{
-            return mainMenu;
-        }
-
-
-
-    }
-
     public ViberKeyboard setCartList(String viberId) throws JsonProcessingException, URISyntaxException {
-
         ArrayList<String> currentCart = httpUtil.getCartList(viberId);
-
         ViberKeyboard cartList = new ViberKeyboard();
         cartList.setInputFieldState("hidden");
         cartList.setType("keyboard");
@@ -237,8 +202,6 @@ public class KeyboardUtil {
                 .setBgColor(stringUtils.getPrimarilyColor()));
         return cartList;
     }
-
-    //Generating Main Menu this is once per lifecycle call (at beginning of service) where we are loading singleton mainMenu with components
     public void setMainMenu() {
         ArrayList<String> categoriesTitle = httpUtil.getCategories();
         maxCategories = categoriesTitle.size();

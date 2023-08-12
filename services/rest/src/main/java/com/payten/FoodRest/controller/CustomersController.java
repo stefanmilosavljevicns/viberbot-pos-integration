@@ -18,8 +18,6 @@ public class CustomersController {
 
     @Autowired
     private CustomersRepository customersRepository;
-
-    //Adding item to cart, if cart is empty we are going to create Customer entry first
     @PutMapping("/addItemToCart")
     public ResponseEntity<Customers> addItemToCart(@RequestParam String viberId, @RequestBody Menu newItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
@@ -75,7 +73,6 @@ public class CustomersController {
         }
         return new ResponseEntity<>(totalPrice, HttpStatus.OK);
     }
-    //Using this endpoint for creating Orders for Android POS
     @GetMapping("/convertToOrderModel")
     public ResponseEntity<List<String>> convertToOrderModel(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
@@ -87,11 +84,6 @@ public class CustomersController {
     }
 
     //Using this endpoint for creating Asseco payment.
-    @GetMapping("/assecoOrderConverter")
-    public ResponseEntity<List<Menu>> assecoOrderConverter(@RequestParam String viberId) {
-        Optional<Customers> customers = customersRepository.findById(viberId);
-        return new ResponseEntity<>(customers.get().getCurrentOrder(), HttpStatus.OK);
-    }
     //Using this endpoint for generating current cart list for Viber Bot
     @GetMapping("/getCart")
     public ResponseEntity<List<String>> getCart(@RequestParam String viberId) {

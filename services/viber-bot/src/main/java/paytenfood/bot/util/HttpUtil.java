@@ -14,7 +14,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import paytenfood.bot.model.MenuItem;
-import paytenfood.bot.model.OrderAsseco;
 import paytenfood.bot.model.OrderPOS;
 
 import java.io.UnsupportedEncodingException;
@@ -32,16 +31,12 @@ import static paytenfood.bot.util.BotConstants.*;
 public class HttpUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
-
     @Autowired
     StringUtils stringUtils;
     private ArrayList<String> categories;
-
     public ArrayList<String> getCategories() {
         return categories;
     }
-
-    //Creating start menu begins here, here we are gathering all categories from DB
     public void setCategories() throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(stringUtils.getRestAdress() + getAllCategories, String.class);
@@ -51,8 +46,6 @@ public class HttpUtil {
         });
         logger.info(String.format(httpLogFormat, getAllCategories, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
-
-    //GENERATING CART LIST AND ADDING TOTAL PRICE AS LAST ITEM IN STRING LIST
     public ArrayList<String> getCartList(String viberId) throws JsonProcessingException, URISyntaxException {
         ArrayList<String> cartList;
         RestTemplate restTemplate = new RestTemplate();
@@ -65,8 +58,6 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, getCart, responseEntity.getStatusCode(), responseEntity.getBody()));
         return cartList;
     }
-
-    //Repacking current list into Strings so we can send it according to OrderPOS model, field: Description
     public ArrayList<String> getCurrentList(String viberId) throws JsonProcessingException, URISyntaxException {
         ArrayList<String> cartList;
         RestTemplate restTemplate = new RestTemplate();
@@ -79,8 +70,6 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, convertToOrderModel, responseEntity.getStatusCode(), responseEntity.getBody()));
         return cartList;
     }
-
-    //CHECKING IF USER ADDED ANY ITEM TO CART IF THIS IS FALSE WE WILL NOT ALLOW USER TO GET CART PAGE OR FINISH ORDER
     public Boolean cartChecker(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + checkIfCartIsEmpty + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
@@ -89,9 +78,6 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, checkIfCartIsEmpty, responseEntity.getStatusCode(), responseEntity.getBody()));
         return status;
     }
-
-
-    //We are using this method to remove item from user cart
     public void removeServiceFromCart(String viberId, MenuItem itemName) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + removeItemFromCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
@@ -104,61 +90,7 @@ public class HttpUtil {
 
         logger.info(String.format(httpLogFormat, removeItemFromCart, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
-    //We are using this for generating Asecco landing page
-    public String generatePaymentId(String viberId, String merchantUser, String merchantPw, String merchant) throws URISyntaxException, JsonProcessingException {
-        RestTemplate getRestTemplate = new RestTemplate();
-        URI getURI = new URI(stringUtils.getRestAdress() + assecoOrderConverter + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = getRestTemplate.getForEntity(getURI, String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        logger.info(String.format(httpLogFormat, assecoOrderConverter, responseEntity.getStatusCode(), responseEntity.getBody()));
-        ArrayList<MenuItem> menuItemRead = objectMapper.readValue(responseEntity.getBody(), new TypeReference<ArrayList<MenuItem>>() {
-        });
-        ArrayList<OrderAsseco> orderAsseco = new ArrayList<>();
-        for (MenuItem menuItem : menuItemRead) {
-            OrderAsseco orderItem = new OrderAsseco();
-            orderItem.setCode(menuItem.getName());
-            orderItem.setName(menuItem.getName());
-            orderItem.setDescription(menuItem.getDescription());
-            orderItem.setQuantity(1);
-            orderItem.setPrice(menuItem.getPrice());
-            orderAsseco.add(orderItem);
-        }
-        String orderJson = null;
-        ObjectMapper objectMapperOrder = new ObjectMapper();
-        try {
-            orderJson = objectMapperOrder.writeValueAsString(orderAsseco);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Double totalPrice = getTotalPrice(viberId);
-        //Generating Form body for obtaining token
-        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("ACTION", "SESSIONTOKEN");
-        map.add("MERCHANTUSER", merchantUser);
-        map.add("MERCHANTPASSWORD", merchantPw);
-        map.add("MERCHANT", merchant);
-        map.add("CUSTOMER", viberId);
-        map.add("SESSIONTYPE", "PAYMENTSESSION");
-        map.add("MERCHANTPAYMENTID", LocalDateTime.now() + "_" + viberId);
-        map.add("AMOUNT", totalPrice);
-        map.add("CURRENCY", "RSD");
-        map.add("RETURNURL", redirection + "?viberId=" + viberId + "&viberPath=" + stringUtils.getBotPath());
-        map.add("ORDER", orderJson);
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(map, headers);
-        ResponseEntity<String> response = restTemplate.exchange(assecoPayingOnline, HttpMethod.POST, request, String.class);
-        if (response.getStatusCode() == HttpStatus.OK) {
-            ObjectMapper objectMapperAsecco = new ObjectMapper();
-            JsonNode rootNode = objectMapperAsecco.readTree(response.getBody());
-            logger.info(String.format(httpLogFormat, assecoPayingOnline, response.getStatusCode(), response.getBody()));
-            return rootNode.get("sessionToken").asText();
-        } else {
-            return null;
-        }
-    }
-    
+
     //Gathering items for selected category from menu
     public ArrayList<MenuItem> getServiceList(String menuItem) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();

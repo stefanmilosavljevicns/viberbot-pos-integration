@@ -61,12 +61,6 @@ public class StringUtils {
     private String messageCheckTime;
     @Value("${message.success-reservation}")
     private String messageSuccessReservation;
-    @Value("${asseco.merchant}")
-    private String assecoMerchant;
-    @Value("${asseco.merchant-user}")
-    private String assecoMerchantUser;
-    @Value("${asseco.merchant-password}")
-    private String assecoMerchantPassword;
 
     public String getButtonMenuCart() {
         return buttonMenuCart;
@@ -94,18 +88,6 @@ public class StringUtils {
 
     public String getButtonRemoveCartItem() {
         return buttonRemoveCartItem;
-    }
-
-    public String getAssecoMerchant() {
-        return assecoMerchant;
-    }
-
-    public String getAssecoMerchantUser() {
-        return assecoMerchantUser;
-    }
-
-    public String getAssecoMerchantPassword() {
-        return assecoMerchantPassword;
     }
 
     public String getMessageError() {

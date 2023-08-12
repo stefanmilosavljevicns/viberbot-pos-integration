@@ -46,21 +46,13 @@ public class Controller {
     @RequestMapping(method = POST, path = "${viber.bot-path}")
     ResponseEntity<?> callbackHandle(@RequestBody String text) throws IOException, InterruptedException, URISyntaxException {
         logger.info("Received messageForUser {}", text);
-        // Processing incoming messageForUser
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         Incoming incoming = IncomingImpl.fromString(text);
         String eventType = incoming.getEvent();
-        //
-        // getting info about user
-        //
         String userId = incoming.getSenderId();
         String messageText = incoming.getMessageText();
-
         if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
             return ResponseEntity.ok().build();
-
-        //  Checking if this is the user first time opening Viber Bot, if that is true we want to show him immediately welcome message with main menu.
-        // Incoming class will not work in this case because user did not send any message instead we are going to parse user ViberID from default Viber log
         if (StringUtils.equals(incoming.getEvent(), START_MSG_EVENT)) {
             Gson gson = new Gson();
             Map jsonMap = gson.fromJson(text, Map.class);
@@ -69,15 +61,7 @@ public class Controller {
             logger.info("Showing welcome message.");
             return ResponseEntity.ok().build();
         }
-        //Handling user input here
         else if (messageText.length() >= 3) {
-                //This IF will trigger when user is on asseco payment page. If something happens: browser crashed, accidentaly closing browser etc... We want to handle this scenario by giving him  chance to restart payment flow.
-                if (messageText.startsWith(assecoPaymentPage)){
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.returnToPayment());
-                    logger.info("Returning user back to payment option");
-                    return ResponseEntity.ok().build();
-                }
-                //Going through Viber bot flow, using our 3 Character keywords for mapping different actions.
                 switch (messageText.substring(0, 3)) {
                     case selectCategoryFromMainMenu:
                         bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
@@ -98,7 +82,6 @@ public class Controller {
                             logger.info("Unable to show current cart.");
                         }
                         break;
-                        //First thing that triggers after user selected FINISH RESERVATION button. First we are going to show him what items did he selected.
                     case startReservationProcess:
                         if (httpUtil.cartChecker(userId)) {
                             StringBuilder finishMsg = new StringBuilder(stringUtils.getMessageCheckCart());
@@ -112,7 +95,6 @@ public class Controller {
                             logger.info("Unable to show current cart.");
                         }
                         break;
-                        //If the user agrees with his cart we are going to ask him to choose time.
                     case startPaymentProcess:
                         if (httpUtil.cartChecker(userId)) {
                             bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime(), keyboardUtil.setDayPicker());
@@ -135,16 +117,12 @@ public class Controller {
                         break;
                     case sendOrderToPOS:
                             LocalDateTime startTime = LocalDateTime.parse(messageText.substring(3));
-                            //IF FORM IS CORRECT CHECKING IF TIMESLOT IS AVAILABLE
                             Double totalMinutes = httpUtil.getTotalTime(userId);
                             LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
                             String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
-                            //Checking time availability in case multiple users try to reserve in same time
                             if (checkTime.equals("Time slot is available.")) {
                                 OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
                                 httpUtil.sendOrder(sendOrderPOS, userId);
-                                //Sklanjam placanje online zbog zahteva Payten-a ukoliko zelimo da vratimo sklonicemo komentar sa linije 148
-                                //bot.messageForUser(userId).postText(stringUtils.getMessagePaymentOnline(), keyboardUtil.setPaymentOption(userId));
                                 bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
                                 httpUtil.clearCart(userId);
                                 logger.info("Session finished, clearing cart.");
@@ -179,31 +157,10 @@ public class Controller {
                 logger.info("Navigating to main menu.");
             }
         }
-
         return ResponseEntity.ok().build();
     }
-    //This endpoint will be called by our page, it is being used for letting bot know if payment is OK or NOT
-    @RequestMapping(method = POST, path = "${viber.bot-path}" + "/external-paying")
-    ResponseEntity<?> sendExternalSuccess(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException {
-        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
-        bot.messageForUser(viberId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
-        httpUtil.clearCart(viberId);
-        logger.info("User successfully payed his bill, clearing cart.");
-        return ResponseEntity.ok().build();
-
-    }
-
-    @RequestMapping(method = POST, path = "${viber.bot-path}" + "/external-failure")
-    ResponseEntity<?> sendExternalFail(@RequestParam String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {
-        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
-        bot.messageForUser(viberId).postText(failedPayment, keyboardUtil.setPaymentOption(viberId));
-        logger.info("User failed to complete online payment, trying again.");
-        return ResponseEntity.ok().build();
-
-    }
-
     @PutMapping("${viber.bot-path}" + "/updateStartTime")
-    ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws UnsupportedEncodingException, URISyntaxException, JsonProcessingException {        
+    ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws URISyntaxException {
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         httpUtil.updateStartTime(viberId,start);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;

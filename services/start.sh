@@ -15,8 +15,7 @@ echo '~~~~~~ 1. BULDING REST IMAGE ~~~~~~'
 docker build ./rest -t foodrest.jar
 echo '~~~~~~ 2. BULDING VIBER-BOT IMAGE ~~~~~~'
 docker build ./viber-bot -t bot.jar
-echo '~~~~~~ 3. BULDING CLIENT-FLASK IMAGE ~~~~~~'
-docker build ./client -t client-flask
+
 echo '~~~~~~ CREATING DOCKER NETWORK ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
@@ -25,9 +24,6 @@ echo '~~~~~~ STARTING DOCKER SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~ 1. STARTING CLIENT FLASK ~~~~~~'
-docker-compose -f ./client/docker-compose.yml down
-docker-compose -f ./client/docker-compose.yml up -d
-sleep 15
 echo '~~~~~~ 2. STARTING NGINX ~~~~~~'
 docker-compose -f ./nginx/docker-compose.yml down
 docker-compose -f ./nginx/docker-compose.yml up -d
