@@ -48,17 +48,17 @@ public class DateUtil {
     public String translateDayValue(int value){
         switch (value) {
             case 1:
-                return "Ponedeljak";
+                return "Monday";
             case 2:
-                return "Utorak";
+                return "Tuesday";
             case 3:
-                return "Sreda";
+                return "Wednesday";
             case 4:
-                return "Četvrtak";
+                return "Thursday";
             case 5:
-                return "Petak";
+                return "Friday";
             default:
-                return "Greška";
+                return "Error";
         }
     }
 }
