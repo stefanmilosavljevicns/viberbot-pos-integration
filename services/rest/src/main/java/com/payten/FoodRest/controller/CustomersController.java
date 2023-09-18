@@ -94,7 +94,7 @@ public class CustomersController {
             response.add(menu.getName()+"\n"+"PRICE: "+ menu.getPrice()+"EUR");
             totalPrice += menu.getPrice();
         }
-        response.add("Ukupno za uplatu: "+ totalPrice);
+        response.add("Total: "+ totalPrice);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
