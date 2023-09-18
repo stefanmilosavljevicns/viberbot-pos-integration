@@ -37,7 +37,6 @@ public class BotConstants {
     public static final String checkTimeSlotAvailability = "/checkTimeSlotAvailability";
     public static final String checkFreeTimeSlots = "/checkFreeTimeSlots";
     public static final String addOrder = "/addOrder";
-    public static final String returnToPayment = "Povratak na odabir plaćanja";
     public static final String failedPayment = "Da li želite da ponovite online plaćanje?";
 
 
