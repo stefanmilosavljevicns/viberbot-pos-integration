@@ -70,7 +70,7 @@ public class Controller {
                     case addingItemToCart:
                         MenuItem addList = httpUtil.getItemByName(messageText.substring(3));
                         httpUtil.addServiceToCart(userId, addList);
-                        bot.messageForUser(userId).postText("Dodajem na listu " + messageText.substring(3), keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText("Adding to list: " + messageText.substring(3), keyboardUtil.getMainMenu());
                         logger.info("Adding to cart: " + messageText.substring(3));
                         break;
                     case navigateToCartMenu:
@@ -108,7 +108,7 @@ public class Controller {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                         LocalDate localDate = LocalDate.parse(messageText.substring(3), formatter);
                         List<LocalDateTime> allSlots = httpUtil.checkFreeTimeSlots(localDate,httpUtil.getTotalTime(userId).intValue());
-                        bot.messageForUser(userId).postText("Izaberite termin kako bi završili rezervaciju",keyboardUtil.setHourPicker(allSlots));
+                        bot.messageForUser(userId).postText("Select time slot in order to finish reservation: ",keyboardUtil.setHourPicker(allSlots));
                         logger.info("Showing user: " + userId +"list of free time slots.");
                         break;
                     case selectDeliveryTime:
@@ -140,7 +140,7 @@ public class Controller {
                         int newlineIndex = messageText.indexOf('\n', 3);
                         MenuItem rmvList = httpUtil.getItemByName(messageText.substring(3, newlineIndex));
                         httpUtil.removeServiceFromCart(userId, rmvList);
-                        bot.messageForUser(userId).postText("Uklanjam " + messageText.substring(3, newlineIndex), keyboardUtil.setCartList(userId));
+                        bot.messageForUser(userId).postText("Removing " + messageText.substring(3, newlineIndex), keyboardUtil.setCartList(userId));
                         logger.info("Trying to remove: " + messageText.substring(3));
                         break;
                     case navigateToMainMenu:
@@ -165,7 +165,7 @@ public class Controller {
         httpUtil.updateStartTime(viberId,start);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         LocalDateTime startDate = LocalDateTime.parse(start, formatter);
-        bot.messageForUser(viberId).postText("Vaš zakazani termin je promenjen, vreme novog termina je: " + startDate.getDayOfMonth()+"."+startDate.getMonthValue()+". u " + startDate.getHour()+":"+startDate.getMinute(), keyboardUtil.getMainMenu());
+        bot.messageForUser(viberId).postText("Your time slot has been updated to: " + startDate.getDayOfMonth()+"."+startDate.getMonthValue()+". u " + startDate.getHour()+":"+startDate.getMinute(), keyboardUtil.getMainMenu());
         logger.info("We are sending user information that merchant changed his start time");
         return ResponseEntity.ok().build();
 
