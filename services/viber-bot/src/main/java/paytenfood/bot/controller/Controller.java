@@ -13,10 +13,10 @@ import paytenfood.bot.model.OrderPOS;
 import paytenfood.bot.util.DateUtil;
 import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
-import ru.multicon.viber4j.ViberBot;
-import ru.multicon.viber4j.ViberBotManager;
-import ru.multicon.viber4j.incoming.Incoming;
-import ru.multicon.viber4j.incoming.IncomingImpl;
+import com.payten.viberutil.ViberBot;
+import com.payten.viberutil.ViberBotManager;
+import com.payten.viberutil.incoming.Incoming;
+import com.payten.viberutil.incoming.IncomingImpl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import paytenfood.bot.model.OrderPOS;
 import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
-import ru.multicon.viber4j.ViberBot;
-import ru.multicon.viber4j.ViberBotManager;
+import com.payten.viberutil.ViberBot;
+import com.payten.viberutil.ViberBotManager;
 
 @Component
 public class OrderReminderScheduler {

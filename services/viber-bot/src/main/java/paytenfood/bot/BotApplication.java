@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import paytenfood.bot.util.HttpUtil;
 import paytenfood.bot.util.KeyboardUtil;
 import paytenfood.bot.util.StringUtils;
-import ru.multicon.viber4j.ViberBotManager;
+import com.payten.viberutil.ViberBotManager;
 
 import static paytenfood.bot.util.BotConstants.domain;
 

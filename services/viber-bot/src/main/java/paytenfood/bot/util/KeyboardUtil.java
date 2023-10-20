@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import paytenfood.bot.model.MenuItem;
-import ru.multicon.viber4j.keyboard.ViberButton;
-import ru.multicon.viber4j.keyboard.ViberKeyboard;
+import com.payten.viberutil.keyboard.ViberButton;
+import com.payten.viberutil.keyboard.ViberKeyboard;
 
 
 import java.net.URISyntaxException;

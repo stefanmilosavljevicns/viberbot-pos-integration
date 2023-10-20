@@ -3,7 +3,7 @@ echo '~~~~~~ BUILDING SPRING-BOOT SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~ 1. BULDING UTIL SERVICE ~~~~~~'
-mvn -f ./utils/viber4j clean install -DskipTests
+mvn -f ./utils/viberutil clean install -DskipTests
 echo '~~~~~~ 2. BULDING REST SERVICE ~~~~~~'
 mvn -f ./rest clean install -DskipTests
 echo '~~~~~~ 3. BULDING VIBER-BOT SERVICE ~~~~~~'

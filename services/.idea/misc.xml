@@ -4,7 +4,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/rest/pom.xml" />
-        <option value="$PROJECT_DIR$/utils/viber4j/pom.xml" />
+        <option value="$PROJECT_DIR$/utils/viberutil/pom.xml" />
         <option value="$PROJECT_DIR$/viber-bot/pom.xml" />
       </list>
     </option>
