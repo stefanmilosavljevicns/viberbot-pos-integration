@@ -1,8 +1,8 @@
-package com.payten.FoodRest.controller;
+package com.payten.restapi.controller;
 
-import com.payten.FoodRest.model.Order;
-import com.payten.FoodRest.model.OrderState;
-import com.payten.FoodRest.repository.OrderRepository;
+import com.payten.restapi.model.Order;
+import com.payten.restapi.model.OrderState;
+import com.payten.restapi.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;

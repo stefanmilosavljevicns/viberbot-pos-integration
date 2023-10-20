@@ -1,6 +1,6 @@
-package com.payten.FoodRest.repository;
+package com.payten.restapi.repository;
 
-import com.payten.FoodRest.model.Customers;
+import com.payten.restapi.model.Customers;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

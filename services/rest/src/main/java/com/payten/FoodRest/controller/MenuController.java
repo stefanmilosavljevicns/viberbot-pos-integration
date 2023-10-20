@@ -1,7 +1,7 @@
-package com.payten.FoodRest.controller;
+package com.payten.restapi.controller;
 
-import com.payten.FoodRest.model.Menu;
-import com.payten.FoodRest.repository.MenuRepository;
+import com.payten.restapi.model.Menu;
+import com.payten.restapi.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package paytenfood.bot.model;
+package payten.bot.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

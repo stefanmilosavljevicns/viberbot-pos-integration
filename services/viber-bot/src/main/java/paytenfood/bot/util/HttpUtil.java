@@ -1,4 +1,4 @@
-package paytenfood.bot.util;
+package payten.bot.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import paytenfood.bot.model.MenuItem;
-import paytenfood.bot.model.OrderPOS;
+import payten.bot.model.MenuItem;
+import payten.bot.model.OrderPOS;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static paytenfood.bot.util.BotConstants.*;
+import static payten.bot.util.BotConstants.*;
 
 @Component
 public class HttpUtil {

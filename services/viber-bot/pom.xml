@@ -10,7 +10,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>payten-food</groupId>
+	<groupId>payten</groupId>
 	<artifactId>bot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bot</name>

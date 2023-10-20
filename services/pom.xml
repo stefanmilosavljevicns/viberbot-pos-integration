@@ -56,7 +56,7 @@
 
     <modules>
         <module>viberutil</module>
-        <module>FoodRest</module>
+        <module>restapi</module>
         <module>bot</module>
     </modules>
 </project>

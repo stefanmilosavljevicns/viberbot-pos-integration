@@ -1,13 +1,13 @@
-package com.payten.FoodRest;
+package com.payten.restapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FoodRestApplication {
+public class restapiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FoodRestApplication.class, args);
+		SpringApplication.run(restapiApplication.class, args);
 	}
 
 }

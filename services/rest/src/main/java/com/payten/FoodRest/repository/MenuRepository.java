@@ -1,8 +1,8 @@
-package com.payten.FoodRest.repository;
+package com.payten.restapi.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.Query;
-import com.payten.FoodRest.model.Menu;
+import com.payten.restapi.model.Menu;
 import java.util.List;
 
 public interface MenuRepository extends MongoRepository<Menu, String> {

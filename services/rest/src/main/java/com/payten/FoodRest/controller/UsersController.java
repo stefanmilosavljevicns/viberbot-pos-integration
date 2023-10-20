@@ -1,8 +1,8 @@
-package com.payten.FoodRest.controller;
+package com.payten.restapi.controller;
 
 
-import com.payten.FoodRest.model.Users;
-import com.payten.FoodRest.repository.UsersRepository;
+import com.payten.restapi.model.Users;
+import com.payten.restapi.repository.UsersRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

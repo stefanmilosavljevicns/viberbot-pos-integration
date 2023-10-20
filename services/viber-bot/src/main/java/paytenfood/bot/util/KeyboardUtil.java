@@ -1,11 +1,11 @@
-package paytenfood.bot.util;
+package payten.bot.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import paytenfood.bot.model.MenuItem;
+import payten.bot.model.MenuItem;
 import com.payten.viberutil.keyboard.ViberButton;
 import com.payten.viberutil.keyboard.ViberKeyboard;
 
@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static paytenfood.bot.util.BotConstants.*;
+import static payten.bot.util.BotConstants.*;
 
 @Component
 public class KeyboardUtil {

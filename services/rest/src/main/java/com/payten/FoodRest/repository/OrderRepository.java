@@ -1,8 +1,8 @@
-package com.payten.FoodRest.repository;
+package com.payten.restapi.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.payten.FoodRest.model.Order;
+import com.payten.restapi.model.Order;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

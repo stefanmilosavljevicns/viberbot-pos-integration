@@ -11,9 +11,9 @@
 	</parent>
 
 	<groupId>com.payten</groupId>
-	<artifactId>FoodRest</artifactId>
+	<artifactId>restapi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>FoodRest</name>
+	<name>restapi</name>
 	<description>Demo project for Spring Boot</description>
 
 	<dependencies>
@@ -42,7 +42,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>foodrest</finalName>
+		<finalName>restapi</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

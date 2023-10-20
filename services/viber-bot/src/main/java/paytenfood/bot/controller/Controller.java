@@ -1,4 +1,4 @@
-package paytenfood.bot.controller;
+package payten.bot.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import paytenfood.bot.model.MenuItem;
-import paytenfood.bot.model.OrderPOS;
-import paytenfood.bot.util.DateUtil;
-import paytenfood.bot.util.HttpUtil;
-import paytenfood.bot.util.KeyboardUtil;
+import payten.bot.model.MenuItem;
+import payten.bot.model.OrderPOS;
+import payten.bot.util.DateUtil;
+import payten.bot.util.HttpUtil;
+import payten.bot.util.KeyboardUtil;
 import com.payten.viberutil.ViberBot;
 import com.payten.viberutil.ViberBotManager;
 import com.payten.viberutil.incoming.Incoming;
@@ -28,14 +28,14 @@ import java.util.List;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static paytenfood.bot.util.BotConstants.*;
+import static payten.bot.util.BotConstants.*;
 
 @RestController
 public class Controller {
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
     @Autowired
-    public paytenfood.bot.util.StringUtils stringUtils;
+    public payten.bot.util.StringUtils stringUtils;
     @Autowired
     private HttpUtil httpUtil;
     @Autowired

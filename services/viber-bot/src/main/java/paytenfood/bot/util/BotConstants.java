@@ -1,4 +1,4 @@
-package paytenfood.bot.util;
+package payten.bot.util;
 
 public class BotConstants {
     //KEY NAMES FOR MAPPING ACTION STATES FOR VIBER

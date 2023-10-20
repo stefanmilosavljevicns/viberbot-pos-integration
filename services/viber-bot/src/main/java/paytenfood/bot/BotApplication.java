@@ -1,4 +1,4 @@
-package paytenfood.bot;
+package payten.bot;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
@@ -10,12 +10,12 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import paytenfood.bot.util.HttpUtil;
-import paytenfood.bot.util.KeyboardUtil;
-import paytenfood.bot.util.StringUtils;
+import payten.bot.util.HttpUtil;
+import payten.bot.util.KeyboardUtil;
+import payten.bot.util.StringUtils;
 import com.payten.viberutil.ViberBotManager;
 
-import static paytenfood.bot.util.BotConstants.domain;
+import static payten.bot.util.BotConstants.domain;
 
 
 @SpringBootApplication

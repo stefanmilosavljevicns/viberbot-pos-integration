@@ -1,4 +1,4 @@
 FROM openjdk:17
-ADD target/foodrest.jar foodrest.jar
-ENTRYPOINT ["java", "-jar","foodrest.jar"]
+ADD target/restapi.jar restapi.jar
+ENTRYPOINT ["java", "-jar","restapi.jar"]
 EXPOSE 9097

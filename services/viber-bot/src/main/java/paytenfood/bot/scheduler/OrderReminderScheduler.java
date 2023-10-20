@@ -1,4 +1,4 @@
-package paytenfood.bot.scheduler;
+package payten.bot.scheduler;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import org.slf4j.Logger;
-import paytenfood.bot.model.OrderPOS;
-import paytenfood.bot.util.HttpUtil;
-import paytenfood.bot.util.KeyboardUtil;
+import payten.bot.model.OrderPOS;
+import payten.bot.util.HttpUtil;
+import payten.bot.util.KeyboardUtil;
 import com.payten.viberutil.ViberBot;
 import com.payten.viberutil.ViberBotManager;
 
@@ -18,7 +18,7 @@ public class OrderReminderScheduler {
     private static final Logger logger = LoggerFactory.getLogger(OrderReminderScheduler.class);
 
     @Autowired
-    public paytenfood.bot.util.StringUtils stringUtils;
+    public payten.bot.util.StringUtils stringUtils;
     @Autowired
     private HttpUtil httpUtil;
     @Autowired

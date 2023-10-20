@@ -1,4 +1,4 @@
-package paytenfood.bot.util;
+package payten.bot.util;
 
 import org.springframework.stereotype.Component;
 

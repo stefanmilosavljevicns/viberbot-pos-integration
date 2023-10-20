@@ -1,4 +1,4 @@
-package paytenfood.bot.model;
+package payten.bot.model;
 
 public class MenuItem {
     private String name;
