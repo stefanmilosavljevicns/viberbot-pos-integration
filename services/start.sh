@@ -2,12 +2,7 @@
 echo '~~~~~~ BUILDING SPRING-BOOT SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-echo '~~~~~~ 1. BULDING UTIL SERVICE ~~~~~~'
-mvn -f ./utils/viberutil clean install -DskipTests
-echo '~~~~~~ 2. BULDING REST SERVICE ~~~~~~'
-mvn -f ./rest clean install -DskipTests
-echo '~~~~~~ 3. BULDING VIBER-BOT SERVICE ~~~~~~'
-mvn -f ./viber-bot clean install -DskipTests
+mvn clean install -DskipTests
 echo '~~~~~~ BUILDING DOCKER IMAGES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
@@ -15,7 +10,6 @@ echo '~~~~~~ 1. BULDING REST IMAGE ~~~~~~'
 docker build ./rest -t foodrest.jar
 echo '~~~~~~ 2. BULDING VIBER-BOT IMAGE ~~~~~~'
 docker build ./viber-bot -t bot.jar
-
 echo '~~~~~~ CREATING DOCKER NETWORK ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
