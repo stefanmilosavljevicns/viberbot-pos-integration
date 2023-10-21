@@ -9,12 +9,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="restapi" />
         <module name="viberutil" />
+        <module name="bot" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="bot" options="-parameters" />
+      <module name="bot" options="" />
       <module name="restapi" options="" />
     </option>
   </component>
