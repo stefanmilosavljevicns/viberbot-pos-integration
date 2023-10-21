@@ -27,6 +27,6 @@ docker-compose -f ./restapi/docker-compose.yml down
 docker-compose -f ./restapi/docker-compose.yml up -d
 sleep 15
 echo '~~~~~~ 3. STARTING VIBER-BOT ~~~~~~'
-docker-compose -f ./viberutil/docker-compose.yml down
-docker-compose -f ./viberutil/docker-compose.yml up -d
+docker-compose -f ./bot/docker-compose.yml down
+docker-compose -f ./bot/docker-compose.yml up -d
 sleep 15

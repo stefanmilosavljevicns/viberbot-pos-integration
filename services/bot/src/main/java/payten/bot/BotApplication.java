@@ -1,4 +1,4 @@
-package payten.bot;
+package com.payten.bot;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
