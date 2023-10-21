@@ -18,16 +18,15 @@ docker network create nginx-net
 echo '~~~~~~ STARTING DOCKER SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-echo '~~~~~~ 1. STARTING CLIENT FLASK ~~~~~~'
-echo '~~~~~~ 2. STARTING NGINX ~~~~~~'
-docker-compose -f ./nginx/docker-compose.yml down -d
+echo '~~~~~~ 1. STARTING NGINX ~~~~~~'
+docker-compose -f ./nginx/docker-compose.yml down
 docker-compose -f ./nginx/docker-compose.yml up -d
 sleep 15
-echo '~~~~~~ 3. STARTING REST ~~~~~~'
-docker-compose -f ./restapi/docker-compose.yml down -d
-docker-compose -f ./restapi/docker-compose.yml up -d
+echo '~~~~~~ 2. STARTING REST ~~~~~~'
+docker-compose -f ./rest/docker-compose.yml down
+docker-compose -f ./rest/docker-compose.yml up -d
 sleep 15
-echo '~~~~~~ 4. STARTING VIBER-BOT ~~~~~~'
-docker-compose -f ./bot/docker-compose.yml down -d
-docker-compose -f ./bot/docker-compose.yml up -d
+echo '~~~~~~ 3. STARTING VIBER-BOT ~~~~~~'
+docker-compose -f ./viber-bot/docker-compose.yml down
+docker-compose -f ./viber-bot/docker-compose.yml up -d
 sleep 15
