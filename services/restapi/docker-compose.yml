@@ -1,7 +1,7 @@
 version: "3.3"
 services:
     food-rest:
-      image: restapi.jar:latest
+      image: restapi:latest
       restart: on-failure
       container_name: rest
       environment:

@@ -7,9 +7,9 @@ echo '~~~~~~ BUILDING DOCKER IMAGES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~ 1. BULDING REST IMAGE ~~~~~~'
-docker build ./restapi -t restapi.jar
+docker build ./restapi -t restapi
 echo '~~~~~~ 2. BULDING VIBER-BOT IMAGE ~~~~~~'
-docker build ./bot -t bot.jar
+docker build ./bot -t bot
 
 echo '~~~~~~ CREATING DOCKER NETWORK ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
