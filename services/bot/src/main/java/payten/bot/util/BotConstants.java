@@ -26,8 +26,6 @@ public class BotConstants {
     public static final String getCart = "/getCart";
     public static final String getOrdersWithin24Hourse = "/getAllActiveDates";
     public static final String checkIfCartIsEmpty = "/checkIfCartIsEmpty";
-    public static final String checkPayingStatus = "/checkPayingStatus";
-    public static final String changePayingStatus = "/changePayingStatus";
     public static final String getTotalTime = "/getTotalTime";
     public static final String getTotalPrice = "/getTotalPrice";
     public static final String convertToOrderModel = "/convertToOrderModel";
@@ -37,7 +35,6 @@ public class BotConstants {
     public static final String checkTimeSlotAvailability = "/checkTimeSlotAvailability";
     public static final String checkFreeTimeSlots = "/checkFreeTimeSlots";
     public static final String addOrder = "/addOrder";
-    public static final String failedPayment = "Da li želite da ponovite online plaćanje?";
     public static final String returnToPayment = "Back to payment";
 
 }

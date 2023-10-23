@@ -37,25 +37,12 @@ public class CustomersController {
         }
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
-    @PutMapping("/changePayingStatus")
-    public ResponseEntity<Customers> changePayingStatus(@RequestParam String viberId, @RequestParam Boolean payingStatus){
-        Optional<Customers> doc = customersRepository.findById(viberId);
-        doc.get().setIsPaying(payingStatus);
-        return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
-    }
     @PutMapping("/clearCart")
     public ResponseEntity<Customers> clearCart(@RequestParam String viberId){
         Optional<Customers> doc = customersRepository.findById(viberId);
         doc.get().getArchievedOrder().addAll(doc.get().getCurrentOrder());
         doc.get().setCurrentOrder(new ArrayList<>());
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
-    }
-    @GetMapping("/checkPayingStatus")
-    public ResponseEntity<Boolean> checkPayingStatus(@RequestParam String viberId) {
-        if (customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getIsPaying().equals(true)) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(false, HttpStatus.OK);
     }
     @GetMapping("/getTotalTime")
     public ResponseEntity<Integer> getTotalTime(@RequestParam String viberId) {
@@ -83,7 +70,6 @@ public class CustomersController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    //Using this endpoint for creating Asseco payment.
     //Using this endpoint for generating current cart list for Viber Bot
     @GetMapping("/getCart")
     public ResponseEntity<List<String>> getCart(@RequestParam String viberId) {
