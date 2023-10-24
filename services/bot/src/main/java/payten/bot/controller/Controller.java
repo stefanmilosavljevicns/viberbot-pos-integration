@@ -68,7 +68,7 @@ public class Controller {
                     case addingItemToCart:
                         MenuItem addList = httpUtil.getItemByName(messageText.substring(3));
                         httpUtil.addServiceToCart(userId, addList);
-                        bot.messageForUser(userId).postText("Adding to list: " + messageText.substring(3), keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText("Dodajem na listu: " + messageText.substring(3), keyboardUtil.getMainMenu());
                         logger.info("Adding to cart: " + messageText.substring(3));
                         break;
                     case navigateToCartMenu:
@@ -139,7 +139,7 @@ public class Controller {
                         int newlineIndex = messageText.indexOf('\n', 3);
                         MenuItem rmvList = httpUtil.getItemByName(messageText.substring(3, newlineIndex));
                         httpUtil.removeServiceFromCart(userId, rmvList);
-                        bot.messageForUser(userId).postText("Removing " + messageText.substring(3, newlineIndex), keyboardUtil.setCartList(userId));
+                        bot.messageForUser(userId).postText("Uklanjam " + messageText.substring(3, newlineIndex), keyboardUtil.setCartList(userId));
                         logger.info("Trying to remove: " + messageText.substring(3));
                         break;
                     case navigateToMainMenu:
