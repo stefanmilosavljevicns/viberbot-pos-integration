@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition
 @Configuration
-public class OpenAPIConfiguration {
+public class SpringdocConfig {
+
     @Bean
     public OpenAPI baseOpenAPI() {
         return new OpenAPI()
