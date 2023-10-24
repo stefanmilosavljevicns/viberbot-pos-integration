@@ -1,6 +1,5 @@
 package payten.bot.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ import com.payten.viberutil.incoming.Incoming;
 import com.payten.viberutil.incoming.IncomingImpl;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -95,7 +93,7 @@ public class Controller {
                             logger.info("Unable to show current cart.");
                         }
                         break;
-                    case startPaymentProcess:
+                    case agreeWithCart:
                         if (httpUtil.cartChecker(userId)) {
                             bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime(), keyboardUtil.setDayPicker());
 

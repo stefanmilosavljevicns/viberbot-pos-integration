@@ -11,8 +11,6 @@ import com.payten.viberutil.keyboard.ViberKeyboard;
 
 
 import java.net.URISyntaxException;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -136,7 +134,7 @@ public class KeyboardUtil {
         confirmationKeyboard = new ViberKeyboard();
         confirmationKeyboard.setInputFieldState("hidden");
         confirmationKeyboard.setType("keyboard");
-        confirmationKeyboard.addButton(new ViberButton(startPaymentProcess)
+        confirmationKeyboard.addButton(new ViberButton(agreeWithCart)
                 .setText(stringUtils.getButtonYes())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())

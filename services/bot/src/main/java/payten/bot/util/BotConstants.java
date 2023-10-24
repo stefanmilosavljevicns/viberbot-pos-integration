@@ -7,11 +7,11 @@ public class BotConstants {
     public static final String navigateToCartMenu = "CRT";
     public static final String startReservationProcess = "FNH";
     public static final String clearCartAndFinishSession = "CLR";
-    public static final String startPaymentProcess = "PYT";
+    public static final String agreeWithCart = "AGR";
     public static final String selectDayReservation = "DAY";
     public static final String selectDeliveryTime = "TIM";
     public static final String selectCategoryFromMainMenu = "LST";
-    public static final String navigateToMainMenu = "RTS";
+    public static final String navigateToMainMenu = "BCK";
     public static final String ignoreUserInput = "IGR";
     public static final String addingItemToCart = "ADD";
     public static final String removingItemFromCart = "RMV";
