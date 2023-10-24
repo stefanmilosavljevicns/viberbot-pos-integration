@@ -77,10 +77,10 @@ public class CustomersController {
         ArrayList<String> response = new ArrayList<>();
         Double totalPrice = 0.0;
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
-            response.add(menu.getName()+"\n"+"PRICE: "+ menu.getPrice()+"EUR");
+            response.add(menu.getName()+"\n"+"CENA: "+ menu.getPrice()+"RSD");
             totalPrice += menu.getPrice();
         }
-        response.add("Total: "+ totalPrice);
+        response.add("UKUPNO: "+ totalPrice);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
