@@ -33,7 +33,9 @@ public class KeyboardUtil {
     private DateUtil dateUtil;
     private ViberKeyboard confirmationKeyboard;
     public ViberKeyboard getMainMenu() {
+        logger.info("Delivering user: " + mainMenu.toString());
         return mainMenu;
+
     }
     public ViberKeyboard setListMenu(String listName) throws JsonProcessingException {
         ArrayList<MenuItem> menuItems = httpUtil.getServiceList(listName);
@@ -64,6 +66,7 @@ public class KeyboardUtil {
                     .setTextSize(ViberButton.TextSize.LARGE)
                     .setBgColor(stringUtils.getPrimarilyColor())
                     .setSilent(true));
+        logger.info("Delivering user: " + listMenu);
         return listMenu;
     }
     public ViberKeyboard setDayPicker(){
@@ -99,6 +102,7 @@ public class KeyboardUtil {
                 .setSilent(true)
                 .setBgColor(stringUtils.getPrimarilyColor()));
         logger.info(availableDays.toString());
+        logger.info("Delivering user: " + dayPicker);
         return dayPicker;
     }
     public ViberKeyboard setHourPicker(List<LocalDateTime> freeTimeSlots){
@@ -130,6 +134,7 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setSilent(true)
                 .setBgColor(stringUtils.getPrimarilyColor()));
+        logger.info("Delivering user: " + hourPicker);
         return hourPicker;
     }
     public ViberKeyboard setYesNo(){
@@ -150,20 +155,8 @@ public class KeyboardUtil {
                 .setSilent(true)
                 .setColumns(3)
                 .setRows(2));
+        logger.info("Delivering user: " + confirmationKeyboard);
         return confirmationKeyboard;
-    }
-    public ViberKeyboard returnToPayment(){
-        ViberKeyboard returnToPaymentKyb = new ViberKeyboard();
-        returnToPaymentKyb.setInputFieldState("hidden");
-        returnToPaymentKyb.setType("keyboard");
-        returnToPaymentKyb.addButton(new ViberButton(startPaymentProcess)
-                .setText(returnToPayment)
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getPrimarilyColor())
-                .setColumns(4)
-                .setSilent(true)
-                .setRows(4));
-        return returnToPaymentKyb;
     }
     public ViberKeyboard setCartList(String viberId) throws JsonProcessingException, URISyntaxException {
         ArrayList<String> currentCart = httpUtil.getCartList(viberId);
@@ -200,6 +193,8 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setSilent(true)
                 .setBgColor(stringUtils.getPrimarilyColor()));
+
+        logger.info("Delivering user: " + cartList);
         return cartList;
     }
     public void setMainMenu() {
