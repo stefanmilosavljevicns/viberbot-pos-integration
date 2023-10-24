@@ -38,6 +38,8 @@ public class DefaultViberClient implements ViberClient {
     public String post(String message, String url) throws IOException {
         LOGGER.debug("Posting messageForUser {} to url {}", message, url);
         HttpPost request = new HttpPost(url);
+        //Todo obrisi ovo kasnije
+        LOGGER.info("JSON REQUEST: {}", message);
         request.addHeader(TOKEN_HEADER, authToken);
         request.addHeader(USER_AGENT_NAME, USER_AGENT_VALUE);
         request.setEntity(new StringEntity(message, ContentType.APPLICATION_JSON));
