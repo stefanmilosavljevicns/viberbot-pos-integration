@@ -1,5 +1,6 @@
 package payten.bot.scheduler;
 
+import com.payten.restapi.model.Order;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,11 +27,11 @@ public class OrderReminderScheduler {
     @Scheduled(cron = "0 0 14 * * *") // Trigger at 2 pm every day
     public void remindUserForIncomingReservation() {        
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
-        ArrayList<OrderPOS> activeUsers = new ArrayList<>();
+        ArrayList<Order> activeUsers = new ArrayList<>();
         activeUsers = httpUtil.get24HOrderPOS();
         if(activeUsers.size() > 0){
-            for(OrderPOS orderPos : activeUsers){
-                bot.messageForUser(orderPos.getViberID()).postText("Podsećamo Vas da sutra imate zakazan termin u " + orderPos.getStartTime().getHour() +":" + orderPos.getStartTime().getMinute(),keyboardUtil.getMainMenu());
+            for(Order orderPos : activeUsers){
+                bot.messageForUser(orderPos.getViberID()).postText(stringUtils.getMessageReminder() + orderPos.getStartTime().getHour() +":" + orderPos.getStartTime().getMinute(),keyboardUtil.getMainMenu());
                 logger.info("Reminding user " + orderPos.getViberID() + " for his reservation");
             }
         }

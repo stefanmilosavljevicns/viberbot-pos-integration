@@ -1,6 +1,8 @@
 package payten.bot.controller;
 
 import com.google.gson.Gson;
+import com.payten.restapi.model.Order;
+import com.payten.restapi.model.OrderState;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,14 +122,20 @@ public class Controller {
                             LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
                             String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
                             if (checkTime.equals("Time slot is available.")) {
-                                OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId);
+                                Order sendOrderPOS = new Order();
+                                sendOrderPOS.setDescription(httpUtil.getCurrentList(userId));
+                                sendOrderPOS.setPrice(httpUtil.getTotalPrice(userId));
+                                sendOrderPOS.setStartTime(startTime);
+                                sendOrderPOS.setEndTime(endTime);
+                                sendOrderPOS.setState(OrderState.PENDING);
+                                sendOrderPOS.setViberID(userId);
                                 httpUtil.sendOrder(sendOrderPOS, userId);
                                 bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(),keyboardUtil.getMainMenu());
                                 httpUtil.clearCart(userId);
                                 logger.info("Session finished, clearing cart.");
                             }
                             else{
-                                bot.messageForUser(userId).postText("Došlo je do greške ili je termin upravo neko rezervisao pre Vas, vraćam Vas na početak",keyboardUtil.getMainMenu());
+                                bot.messageForUser(userId).postText(stringUtils.getMessageError(),keyboardUtil.getMainMenu());
                             }
                         break;
                     case clearCartAndFinishSession:

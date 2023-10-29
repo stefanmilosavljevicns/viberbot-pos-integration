@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.payten.restapi.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import payten.bot.model.MenuItem;
-import payten.bot.model.OrderPOS;
+
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -143,11 +144,11 @@ public class HttpUtil {
 
 
     //In this endpoint we are sending order to POS and clearing cart for customer
-    public void sendOrder(OrderPOS orderPOS, String viberId) throws URISyntaxException {
+    public void sendOrder(Order orderPOS, String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<OrderPOS> requestEntity = new HttpEntity<>(orderPOS, headers);
+        HttpEntity<Order> requestEntity = new HttpEntity<>(orderPOS, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(stringUtils.getRestAdress() + addOrder, HttpMethod.POST, requestEntity, String.class);
         logger.info(String.format(httpLogFormat, addOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
@@ -189,12 +190,12 @@ public class HttpUtil {
         MenuItem model = responseEntity.getBody();
         return model;
     }
-    public ArrayList<OrderPOS> get24HOrderPOS () {
+    public ArrayList<Order> get24HOrderPOS () {
         RestTemplate restTemplate = new RestTemplate();
         String endpointUrl = stringUtils.getRestAdress() + getOrdersWithin24Hourse;      
-        ParameterizedTypeReference<ArrayList<OrderPOS>> responseType = new ParameterizedTypeReference<ArrayList<OrderPOS>>() {};                
-        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(endpointUrl, HttpMethod.GET, null, responseType);                
-        ArrayList<OrderPOS> orderList = responseEntity.getBody();
+        ParameterizedTypeReference<ArrayList<Order>> responseType = new ParameterizedTypeReference<ArrayList<Order>>() {};
+        ResponseEntity<ArrayList<Order>> responseEntity = restTemplate.exchange(endpointUrl, HttpMethod.GET, null, responseType);
+        ArrayList<Order> orderList = responseEntity.getBody();
         return orderList;
     }
 

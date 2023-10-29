@@ -21,4 +21,6 @@ public class Order {
     private LocalDateTime endTime;
     private OrderState state;
     private String viberID;
-}
+
+    }
+

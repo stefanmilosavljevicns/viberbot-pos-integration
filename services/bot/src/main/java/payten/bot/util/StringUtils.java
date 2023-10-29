@@ -19,6 +19,7 @@ public class StringUtils {
     private String buttonYes;
     @Value("${text.no-button}")
     private String buttonNo;
+
     @Value("${text.standard-button}")
     private String buttonStandard;
     @Value("${text.menu-cart}")
@@ -61,6 +62,13 @@ public class StringUtils {
     private String messageCheckTime;
     @Value("${message.success-reservation}")
     private String messageSuccessReservation;
+
+    @Value("${message.remind-user}")
+    private String messageReminder;
+
+    public String getMessageReminder() {
+        return messageReminder;
+    }
 
     public String getButtonMenuCart() {
         return buttonMenuCart;
