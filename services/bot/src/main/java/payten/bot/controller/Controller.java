@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import payten.bot.model.MenuItem;
-import payten.bot.model.OrderPOS;
 import payten.bot.util.DateUtil;
 import payten.bot.util.HttpUtil;
 import payten.bot.util.KeyboardUtil;
@@ -18,7 +17,6 @@ import com.payten.viberutil.ViberBot;
 import com.payten.viberutil.ViberBotManager;
 import com.payten.viberutil.incoming.Incoming;
 import com.payten.viberutil.incoming.IncomingImpl;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
