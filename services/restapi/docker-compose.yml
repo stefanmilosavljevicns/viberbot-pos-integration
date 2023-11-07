@@ -10,7 +10,7 @@ services:
       stdin_open: true
       tty: true
       depends_on:
-        - food-mongo
+        - mongo-db
       networks:
         - nginx-net
     mongo-db:
