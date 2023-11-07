@@ -11,10 +11,6 @@ services:
         - ./conf/:/etc/nginx/conf.d/:ro        
         - ./certbot/conf/:/etc/nginx/ssl/:ro        
         - /var/www/html/images:/usr/share/nginx/html/images
-    certbot:
-      image: certbot/certbot:latest
-      volumes:
-        - ./certbot/conf/:/etc/letsencrypt/:rw  
 networks:
   nginx-net:
     external: true        
