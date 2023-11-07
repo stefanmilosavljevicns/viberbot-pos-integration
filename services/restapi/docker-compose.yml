@@ -3,7 +3,7 @@ services:
     rest-api:
       image: restapi:latest
       environment:
-        - "spring.data.mongodb.uri=mongodb://{db_user}:{db_pw}@rest_mongo-db/test?authSource=admin&authMechanism=SCRAM-SHA-1"
+        - "spring.data.mongodb.uri=mongodb://root:test@rest_mongo-db/test?authSource=admin&authMechanism=SCRAM-SHA-1"
         - "rest.path=/api/v1"
       ports:
         - "9097:9097"
