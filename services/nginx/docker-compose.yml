@@ -2,8 +2,6 @@ version: "3.3"
 services:
     nginx:
       image: nginx:latest
-      container_name: nginx
-      restart: always
       networks:
         - nginx-net
       ports:

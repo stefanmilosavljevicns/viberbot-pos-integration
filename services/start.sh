@@ -24,4 +24,4 @@ echo '~~~~~~ 2. STARTING REST ~~~~~~'
 docker stack deploy --compose-file ./restapi/docker-compose.yml rest
 sleep 5
 echo '~~~~~~ 3. STARTING VIBER-BOT ~~~~~~'
-docker stack deploy --compose-file ./bot/docker-compose.yml down
+docker stack deploy --compose-file ./bot/docker-compose.yml bot
