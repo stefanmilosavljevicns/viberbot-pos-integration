@@ -1,11 +1,9 @@
 version: "3.3"
 services:
-    food-rest:
+    rest-api:
       image: restapi:latest
-      restart: on-failure
-      container_name: rest
       environment:
-        - "spring.data.mongodb.uri=mongodb://root:test@food-mongo:27055/test?authSource=admin&authMechanism=SCRAM-SHA-1"
+        - "spring.data.mongodb.uri=mongodb://{db_user}:{db_pw}@rest.mongo-db/test?authSource=admin&authMechanism=SCRAM-SHA-1"
         - "rest.path=/api/v1"
       ports:
         - "9097:9097"
@@ -15,7 +13,7 @@ services:
         - food-mongo
       networks:
         - nginx-net
-    food-mongo:
+    mongo-db:
       image: mongo:4.2.0
       container_name: food-mongo
       command: mongod --port 27055
