@@ -3,7 +3,7 @@ services:
     rest-api:
       image: restapi:latest
       environment:
-        - "spring.data.mongodb.uri=mongodb://root:test@rest_mongo-db:27055/test?authSource=admin&authMechanism=SCRAM-SHA-1"
+        - "spring.data.mongodb.uri=mongodb://{db_user}:{db_pw}@rest_mongo-db:27055/test?authSource=admin&authMechanism=SCRAM-SHA-1"
         - "rest.path=/api/v1"
       ports:
         - "9097:9097"
@@ -13,6 +13,10 @@ services:
         - mongo-db
       networks:
         - nginx-net
+      secrets:
+        - db_user
+        - db_pw
+     
     mongo-db:
       image: mongo:4.2.0
       container_name: food-mongo
@@ -20,9 +24,12 @@ services:
       ports:
         - "27055:27055"
       environment:
-        - MONGO_INITDB_ROOT_USERNAME=root
-        - MONGO_INITDB_ROOT_PASSWORD=test
+        - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/db_user
+        - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/db_pw
         - MONGO_INITDB_DATABASE=test
+      secrets:
+        - db_user
+        - db_pw        
       volumes:
         - mongodb_data_container:/data/db
       healthcheck:
@@ -37,3 +44,9 @@ volumes:
 networks:
   nginx-net:
     external: true
+
+secrets:
+  db_user:
+    external: true
+  db_pw:
+    external: true    
