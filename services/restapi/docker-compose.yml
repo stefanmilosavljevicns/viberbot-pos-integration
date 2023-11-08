@@ -3,8 +3,11 @@ services:
     rest-api:
       image: restapi:latest
       environment:
-        - "spring.data.mongodb.uri=mongodb://{db_user}:{db_pw}@rest_mongo-db:27055/test?authSource=admin&authMechanism=SCRAM-SHA-1"
+        - "spring.data.mongodb.uri=mongodb://${spring.datasource.username}:${spring.datasource.password}@rest_mongo-db:27055/test?authSource=admin&authMechanism=SCRAM-SHA-1"
         - "rest.path=/api/v1"
+        - "spring.datasource.username=file:/run/secrets/db_user"
+        - "spring.datasource.password=file:/run/secrets/db_pw"
+        - "spring.config.import=optional:configtree:/run/secrets/"
       ports:
         - "9097:9097"
       stdin_open: true
