@@ -1,22 +1,7 @@
 version: "3.3"
 services:
-    rest-api:
-      image: restapi:latest
-      ports:
-        - "9097:9097"
-      stdin_open: true
-      tty: true
-      depends_on:
-        - mongo-db
-      networks:
-        - nginx-net
-      secrets:
-        - db_user
-        - db_pw
-     
     mongo-db:
       image: mongo:4.2.0
-      container_name: food-mongo
       command: mongod --port 27055
       ports:
         - "27055:27055"
@@ -36,6 +21,21 @@ services:
         retries: 3
       networks:
         - nginx-net
+        
+    rest-api:
+      image: restapi:latest
+      ports:
+        - "9097:9097"
+      stdin_open: true
+      tty: true
+      depends_on:
+        - mongo-db
+      networks:
+        - nginx-net
+      secrets:
+        - db_user
+        - db_pw
+     
 volumes:
   mongodb_data_container:
 networks:

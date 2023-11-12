@@ -20,28 +20,29 @@ import static payten.bot.util.BotConstants.domain;
 
 @SpringBootApplication
 @EnableScheduling
-public class BotApplication  implements ApplicationListener<ApplicationReadyEvent> {
-	private static final Logger logger = LoggerFactory.getLogger(BotApplication.class);
+public class BotApplication implements ApplicationListener<ApplicationReadyEvent> {
+    private static final Logger logger = LoggerFactory.getLogger(BotApplication.class);
     @Autowired
     private StringUtils stringUtils;
     @Autowired
     KeyboardUtil keyboardUtil;
     @Autowired
     private HttpUtil httpUtil;
-	public static void main(String[] args) {
-		SpringApplication.run(BotApplication.class, args);
-	}
 
-	@Override
-	public void onApplicationEvent(ApplicationReadyEvent event) {
+    public static void main(String[] args) {
+        SpringApplication.run(BotApplication.class, args);
+    }
+
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
         try {
             httpUtil.setCategories();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         keyboardUtil.setMainMenu();
-		logger.info("Web-hook registration for {}", domain+stringUtils.getBotPath());
-        if (!ViberBotManager.viberBot(stringUtils.getBotToken()).setWebHook(domain+stringUtils.getBotPath()))
+        logger.info("Web-hook registration for {}", domain + stringUtils.getBotPath());
+        if (!ViberBotManager.viberBot(stringUtils.getBotToken()).setWebHook(domain + stringUtils.getBotPath()))
             logger.error("Web-hook registration failed!");
 
 

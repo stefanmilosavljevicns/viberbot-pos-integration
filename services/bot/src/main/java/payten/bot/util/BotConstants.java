@@ -16,7 +16,8 @@ public class BotConstants {
     public static final String addingItemToCart = "ADD";
     public static final String removingItemFromCart = "RMV";
     public static final String sendOrderToPOS = "POS";
-    public static final String httpLogFormat = "||Calling endpoint: %s ||Response status: %s ||Response body: %s";
+    public static final String httpLogFormat = "||Calling endpoint: %s ||Response status: %s ||Response body: %s ||";
+    public static final String controlerLogFormat = "||Action: %s ||UserID: %s ||" ;
     public static final String whiteColor = "#FFFFFF";
     public static final String domain = "https://sputnik-it.rs";
     public static final String getAllCategories = "/getallCategories";

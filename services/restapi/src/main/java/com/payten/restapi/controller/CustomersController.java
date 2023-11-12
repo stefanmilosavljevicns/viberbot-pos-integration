@@ -4,6 +4,7 @@ import com.payten.restapi.model.Customers;
 import com.payten.restapi.model.Menu;
 import com.payten.restapi.repository.CustomersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1")
 public class CustomersController {
-
+    @Value("${customers.max.capacity}")
+    private int maxCartCapacity;
     @Autowired
     private CustomersRepository customersRepository;
     @PutMapping("/addItemToCart")
@@ -24,8 +26,15 @@ public class CustomersController {
         if (doc.isEmpty()) {
             doc = Optional.of(new Customers(viberId, new ArrayList<>(),new ArrayList<>(), null,false));
         }
-        doc.get().getCurrentOrder().add(newItem);
-        return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
+        if(doc.get().getCurrentOrder().size() < maxCartCapacity){
+            doc.get().getCurrentOrder().add(newItem);
+            return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+
     }
 
     @DeleteMapping("/removeItemFromCart")

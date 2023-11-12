@@ -1,3 +1,7 @@
+#Scripts needs next docker secrets in order to start services correctly
+#echo "test" | docker secret create db_pw -
+#echo "root" | docker secret create db_user -
+
 #!/bin/sh
 echo '~~~~~~ BUILDING SPRING-BOOT SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
@@ -14,6 +18,8 @@ echo '~~~~~~ CREATING DOCKER NETWORK ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 docker network create -d overlay nginx-net
+echo '~~~~~~~~~~~ CLEARNING SERVICES'
+docker service rm $(docker service ls -q)
 echo '~~~~~~ STARTING DOCKER SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'

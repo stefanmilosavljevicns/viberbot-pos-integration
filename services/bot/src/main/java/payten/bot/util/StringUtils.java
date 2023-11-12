@@ -53,14 +53,24 @@ public class StringUtils {
     private String messageWelcome;
     @Value("${message.return-to-menu}")
     private String messageReturnToMenu;
-    @Value("${message.payment-online}")
-    private String messagePaymentOnline;
     @Value("${message.check-cart}")
     private String messageCheckCart;
     @Value("${message.check-time}")
     private String messageCheckTime;
-    @Value("${message.success-reservation}")
+    @Value("${message.reservation-succes}")
     private String messageSuccessReservation;
+    @Value("${message.reservation-reminder}")
+    private String messageReservationReminder;
+    @Value("${message.reservation-update}")
+    private String messageReservationUpdate;
+    @Value("${message.unknown-command}")
+    private String messageUnknownCommand;
+
+    public String getMessageUnknownCommand() {return messageUnknownCommand;}
+
+    public String getMessageReservationUpdate() {return messageReservationUpdate;}
+
+    public String getMessageReservationReminder() {return messageReservationReminder;}
 
     public String getButtonMenuCart() {
         return buttonMenuCart;
@@ -104,10 +114,6 @@ public class StringUtils {
 
     public String getMessageReturnToMenu() {
         return messageReturnToMenu;
-    }
-
-    public String getMessagePaymentOnline() {
-        return messagePaymentOnline;
     }
 
     public String getMessageCheckCart() {
