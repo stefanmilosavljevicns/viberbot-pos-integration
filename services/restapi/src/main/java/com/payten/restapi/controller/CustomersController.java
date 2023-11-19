@@ -89,7 +89,7 @@ public class CustomersController {
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
             response.add(menu.getName());
         }
-        logger.info(String.format(controllerLogFormat,"/convertToOrderModel",totalPrice, HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat,"/convertToOrderModel",viberId, HttpStatus.OK));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
