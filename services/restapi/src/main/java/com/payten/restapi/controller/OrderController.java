@@ -3,6 +3,8 @@ package com.payten.restapi.controller;
 import com.payten.restapi.model.Order;
 import com.payten.restapi.model.OrderState;
 import com.payten.restapi.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -21,10 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.payten.restapi.util.Constants.controllerLogFormat;
+
 
 @RestController
 @RequestMapping("${rest.path}")
 public class OrderController {
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+
     @Autowired
     private OrderRepository orderRepository;
 
@@ -36,6 +42,7 @@ public class OrderController {
 
     @PostMapping("/addOrder")
     public ResponseEntity<Order> save(@RequestBody Order order) {
+        logger.info(String.format(controllerLogFormat, "addOrder", order, HttpStatus.OK));
         return ResponseEntity.ok(orderRepository.save(order));
     }
     @GetMapping("/getAllActiveDates")
@@ -47,6 +54,7 @@ public class OrderController {
                 .withNano(0);
         LocalDateTime endTime = startTime.plusDays(1);
         List<Order> orders = orderRepository.findUsersToRemindForReservation(startTime, endTime);
+        logger.info(String.format(controllerLogFormat, "getAllActiveDates", orders, HttpStatus.OK));
         return ResponseEntity.ok(orders);
     }
     @GetMapping("/checkFreeTimeSlots")
@@ -54,6 +62,7 @@ public class OrderController {
             @RequestParam("localDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate,
             @RequestParam("totalMinutes") int totalMinutes
     ) {
+        //todo ovo nek vuce iz app properties-a kada setuje radno vreme
         LocalTime startTime = LocalTime.of(7, 0);  // 7am
         LocalTime endTime = LocalTime.of(17, 0);   // 5pm
 
@@ -64,7 +73,7 @@ public class OrderController {
             result.add(dateTime);
             dateTime = dateTime.plusMinutes(totalMinutes);
         }
-
+        logger.info(String.format(controllerLogFormat, "checkFreeTimeSlots", result, HttpStatus.OK));
         return result;
     }
 
@@ -80,7 +89,7 @@ public class OrderController {
         updatedOrder.setState(OrderState.IN_PROGRESS);
 
         orderRepository.save(updatedOrder);
-
+        logger.info(String.format(controllerLogFormat, "acceptOrder", updatedOrder, HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
 
@@ -95,7 +104,7 @@ public class OrderController {
         updatedOrder.setState(OrderState.DECLINED);
 
         orderRepository.save(updatedOrder);
-
+        logger.info(String.format(controllerLogFormat, "declineOrder", updatedOrder, HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
     @GetMapping("/checkTimeSlotAvailability")
@@ -104,8 +113,10 @@ public class OrderController {
         List<Order> conflictingReservations = orderRepository.findByStartTimeLessThanAndEndTimeGreaterThan(end, start);
 
         if (conflictingReservations.isEmpty()) {
+            logger.info(String.format(controllerLogFormat, "checkTimeSlotAvailability", "Time slot is available.", HttpStatus.OK));
             return ResponseEntity.ok("Time slot is available.");
         } else {
+            logger.info(String.format(controllerLogFormat, "checkTimeSlotAvailability", "Time slot is not available.", HttpStatus.OK));
             return ResponseEntity.ok("Time slot is not available.");
         }
     }
@@ -113,6 +124,7 @@ public class OrderController {
     public ResponseEntity<Order> completeOrder(@PathVariable("id") String id) {
         Optional<Order> existingOrder = orderRepository.findById(id);
         if (!existingOrder.isPresent()) {
+            logger.info(String.format(controllerLogFormat, "clearCart", "", HttpStatus.NOT_FOUND));
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -120,7 +132,7 @@ public class OrderController {
         updatedOrder.setState(OrderState.COMPLETED);
 
         orderRepository.save(updatedOrder);
-
+        logger.info(String.format(controllerLogFormat, "clearCart", "", HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
 
@@ -140,6 +152,7 @@ public class OrderController {
         updatedOrder.setStartTime(startDate);
         updatedOrder.setEndTime(startDate.plusMinutes(reservationDuration.toMinutes()));
         orderRepository.save(updatedOrder);
+        logger.info(String.format(controllerLogFormat, "updateStartTime", "updatedOrder", HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
 

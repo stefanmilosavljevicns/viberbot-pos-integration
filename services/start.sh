@@ -20,14 +20,15 @@ echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 docker network create -d overlay nginx-net
 echo '~~~~~~~~~~~ CLEARNING SERVICES'
 docker service rm $(docker service ls -q)
+sleep 15
 echo '~~~~~~ STARTING DOCKER SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~ 1. STARTING NGINX ~~~~~~'
 docker stack deploy --compose-file ./nginx/docker-compose.yml nginx
-sleep 5
+sleep 15
 echo '~~~~~~ 2. STARTING REST ~~~~~~'
 docker stack deploy --compose-file ./restapi/docker-compose.yml rest
-sleep 5
+sleep 15
 echo '~~~~~~ 3. STARTING VIBER-BOT ~~~~~~'
 docker stack deploy --compose-file ./bot/docker-compose.yml bot
