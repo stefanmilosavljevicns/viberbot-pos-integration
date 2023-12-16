@@ -15,8 +15,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(request -> "10.0.1.252".contains(request.getRemoteAddr())).permitAll()
-                        .requestMatchers(request -> "10.0.1.252".equals(request.getServerName())).permitAll()
+                        .requestMatchers(request -> "10.0.1".contains(request.getRemoteAddr())).permitAll()
+                        .requestMatchers(request -> "10.0.1".contains(request.getServerName())).permitAll()
                         .requestMatchers(request -> "ws".contains(request.getScheme())).permitAll()
                         .anyRequest().authenticated()
                 )
