@@ -8,7 +8,7 @@ services:
       tty: true
       networks:
         nginx-net:
-          ipv4_address: 10.0.1.252
+          ipv4_address: 10.0.1.10
 
       environment:
         - LANG=C.UTF-8
@@ -16,3 +16,7 @@ services:
 networks:
   nginx-net:
     external: true
+    ipam:
+      config:
+        - subnet: 10.0.1.0/16
+          gateway: 10.0.1.0
