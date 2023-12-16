@@ -16,6 +16,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(request -> "bot_viber-bot".equals(request.getServerName())).permitAll()
+                        .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
