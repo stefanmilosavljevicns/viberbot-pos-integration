@@ -9,6 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig  {
 
     @Bean
