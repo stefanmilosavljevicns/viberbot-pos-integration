@@ -19,7 +19,8 @@ public class SecurityConfig {
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .requestMatchers(request -> "ws".contains(request.getScheme())).permitAll()
                         .anyRequest().authenticated()
-                );
+                )
+                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
     }
 
