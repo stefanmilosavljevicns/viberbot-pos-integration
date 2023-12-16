@@ -17,7 +17,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(request -> ".".contains(request.getRemoteAddr())).permitAll()
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
-                        .requestMatchers(request -> "ws://**".contains(request.getServerName())).permitAll()
+                        .requestMatchers(request -> "ws://".contains(request.getServerName())).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
