@@ -19,7 +19,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(request -> {
                             logger.info("Remote Address: " + request.getRemoteAddr());
-                            logger.info("Server Name: " + request.getServerName());
+                            logger.info("Server Host: " + request.getRemoteHost());
+                            logger.info("Server Port: " + request.getRemotePort());
                             return "10.0.1".contains(request.getRemoteAddr());
                         }).permitAll()                        .requestMatchers(request -> "10.0.1".contains(request.getServerName())).permitAll()
                         .requestMatchers(request -> "ws".contains(request.getScheme())).permitAll()
