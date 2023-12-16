@@ -15,7 +15,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(request -> "bot_viber-bot:9943".equals(request.getServerName())).permitAll()
+                        .requestMatchers(request -> ".".contains(request.getRemoteAddr())).permitAll()
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .requestMatchers(request -> "ws://**".contains(request.getServerName())).permitAll()
                         .anyRequest().authenticated()
