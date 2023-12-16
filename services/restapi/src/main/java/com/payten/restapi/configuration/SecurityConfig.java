@@ -15,10 +15,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(request -> "172.17.0.0/16".contains(request.getRemoteAddr()))
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+                        .requestMatchers(request -> "10.0.1".contains(request.getLocalAddr())).permitAll().anyRequest().authenticated()
+                        .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
