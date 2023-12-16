@@ -24,26 +24,26 @@ public class MenuController {
     @PostMapping("/addMenuItem")
     public ResponseEntity<Menu> save(@RequestBody Menu menu)
     {
-        logger.info(String.format(controllerLogFormat, "addMenuItem", menu, HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat, "addMenuItem", HttpStatus.OK));
         return ResponseEntity.ok(menuRepository.save(menu));
     }
 
     @GetMapping("/getallCategories")
     public ResponseEntity<List<String>> findAllLocations() {
-        logger.info(String.format(controllerLogFormat, "getallCategories", "", HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat, "getallCategories", HttpStatus.OK));
         return ResponseEntity.ok(menuRepository.findDistinctCategories());
     }
 
     @GetMapping("/getItemByName/{name}")
     public ResponseEntity<Menu> fetchItemByName(@PathVariable(value = "name") String name) {
-        logger.info(String.format(controllerLogFormat, "getItemByName", "", HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat, "getItemByName", HttpStatus.OK));
         Menu menu = menuRepository.findByName(name);
         return ResponseEntity.ok(menu);
     }
 
     @GetMapping("/getCategoryItems/{category}")
     public ResponseEntity<List<Menu>> fetchLocation(@PathVariable(value = "category") String category) {
-        logger.info(String.format(controllerLogFormat, "getCategoryItems", "", HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat, "getCategoryItems", HttpStatus.OK));
         return ResponseEntity.ok(menuRepository.findByCategory(category));
     }
 }

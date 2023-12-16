@@ -34,11 +34,11 @@ public class CustomersController {
         }
         if(doc.get().getCurrentOrder().size() < maxCartCapacity){
             doc.get().getCurrentOrder().add(newItem);
-            logger.info(String.format(controllerLogFormat,"addItemTocart",doc.get(), HttpStatus.OK));
+            logger.info(String.format(controllerLogFormat,"addItemTocart", HttpStatus.OK));
             return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
         }
         else{
-            logger.info(String.format(controllerLogFormat, "addItemTocart", "", HttpStatus.FORBIDDEN));
+            logger.info(String.format(controllerLogFormat, "addItemTocart", HttpStatus.FORBIDDEN));
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -50,10 +50,10 @@ public class CustomersController {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if(doc.get().getCurrentOrder().contains(removeItem)){
             doc.get().getCurrentOrder().remove(removeItem);
-            logger.info(String.format(controllerLogFormat,"/removeItemFromCart",doc.get(), HttpStatus.OK));
+            logger.info(String.format(controllerLogFormat,"/removeItemFromCart", HttpStatus.OK));
             return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
         }
-        logger.info(String.format(controllerLogFormat,"/removeItemFromCart",doc.get(), HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat,"/removeItemFromCart", HttpStatus.OK));
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
     @PutMapping("/clearCart")
@@ -61,7 +61,7 @@ public class CustomersController {
         Optional<Customers> doc = customersRepository.findById(viberId);
         doc.get().getArchievedOrder().addAll(doc.get().getCurrentOrder());
         doc.get().setCurrentOrder(new ArrayList<>());
-        logger.info(String.format(controllerLogFormat,"/clearCart",doc.get(), HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat,"/clearCart", HttpStatus.OK));
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
     @GetMapping("/getTotalTime")
@@ -70,7 +70,7 @@ public class CustomersController {
             for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
                 totalTime += menu.getTime();
             }
-        logger.info(String.format(controllerLogFormat,"/getTotalTime",totalTime, HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat,"/getTotalTime", HttpStatus.OK));
         return new ResponseEntity<>(totalTime, HttpStatus.OK);
     }
     @GetMapping("/getTotalPrice")
@@ -79,7 +79,7 @@ public class CustomersController {
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
             totalPrice += menu.getPrice();
         }
-        logger.info(String.format(controllerLogFormat,"/getTotalPrice",totalPrice, HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat,"/getTotalPrice", HttpStatus.OK));
         return new ResponseEntity<>(totalPrice, HttpStatus.OK);
     }
     @GetMapping("/convertToOrderModel")
@@ -89,7 +89,7 @@ public class CustomersController {
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
             response.add(menu.getName());
         }
-        logger.info(String.format(controllerLogFormat,"/convertToOrderModel",viberId, HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat,"/convertToOrderModel", HttpStatus.OK));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
