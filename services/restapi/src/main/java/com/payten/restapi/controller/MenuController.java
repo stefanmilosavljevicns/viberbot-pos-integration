@@ -28,7 +28,6 @@ public class MenuController {
         return ResponseEntity.ok(menuRepository.save(menu));
     }
 
-
     @GetMapping("/getallCategories")
     public ResponseEntity<List<String>> findAllLocations() {
         logger.info(String.format(controllerLogFormat, "getallCategories", "", HttpStatus.OK));

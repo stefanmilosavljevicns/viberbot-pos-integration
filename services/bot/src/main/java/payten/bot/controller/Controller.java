@@ -155,9 +155,6 @@ public class Controller {
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
                     logger.info(String.format(controlerLogFormat, "Navigating to main menu." + messageText.substring(3), userId));
                     break;
-                case ignoreUserInput:
-                    logger.info(String.format(controlerLogFormat, "User clicked on text label, safely ignore this log." + messageText.substring(3), userId));
-                    break;
             }
         } else {
             if (!StringUtils.equals(ignoreUserInput, messageText)) {
