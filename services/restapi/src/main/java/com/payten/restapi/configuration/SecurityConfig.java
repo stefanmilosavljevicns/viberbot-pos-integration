@@ -15,9 +15,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(request -> "bot_viber-bot".contains(request.getServerName())).permitAll().anyRequest().authenticated()
-                        .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(request -> "viber-bot".contains(request.getServerName()))
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
