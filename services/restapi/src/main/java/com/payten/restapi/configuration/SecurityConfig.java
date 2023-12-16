@@ -22,7 +22,7 @@ public class SecurityConfig {
                             return request.getRemoteHost().contains("10.0.1");
                         }).permitAll()
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
-                        .requestMatchers("gs-guide-websocket").permitAll()
+                        .requestMatchers("/gs-guide-websocket").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
