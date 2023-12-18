@@ -17,7 +17,7 @@ docker build ./bot -t bot
 echo '~~~~~~ CREATING DOCKER NETWORK ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-docker network create -d overlay nginx-net
+docker network create --subnet=10.0.1.0/16 -d overlay nginx-net
 echo '~~~~~~~~~~~ CLEARNING SERVICES'
 docker service rm $(docker service ls -q)
 sleep 15

@@ -20,5 +20,6 @@ public class Order {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private OrderState state;
+    private String customerName;
     private String viberID;
 }
