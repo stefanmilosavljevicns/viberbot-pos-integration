@@ -24,7 +24,7 @@ public class SecurityConfig {
                         }).permitAll()
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .requestMatchers("/gs-guide-websocket").permitAll()
-                        .requestMatchers("/swagger-ui").permitAll()
+                        .requestMatchers("/swagger-ui*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
