@@ -18,24 +18,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(request -> {
-                            logger.info("SEMA"+request.getScheme());
-                            logger.info("PROTOKOL"+request.getProtocol());
-                            return request.getRemoteHost().contains("10.0.1");
-                        }).permitAll()
-                        // Allow all requests from localhost (both HTTP and HTTPS)
-                        .requestMatchers("http://localhost/**", "https://localhost/**").permitAll()
-                        // Allow WebSockets (if needed)
-                        .requestMatchers(request -> "ws".equalsIgnoreCase(request.getScheme()) || "wss".equalsIgnoreCase(request.getScheme())).permitAll()
+                        .requestMatchers(request -> request.getRemoteHost().startsWith("10.0.1.")).permitAll()
+                        .requestMatchers(request -> request.getServerName().startsWith("rest-api")).permitAll()
+                        .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .requestMatchers("/gs-guide-websocket").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/api-docs/**").permitAll()
-                        // Require authentication for all other requests
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
                 .csrf().disable();
         return http.build();
     }
-
 }
