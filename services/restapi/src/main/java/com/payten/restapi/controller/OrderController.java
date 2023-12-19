@@ -154,8 +154,8 @@ public class OrderController {
     // iz query parametra novi startTime a endTime dobijamo uvecavanjem novog starTtime-a za ukupnu duzinu termina koju smo prethodno izracunali (promenljiva reservationDuration)
     @PutMapping("/updateStartTime")
     public ResponseEntity<Order> updateStartTime(@RequestParam("startDate") String start,
-                                                 @RequestParam("viberId") String viberId) {
-        Optional<Order> existingOrder = Optional.ofNullable(orderRepository.findByViberId(viberId));
+                                                 @RequestParam("orderId") String orderId) {
+        Optional<Order> existingOrder = orderRepository.findById(orderId);
         if (existingOrder.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
