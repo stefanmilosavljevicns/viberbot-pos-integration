@@ -20,12 +20,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(request -> {
-                            logger.info("GLEDAJ" + request.getServerName());
-                            logger.info("GLEDAJ" + request.getRemoteHost());
-                            return request.getRemoteHost().startsWith("10.0.1.");
-                        }).permitAll()
-                        .requestMatchers(request -> request.getServerName().startsWith("10.0.1.")).permitAll()
+                        .requestMatchers(request -> request.getRemoteHost().startsWith("10.0.1.")).permitAll()
+                        .requestMatchers(request -> request.getServerName().startsWith("rest-api")).permitAll()
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .requestMatchers("/gs-guide-websocket").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
