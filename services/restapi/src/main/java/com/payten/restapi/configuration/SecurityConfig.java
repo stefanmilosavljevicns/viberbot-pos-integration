@@ -28,8 +28,8 @@ public class SecurityConfig {
                         .requestMatchers("/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .csrf().disable()
-                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+                .csrf().disable();
         return http.build();
     }
 
