@@ -23,8 +23,11 @@ public class SecurityConfig {
                             logger.info("PROTOKOL"+request.getProtocol());
                             return request.getRemoteHost().contains("10.0.1");
                         }).permitAll()
-                        .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
-                        .requestMatchers(request -> "ws://".contains(request.getScheme())).permitAll()
+                        // Allow all requests from localhost (both HTTP and HTTPS)
+                        .requestMatchers("http://localhost/**", "https://localhost/**").permitAll()
+                        // Allow WebSockets (if needed)
+                        .requestMatchers(request -> "ws".equalsIgnoreCase(request.getScheme()) || "wss".equalsIgnoreCase(request.getScheme())).permitAll()
+                        // Require authentication for all other requests
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
