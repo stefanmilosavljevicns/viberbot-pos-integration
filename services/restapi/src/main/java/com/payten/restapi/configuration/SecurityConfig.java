@@ -13,13 +13,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-        private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(request -> request.getRemoteHost().startsWith("10.0.1.")).permitAll()
+                        .requestMatchers(request -> request.getServerName().startsWith("10.0.1.")).permitAll()
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .requestMatchers("/gs-guide-websocket").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
