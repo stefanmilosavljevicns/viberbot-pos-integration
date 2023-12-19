@@ -1,9 +1,10 @@
 package com.payten.restapi.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.payten.restapi.model.Order;
 import com.payten.restapi.model.OrderState;
 import com.payten.restapi.repository.OrderRepository;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.payten.restapi.util.Constants.controllerLogFormat;
 
@@ -44,13 +43,20 @@ public class OrderController {
 
     @SendTo("/topic/order")
     @PostMapping("/addOrder")
-    public ResponseEntity<Order> save(@RequestBody Order order) {
+    public ResponseEntity<Order> save(@RequestBody Order order) throws JsonProcessingException {
         logger.info(String.format(controllerLogFormat, "addOrder", order, HttpStatus.OK));
-        JSONObject jsonObject = new JSONObject()
-                .put("orderId", order.getId());
+
+        // Creating a Map of key-value pairs
+        Map<String, Object> jsonMap = new HashMap<>();
+        jsonMap.put("orderId", order.getId());
 
 
-        msgTemplate.convertAndSend("/topic/order", jsonObject);
+        // Using Jackson ObjectMapper to serialize Map to JSON string
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(jsonMap);
+
+
+        msgTemplate.convertAndSend("/topic/order", jsonString);
         return ResponseEntity.ok(orderRepository.save(order));
     }
     @GetMapping("/getAllActiveDates")
