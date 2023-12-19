@@ -19,9 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(request -> {                            
-                            return request.getRemoteHost().contains("10.0.1");
-                        }).permitAll()
+                        .requestMatchers(request -> request.getRemoteHost().startsWith("10.0.1.")).permitAll()
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .requestMatchers("/gs-guide-websocket").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
