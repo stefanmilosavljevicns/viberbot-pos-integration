@@ -26,7 +26,9 @@ echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~ 1. STARTING NGINX ~~~~~~'
 docker stack deploy --compose-file ./nginx/docker-compose.yml nginx
+sleep 5
 echo '~~~~~~ 2. STARTING REST ~~~~~~'
 docker stack deploy --compose-file ./restapi/docker-compose.yml rest
+sleep 5
 echo '~~~~~~ 3. STARTING VIBER-BOT ~~~~~~'
 docker stack deploy --compose-file ./bot/docker-compose.yml bot
