@@ -23,6 +23,7 @@ public class SecurityConfig {
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .requestMatchers("/gs-guide-websocket").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
