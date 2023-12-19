@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-    nginx:
+    food-nginx:
       image: nginx:latest
       networks:
         - nginx-net
@@ -9,8 +9,8 @@ services:
         - 443:443
       volumes:
         - ./conf/:/etc/nginx/conf.d/:ro        
-        - ./certbot/conf/:/etc/nginx/ssl/:ro        
-        - /var/www/html/images:/usr/share/nginx/html/images
+        - /etc/letsencrypt:/etc/letsencrypt
+
 networks:
   nginx-net:
-    external: true        
+    external: true     

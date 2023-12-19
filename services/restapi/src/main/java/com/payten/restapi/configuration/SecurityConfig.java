@@ -27,10 +27,14 @@ public class SecurityConfig {
                         .requestMatchers("http://localhost/**", "https://localhost/**").permitAll()
                         // Allow WebSockets (if needed)
                         .requestMatchers(request -> "ws".equalsIgnoreCase(request.getScheme()) || "wss".equalsIgnoreCase(request.getScheme())).permitAll()
+                        .requestMatchers("/gs-guide-websocket").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/api-docs/**").permitAll()
                         // Require authentication for all other requests
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+                .csrf().disable();
         return http.build();
     }
 

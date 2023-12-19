@@ -17,18 +17,18 @@ docker build ./bot -t bot
 echo '~~~~~~ CREATING DOCKER NETWORK ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-docker network create -d overlay nginx-net
+docker network create --subnet=10.0.1.0/16 -d overlay nginx-net
 echo '~~~~~~~~~~~ CLEARNING SERVICES'
-docker service rm $(docker service ls -q)
+docker stack rm $(docker stack ls )
 sleep 15
 echo '~~~~~~ STARTING DOCKER SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~ 1. STARTING NGINX ~~~~~~'
 docker stack deploy --compose-file ./nginx/docker-compose.yml nginx
-sleep 15
+sleep 5
 echo '~~~~~~ 2. STARTING REST ~~~~~~'
 docker stack deploy --compose-file ./restapi/docker-compose.yml rest
-sleep 15
+sleep 5
 echo '~~~~~~ 3. STARTING VIBER-BOT ~~~~~~'
 docker stack deploy --compose-file ./bot/docker-compose.yml bot

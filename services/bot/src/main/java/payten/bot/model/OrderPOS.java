@@ -10,20 +10,30 @@ public class OrderPOS {
     private LocalDateTime endTime;
     private String state;
     private String viberID;
+    private String customerName;
 
-    public OrderPOS(ArrayList<String> description, Double price, LocalDateTime startTime, LocalDateTime endTime, String state, String viberID) {
+
+    public OrderPOS(ArrayList<String> description, Double price, LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName) {
         this.description = description;
         this.price = price;
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = state;
         this.viberID = viberID;
+        this.customerName = customerName;
     }
+
 
     public OrderPOS() {
         // Default constructor for JSON deserilization
     }
+    public String getCustomerName() {
+        return customerName;
+    }
 
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
     public ArrayList<String> getDescription() {
         return description;
     }
