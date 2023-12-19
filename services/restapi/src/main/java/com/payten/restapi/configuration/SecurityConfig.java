@@ -1,5 +1,6 @@
 package com.payten.restapi.configuration;
 
+import com.payten.restapi.controller.OrderController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +14,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(request -> request.getRemoteHost().startsWith("10.0.1.")).permitAll()
+                        .requestMatchers(request -> {
+                            logger.info("GLEDAJ" + request.getServerName());
+                            logger.info("GLEDAJ" + request.getRemoteHost());
+                            return request.getRemoteHost().startsWith("10.0.1.");
+                        }).permitAll()
                         .requestMatchers(request -> request.getServerName().startsWith("10.0.1.")).permitAll()
                         .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
                         .requestMatchers("/gs-guide-websocket").permitAll()
