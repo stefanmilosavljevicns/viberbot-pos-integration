@@ -2,8 +2,11 @@ package com.payten.restapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.payten.restapi.model.AddOrderFromPosDTO;
+import com.payten.restapi.model.Menu;
 import com.payten.restapi.model.Order;
 import com.payten.restapi.model.OrderState;
+import com.payten.restapi.repository.MenuRepository;
 import com.payten.restapi.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,8 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private MenuRepository menuRepository;
 
     @GetMapping("/getOrders")
     public ResponseEntity<List<Order>> findAll() {
@@ -47,18 +52,39 @@ public class OrderController {
         logger.info(String.format(controllerLogFormat, "addOrder", order, HttpStatus.OK));
 
         // Creating a Map of key-value pairs
-        Map<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("orderId", order.getId());
-
-
-        // Using Jackson ObjectMapper to serialize Map to JSON string
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString = objectMapper.writeValueAsString(jsonMap);
-
-
-        msgTemplate.convertAndSend("/topic/order", jsonString);
+        serializeOrderForSending(order.getId());
         return ResponseEntity.ok(orderRepository.save(order));
     }
+
+    @SendTo("/topic/order")
+    @PostMapping("/addOrderFromPos")
+    public ResponseEntity<Order> saveOrderFromPos(@RequestBody AddOrderFromPosDTO order) throws JsonProcessingException {
+        logger.info(String.format(controllerLogFormat, "addOrderFromPos", order, HttpStatus.OK));
+
+        ArrayList<String> descriptions = order.getDescription();
+
+        Double totalPrice = 0.0;
+        Integer totalTime = 0;
+        for (String description : descriptions) {
+            try {
+                Menu menu = menuRepository.findByName(description);
+                totalPrice += menu.getPrice();
+                totalTime += menu.getTime();
+            } catch (Exception ex) {
+                logger.error(ex.getMessage());
+            }
+        }
+
+        Order newOrder = new Order(descriptions, totalPrice, order.getStartTime(), order.getStartTime().plusMinutes(totalTime), OrderState.IN_PROGRESS, order.getCustomerName(), "");
+
+        Order savedOrder = orderRepository.save(newOrder);
+
+        // Creating a Map of key-value pairs
+        serializeOrderForSending(savedOrder.getId());
+
+        return ResponseEntity.ok(savedOrder);
+    }
+
     @GetMapping("/getAllActiveDates")
     public ResponseEntity<List<Order>> getOrdersWithin24Hours() {
         LocalDateTime startTime = LocalDateTime.now().plusDays(1)
@@ -71,6 +97,7 @@ public class OrderController {
         logger.info(String.format(controllerLogFormat, "getAllActiveDates", orders, HttpStatus.OK));
         return ResponseEntity.ok(orders);
     }
+
     @GetMapping("/checkFreeTimeSlots")
     public List<LocalDateTime> getDateTimes(
             @RequestParam("localDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate,
@@ -121,6 +148,7 @@ public class OrderController {
         logger.info(String.format(controllerLogFormat, "declineOrder", updatedOrder, HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
+
     @GetMapping("/checkTimeSlotAvailability")
     public ResponseEntity<String> checkAvailability(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
                                                     @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
@@ -134,6 +162,7 @@ public class OrderController {
             return ResponseEntity.ok("Time slot is not available.");
         }
     }
+
     @PutMapping("/clearCart/{id}")
     public ResponseEntity<Order> completeOrder(@PathVariable("id") String id) {
         Optional<Order> existingOrder = orderRepository.findById(id);
@@ -170,5 +199,14 @@ public class OrderController {
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
 
+    private void serializeOrderForSending(String orderId) throws JsonProcessingException {
+        Map<String, Object> jsonMap = new HashMap<>();
+        jsonMap.put("orderId", orderId);
 
+        // Using Jackson ObjectMapper to serialize Map to JSON string
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(jsonMap);
+
+        msgTemplate.convertAndSend("/topic/order", jsonString);
+    }
 }

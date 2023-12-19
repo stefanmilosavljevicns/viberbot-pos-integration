@@ -22,4 +22,14 @@ public class Order {
     private OrderState state;
     private String customerName;
     private String viberID;
+
+    public Order(ArrayList<String> description, Double price, LocalDateTime startTime, LocalDateTime endTime, OrderState state, String customerName, String viberID) {
+        this.description = description;
+        this.price = price;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.state = state;
+        this.customerName = customerName;
+        this.viberID = viberID;
+    }
 }
