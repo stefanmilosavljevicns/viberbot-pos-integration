@@ -3,16 +3,16 @@ package com.payten.restapi.controller;
 import com.payten.restapi.model.Order;
 import com.payten.restapi.model.OrderState;
 import com.payten.restapi.repository.OrderRepository;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -39,10 +39,18 @@ public class OrderController {
         return ResponseEntity.ok(orderRepository.findAll());
     }
 
+    @Autowired
+    private SimpMessagingTemplate msgTemplate;
 
+    @SendTo("/topic/order")
     @PostMapping("/addOrder")
     public ResponseEntity<Order> save(@RequestBody Order order) {
         logger.info(String.format(controllerLogFormat, "addOrder", order, HttpStatus.OK));
+        JSONObject jsonObject = new JSONObject()
+                .put("orderId", order.getId());
+
+
+        msgTemplate.convertAndSend("/topic/order", jsonObject);
         return ResponseEntity.ok(orderRepository.save(order));
     }
     @GetMapping("/getAllActiveDates")
