@@ -21,8 +21,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(request -> request.getRemoteHost().startsWith("10.0.1.")).permitAll()
                         .requestMatchers(request -> request.getServerName().startsWith("rest-api")).permitAll()
-                        .requestMatchers(request -> "localhost".equals(request.getServerName())).permitAll()
-                        .requestMatchers("/gs-guide-websocket").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/api-docs/**").permitAll()
                         .anyRequest().authenticated()
