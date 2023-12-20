@@ -2,7 +2,7 @@ package com.payten.restapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.payten.restapi.model.AddOrderFromPosDTO;
+import com.payten.restapi.model.DTO.AddOrderFromPosDTO;
 import com.payten.restapi.model.Menu;
 import com.payten.restapi.model.Order;
 import com.payten.restapi.model.OrderState;

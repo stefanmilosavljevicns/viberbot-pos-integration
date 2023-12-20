@@ -1,4 +1,4 @@
-package com.payten.restapi.model;
+package com.payten.restapi.model.DTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
