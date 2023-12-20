@@ -48,6 +48,7 @@ public class Controller {
         Incoming incoming = IncomingImpl.fromString(text);
         String eventType = incoming.getEvent();
         String userId = incoming.getSenderId();
+        String senderName = incoming.getSenderName();
         String messageText = incoming.getMessageText();
         if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
             return ResponseEntity.ok().build();
@@ -73,7 +74,7 @@ public class Controller {
                         logger.info(String.format(controlerLogFormat, "Adding to cart: " + messageText.substring(3), userId));
                     }
                     else{
-                        bot.messageForUser(userId).postText("Greška, izabrali ste previše servisa molimo izbacite jedan od servisa navigacijom na trenutnu korpu" + messageText.substring(3), keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText("Greška, izabrali ste previše servisa molimo izbacite jedan od servisa navigacijom na trenutnu korpu", keyboardUtil.getMainMenu());
                         logger.info(String.format(controlerLogFormat,"User already having too much selected items", userId));
 
                     }
@@ -128,7 +129,7 @@ public class Controller {
                     LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
                     String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
                     if (checkTime.equals("Time slot is available.")) {
-                        OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId,bot.getUserDetails(userId).getName());
+                        OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId, senderName);
                         httpUtil.sendOrder(sendOrderPOS, userId);
                         bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu());
                         httpUtil.clearCart(userId);

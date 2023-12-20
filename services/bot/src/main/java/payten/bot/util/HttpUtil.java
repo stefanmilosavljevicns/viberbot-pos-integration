@@ -166,17 +166,15 @@ public class HttpUtil {
             URI uri = new URI(stringUtils.getRestAdress() + addItemToCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-    
             HttpEntity<MenuItem> requestEntity = new HttpEntity<>(itemName, headers);
-    
-            ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, MenuItem.class);
-            logger.info(String.format(httpLogFormat, addItemToCart, responseEntity.getStatusCode(), responseEntity.getBody()));
-            if(responseEntity.getStatusCode() == HttpStatus.OK){
+            try{
+                ResponseEntity<MenuItem> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, MenuItem.class);
                 return true;
             }
-            else{
+            catch (Exception e){
                 return false;
             }
+
         }
     public void updateStartTime(String viberId,String startDate) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
