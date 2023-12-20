@@ -74,7 +74,7 @@ public class Controller {
                         logger.info(String.format(controlerLogFormat, "Adding to cart: " + messageText.substring(3), userId));
                     }
                     else{
-                        bot.messageForUser(userId).postText("Greška, izabrali ste previše servisa molimo izbacite jedan od servisa navigacijom na trenutnu korpu" + messageText.substring(3), keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText("Greška, izabrali ste previše servisa molimo izbacite jedan od servisa navigacijom na trenutnu korpu"), keyboardUtil.getMainMenu());
                         logger.info(String.format(controlerLogFormat,"User already having too much selected items", userId));
 
                     }
