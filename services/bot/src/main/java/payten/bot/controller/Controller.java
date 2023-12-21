@@ -80,13 +80,8 @@ public class Controller {
                     }
                     break;
                 case navigateToCartMenu:
-                    if (httpUtil.cartChecker(userId)) {
                         bot.messageForUser(userId).postKeyboard(keyboardUtil.setCartList(userId));
                         logger.info(String.format(controlerLogFormat, "Showing cart", userId));
-                    } else {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu());
-                        logger.info(String.format(controlerLogFormat, "Unable to show current cart", userId));
-                    }
                     break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {
