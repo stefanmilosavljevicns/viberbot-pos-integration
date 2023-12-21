@@ -2,8 +2,6 @@ version: "3.3"
 services:
     food-nginx:
       image: nginx:latest
-      container_name: nginx
-      restart: always
       networks:
         - nginx-net
       ports:
@@ -11,14 +9,8 @@ services:
         - 443:443
       volumes:
         - ./conf/:/etc/nginx/conf.d/:ro        
-        - ./certbot/www:/var/www/certbot/:ro
-        - ./certbot/conf/:/etc/nginx/ssl/:ro        
-        - /var/www/html/images:/usr/share/nginx/html/images
-    certbot:
-      image: certbot/certbot:latest
-      volumes:
-        - ./certbot/www/:/var/www/certbot/:rw      
-        - ./certbot/conf/:/etc/letsencrypt/:rw  
+        - /etc/letsencrypt:/etc/letsencrypt
+
 networks:
   nginx-net:
-    external: true        
+    external: true     

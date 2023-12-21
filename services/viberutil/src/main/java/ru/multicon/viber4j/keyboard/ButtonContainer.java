@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ButtonContainer {
 
-    private List<ViberButton> buttons = new ArrayList<>();
+    private final List<ViberButton> buttons = new ArrayList<>();
     protected String type;
     protected String altText;
 

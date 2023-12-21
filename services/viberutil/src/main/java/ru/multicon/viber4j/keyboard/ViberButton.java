@@ -24,7 +24,7 @@ public class ViberButton {
     private Boolean bgLoop;
     private Boolean silent;
     private BtnActionType actionType;
-    private String actionBody;
+    private final String actionBody;
     private String image;
     private String text;
     private TextAlign textVAlign;

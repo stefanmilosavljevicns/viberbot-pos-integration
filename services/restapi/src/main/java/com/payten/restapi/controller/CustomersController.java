@@ -3,7 +3,11 @@ package com.payten.restapi.controller;
 import com.payten.restapi.model.Customers;
 import com.payten.restapi.model.Menu;
 import com.payten.restapi.repository.CustomersRepository;
+import com.payten.restapi.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,20 +16,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.payten.restapi.util.Constants.controllerLogFormat;
+
 @RestController
 @RequestMapping("/api/v1")
 public class CustomersController {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomersController.class);
+    @Value("${customers.max.capacity}")
+    private int maxCartCapacity;
     @Autowired
     private CustomersRepository customersRepository;
+    @Autowired
+    private OrderRepository orderRepository;
     @PutMapping("/addItemToCart")
     public ResponseEntity<Customers> addItemToCart(@RequestParam String viberId, @RequestBody Menu newItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if (doc.isEmpty()) {
             doc = Optional.of(new Customers(viberId, new ArrayList<>(),new ArrayList<>(), null,false));
         }
-        doc.get().getCurrentOrder().add(newItem);
-        return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
+        if(doc.get().getCurrentOrder().size() < maxCartCapacity){
+            doc.get().getCurrentOrder().add(newItem);
+            logger.info(String.format(controllerLogFormat,"addItemTocart", HttpStatus.OK));
+            return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
+        }
+        else{
+            logger.info(String.format(controllerLogFormat, "addItemTocart", HttpStatus.FORBIDDEN));
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+
     }
 
     @DeleteMapping("/removeItemFromCart")
@@ -33,8 +53,10 @@ public class CustomersController {
         Optional<Customers> doc = customersRepository.findById(viberId);
         if(doc.get().getCurrentOrder().contains(removeItem)){
             doc.get().getCurrentOrder().remove(removeItem);
+            logger.info(String.format(controllerLogFormat,"/removeItemFromCart", HttpStatus.OK));
             return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
         }
+        logger.info(String.format(controllerLogFormat,"/removeItemFromCart", HttpStatus.OK));
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
     @PutMapping("/clearCart")
@@ -42,6 +64,7 @@ public class CustomersController {
         Optional<Customers> doc = customersRepository.findById(viberId);
         doc.get().getArchievedOrder().addAll(doc.get().getCurrentOrder());
         doc.get().setCurrentOrder(new ArrayList<>());
+        logger.info(String.format(controllerLogFormat,"/clearCart", HttpStatus.OK));
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
     @GetMapping("/getTotalTime")
@@ -50,7 +73,8 @@ public class CustomersController {
             for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
                 totalTime += menu.getTime();
             }
-            return new ResponseEntity<>(totalTime, HttpStatus.OK);
+        logger.info(String.format(controllerLogFormat,"/getTotalTime", HttpStatus.OK));
+        return new ResponseEntity<>(totalTime, HttpStatus.OK);
     }
     @GetMapping("/getTotalPrice")
     public ResponseEntity<Double> getTotalPrice(@RequestParam String viberId) {
@@ -58,6 +82,7 @@ public class CustomersController {
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
             totalPrice += menu.getPrice();
         }
+        logger.info(String.format(controllerLogFormat,"/getTotalPrice", HttpStatus.OK));
         return new ResponseEntity<>(totalPrice, HttpStatus.OK);
     }
     @GetMapping("/convertToOrderModel")
@@ -67,6 +92,7 @@ public class CustomersController {
         for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
             response.add(menu.getName());
         }
+        logger.info(String.format(controllerLogFormat,"/convertToOrderModel", HttpStatus.OK));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -81,15 +107,22 @@ public class CustomersController {
             totalPrice += menu.getPrice();
         }
         response.add("UKUPNO: "+ totalPrice);
+        logger.info(String.format(controllerLogFormat,"/getCart",response, HttpStatus.OK));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     //Used for checking if user added some of services to cart
-    @GetMapping("/checkIfCartIsEmpty")
-    public ResponseEntity<Boolean> checkIfCartIsEmpty(@RequestParam String viberId) {
-        if(customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getCurrentOrder().size() > 0){
+    @GetMapping("/checkIfUserCanOrder")
+    public ResponseEntity<Boolean> checkIfUserCanOrder(@RequestParam String viberId) {
+        if(orderRepository.findByViberId(viberId).size() > 0){
+            logger.info(String.format(controllerLogFormat,"/checkIfUserCanOrder",true, HttpStatus.OK));
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+        else if(customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getCurrentOrder().size() > 0){
+            logger.info(String.format(controllerLogFormat,"/checkIfUserCanOrder",true, HttpStatus.OK));
             return new ResponseEntity<>(true,HttpStatus.OK);
         }
+        logger.info(String.format(controllerLogFormat,"/checkIfUserCanOrder",false, HttpStatus.OK));
         return new ResponseEntity<>(false, HttpStatus.OK);
     }
 

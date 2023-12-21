@@ -195,19 +195,6 @@ public class KeyboardUtil {
         mainMenu.setInputFieldState("hidden");
         mainMenu.setType("keyboard");
         for (int i = 0; i < maxCategories; i++) {
-
-            if (i == 2) {
-                mainMenu.addButton(new ViberButton(navigateToCartMenu)
-                        .setText(stringUtils.getButtonMenuCart())
-                        .setImage(stringUtils.getIconCart())
-                        .setRows(2)
-                        .setColumns(2)
-                        .setSilent(true)
-                        .setBgColor(stringUtils.getSecondarilyColor())
-                        .setTextSize(ViberButton.TextSize.LARGE)
-                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
-                        .setTextVAlign(ViberButton.TextAlign.MIDDLE));
-            }
             mainMenu.addButton(new ViberButton(String.format(selectCategoryFromMainMenu+"%s", categoriesTitle.get(i)))
                     .setText(String.format(stringUtils.getButtonMenuCategories(), categoriesTitle.get(i)))
                     .setImage(String.format(stringUtils.getIconCategory(), categoriesTitle.get(i)))
@@ -219,6 +206,16 @@ public class KeyboardUtil {
                     .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                     .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
+        mainMenu.addButton(new ViberButton(navigateToCartMenu)
+                .setText(stringUtils.getButtonMenuCart())
+                .setImage(stringUtils.getIconCart())
+                .setRows(2)
+                .setColumns(2)
+                .setSilent(true)
+                .setBgColor(stringUtils.getSecondarilyColor())
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         mainMenu.addButton(new ViberButton(startReservationProcess).setText(stringUtils.getButtonMenuFinishReservation())
                 .setImage(stringUtils.getIconCompleteOrder())
                 .setRows(2)

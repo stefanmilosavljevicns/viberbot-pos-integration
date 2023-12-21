@@ -12,6 +12,5 @@ import org.springframework.data.mongodb.repository.Query;
         List<Order> findByStartTimeLessThanAndEndTimeGreaterThan(LocalDateTime end, LocalDateTime start);
         List<Order> findByStartTimeGreaterThan(LocalDateTime twentyFourHoursAgo);
         @Query(value = "{ 'viberID' : ?0, 'state' : { $nin: [ 'COMPLETED', 'DECLINED' ] } }")
-        Order findByViberId(String name);
-
+        List<Order> findByViberId(String name);
     }
