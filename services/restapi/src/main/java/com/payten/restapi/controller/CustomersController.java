@@ -3,6 +3,7 @@ package com.payten.restapi.controller;
 import com.payten.restapi.model.Customers;
 import com.payten.restapi.model.Menu;
 import com.payten.restapi.repository.CustomersRepository;
+import com.payten.restapi.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class CustomersController {
     private int maxCartCapacity;
     @Autowired
     private CustomersRepository customersRepository;
+    @Autowired
+    private OrderRepository orderRepository;
     @PutMapping("/addItemToCart")
     public ResponseEntity<Customers> addItemToCart(@RequestParam String viberId, @RequestBody Menu newItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
@@ -109,13 +112,17 @@ public class CustomersController {
     }
 
     //Used for checking if user added some of services to cart
-    @GetMapping("/checkIfCartIsEmpty")
-    public ResponseEntity<Boolean> checkIfCartIsEmpty(@RequestParam String viberId) {
-        if(customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getCurrentOrder().size() > 0){
-            logger.info(String.format(controllerLogFormat,"/checkIfCartIsEmpty",true, HttpStatus.OK));
+    @GetMapping("/checkIfUserCanOrder")
+    public ResponseEntity<Boolean> checkIfUserCanOrder(@RequestParam String viberId) {
+        if(orderRepository.findByViberId(viberId).equals(null)){
+            logger.info(String.format(controllerLogFormat,"/checkIfUserCanOrder",true, HttpStatus.OK));
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+        else if(customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getCurrentOrder().size() > 0){
+            logger.info(String.format(controllerLogFormat,"/checkIfUserCanOrder",true, HttpStatus.OK));
             return new ResponseEntity<>(true,HttpStatus.OK);
         }
-        logger.info(String.format(controllerLogFormat,"/checkIfCartIsEmpty",false, HttpStatus.OK));
+        logger.info(String.format(controllerLogFormat,"/checkIfUserCanOrder",false, HttpStatus.OK));
         return new ResponseEntity<>(false, HttpStatus.OK);
     }
 

@@ -72,10 +72,10 @@ public class HttpUtil {
     }
     public Boolean cartChecker(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + checkIfCartIsEmpty + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI(stringUtils.getRestAdress() + checkIfUserCanOrder + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
         Boolean status = Boolean.valueOf(responseEntity.getBody());
-        logger.info(String.format(httpLogFormat, checkIfCartIsEmpty, responseEntity.getStatusCode(), responseEntity.getBody()));
+        logger.info(String.format(httpLogFormat, checkIfUserCanOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
         return status;
     }
     public void removeServiceFromCart(String viberId, MenuItem itemName) throws URISyntaxException {

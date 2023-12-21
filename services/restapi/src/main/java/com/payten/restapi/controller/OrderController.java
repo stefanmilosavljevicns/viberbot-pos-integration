@@ -50,7 +50,6 @@ public class OrderController {
     @PostMapping("/addOrder")
     public ResponseEntity<Order> save(@RequestBody Order order) throws JsonProcessingException {
         logger.info(String.format(controllerLogFormat, "addOrder", order, HttpStatus.OK));
-
         // Creating a Map of key-value pairs
         serializeOrderForSending(order.getId());
         return ResponseEntity.ok(orderRepository.save(order));
