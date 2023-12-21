@@ -114,7 +114,7 @@ public class CustomersController {
     //Used for checking if user added some of services to cart
     @GetMapping("/checkIfUserCanOrder")
     public ResponseEntity<Boolean> checkIfUserCanOrder(@RequestParam String viberId) {
-        if(orderRepository.findByViberId(viberId).equals(null)){
+        if(orderRepository.findByViberId(viberId).size() > 0){
             logger.info(String.format(controllerLogFormat,"/checkIfUserCanOrder",true, HttpStatus.OK));
             return new ResponseEntity<>(false, HttpStatus.OK);
         }
