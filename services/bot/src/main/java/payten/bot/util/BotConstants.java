@@ -4,7 +4,6 @@ public class BotConstants {
     //KEY NAMES FOR MAPPING ACTION STATES FOR VIBER
     public static final String MESSAGE_EVENT = "message";
     public static final String START_MSG_EVENT = "conversation_started";
-    public static final String navigateToCartMenu = "CRT";
     public static final String startReservationProcess = "FNH";
     public static final String clearCartAndFinishSession = "CLR";
     public static final String agreeWithCart = "AGR";
@@ -21,9 +20,7 @@ public class BotConstants {
     public static final String whiteColor = "#FFFFFF";
     public static final String domain = "https://sputnik-it.rs";
     public static final String getAllCategories = "/getallCategories";
-    public static final String getCategoryItems = "/getCategoryItems/";
-    public static final String addItemToCart = "/addItemToCart";
-    public static final String removeItemFromCart = "/removeItemFromCart";
+
     public static final String getCart = "/getCart";
     public static final String getOrdersWithin24Hourse = "/getAllActiveDates";
     public static final String checkIfUserCanOrder = "/checkIfUserCanOrder";

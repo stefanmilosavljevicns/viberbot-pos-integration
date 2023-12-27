@@ -33,15 +33,7 @@ public class HttpUtil {
     public ArrayList<String> getCategories() {
         return categories;
     }
-    public void setCategories() throws JsonProcessingException {
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(stringUtils.getRestAdress() + getAllCategories, String.class);
-        String responseBody = responseEntity.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
-        categories = objectMapper.readValue(responseBody, new TypeReference<ArrayList<String>>() {
-        });
-        logger.info(String.format(httpLogFormat, getAllCategories, responseEntity.getStatusCode(), responseEntity.getBody()));
-    }
+
     public ArrayList<String> getCartList(String viberId) throws JsonProcessingException, URISyntaxException {
         ArrayList<String> cartList;
         RestTemplate restTemplate = new RestTemplate();
@@ -113,15 +105,6 @@ public class HttpUtil {
         HttpEntity<OrderPOS> requestEntity = new HttpEntity<>(orderPOS, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(stringUtils.getRestAdress() + addOrder, HttpMethod.POST, requestEntity, String.class);
         logger.info(String.format(httpLogFormat, addOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
-    }
-    public void clearCart(String viberId) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = new URI(stringUtils.getRestAdress() + clearCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        HttpEntity<String> requestEntityPut = new HttpEntity<>("", headers);
-        ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntityPut, String.class);
-        logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
     }
         //Inserting selected service to DB in case User doesn't have field in DB here we create it.
     public void updateStartTime(String viberId,String startDate) throws URISyntaxException {

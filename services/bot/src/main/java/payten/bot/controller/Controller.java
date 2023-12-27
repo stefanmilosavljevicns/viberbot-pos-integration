@@ -109,17 +109,11 @@ public class Controller {
                         OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), startTime, endTime, "PENDING", userId, senderName);
                         httpUtil.sendOrder(sendOrderPOS, userId);
                         bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu());
-                        httpUtil.clearCart(userId);
                         logger.info(String.format(controlerLogFormat, "Session finished, clearing cart.", userId));
                     } else {
                         bot.messageForUser(userId).postText(stringUtils.getMessageErrorTime(), keyboardUtil.getMainMenu());
                         logger.info(String.format(controlerLogFormat, "Error in reservations.", userId));
                     }
-                    break;
-                case clearCartAndFinishSession:
-                    bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu());
-                    httpUtil.clearCart(userId);
-                    logger.info(String.format(controlerLogFormat, "Session finished, clearing cart.", userId));
                     break;
 
                 case navigateToMainMenu:

@@ -35,16 +35,16 @@ public class StringUtils {
     private String buttonRemoveCartItem;
     @Value("${text.item-description}")
     private String buttonDescription;
-    @Value("${icon.cart}")
-    private String iconCart;
+    @Value("${icon.reserve}")
+    private String iconReserve;
     @Value("${icon.complete-order}")
     private String iconCompleteOrder;
-    @Value("${icon.category}")
-    private String iconCategory;
-    @Value("${icon.add-item}")
-    private String iconAddItem;
-    @Value("${icon.remove-item}")
-    private String iconRemoveItem;
+    @Value("${icon.about-us}")
+    private String iconAboutUs;
+    @Value("${icon.previous-orders}")
+    private String previousOrders;
+    @Value("${icon.choose-language}")
+    private String iconChooseLanguage;
     @Value("${message.error}")
     private String messageError;
     @Value("${message.error-time}")
@@ -128,24 +128,24 @@ public class StringUtils {
         return messageSuccessReservation;
     }
 
-    public String getIconCart() {
-        return iconCart;
+    public String getIconReserve() {
+        return iconReserve;
     }
 
     public String getIconCompleteOrder() {
         return iconCompleteOrder;
     }
 
-    public String getIconCategory() {
-        return iconCategory;
+    public String getIconAboutUs() {
+        return iconAboutUs;
     }
 
-    public String getIconAddItem() {
-        return iconAddItem;
+    public String getIconPreviousOrders() {
+        return previousOrders;
     }
 
-    public String getIconRemoveItem() {
-        return iconRemoveItem;
+    public String getIconChooseLanguage() {
+        return iconChooseLanguage;
     }
 
     public String getButtonStandard() {

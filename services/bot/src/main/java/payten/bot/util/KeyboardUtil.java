@@ -20,7 +20,6 @@ import static payten.bot.util.BotConstants.*;
 @Component
 public class KeyboardUtil {
     private static final Logger logger = LoggerFactory.getLogger(KeyboardUtil.class);
-    int maxCategories;
     @Autowired
     private HttpUtil httpUtil;
     private ViberKeyboard mainMenu;
@@ -120,7 +119,7 @@ public class KeyboardUtil {
                 .setColumns(3)
                 .setSilent(true)
                 .setRows(2));
-        confirmationKeyboard.addButton(new ViberButton(navigateToCartMenu)
+        confirmationKeyboard.addButton(new ViberButton(navigateToMainMenu)
                 .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
@@ -134,8 +133,9 @@ public class KeyboardUtil {
         mainMenu = new ViberKeyboard();
         mainMenu.setInputFieldState("hidden");
         mainMenu.setType("keyboard");
-        mainMenu.addButton(new ViberButton(startReservationProcess)
+        mainMenu.addButton(new ViberButton(selectDayReservation)
                         .setText("Rezerviši")
+                        .setImage(stringUtils.getIconReserve())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
                         .setColumns(2)
@@ -143,20 +143,23 @@ public class KeyboardUtil {
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
                         .setText("O nama")
+                        .setImage(stringUtils.getIconAboutUs())
                         .setTextSize(ViberButton.TextSize.LARGE)
-                        .setBgColor(stringUtils.getPrimarilyColor())
+                        .setBgColor(stringUtils.getSecondarilyColor())
                         .setColumns(2)
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
                         .setText("Izaberite jezik")
+                        .setImage(stringUtils.getIconChooseLanguage())
                         .setTextSize(ViberButton.TextSize.LARGE)
-                        .setBgColor(stringUtils.getPrimarilyColor())
+                        .setBgColor(stringUtils.getSecondarilyColor())
                         .setColumns(2)
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
                         .setText("Istorija rezervacija")
+                        .setImage(stringUtils.getIconPreviousOrders())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
                         .setColumns(2)
