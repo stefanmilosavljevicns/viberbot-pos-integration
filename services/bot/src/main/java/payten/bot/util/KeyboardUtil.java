@@ -131,9 +131,9 @@ public class KeyboardUtil {
     }
 
     public void setMainMenu() {
-        mainMenu = new ViberKeyboard()
-                .setInputFieldState("hidden")
-                .setType("keyboard");
+        mainMenu = new ViberKeyboard();
+        mainMenu.setInputFieldState("hidden");
+        mainMenu.setType("keyboard");
         mainMenu.addButton(new ViberButton(startReservationProcess)
                         .setText("Rezerviši")
                         .setTextSize(ViberButton.TextSize.LARGE)
