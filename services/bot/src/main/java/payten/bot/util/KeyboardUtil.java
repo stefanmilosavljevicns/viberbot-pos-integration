@@ -134,7 +134,7 @@ public class KeyboardUtil {
         mainMenu.setInputFieldState("hidden");
         mainMenu.setType("keyboard");
         mainMenu.addButton(new ViberButton(selectDayReservation)
-                        .setText("<font color='#ffffff'><b>REZERVIŠI</b></font>")
+                        .setText("<font color='#ffffff'><b>REZERVIŠI STO</b></font>")
                         .setImage(stringUtils.getIconReserve())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
