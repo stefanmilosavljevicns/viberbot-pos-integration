@@ -37,8 +37,6 @@ public class StringUtils {
     private String buttonDescription;
     @Value("${icon.reserve}")
     private String iconReserve;
-    @Value("${icon.complete-order}")
-    private String iconCompleteOrder;
     @Value("${icon.about-us}")
     private String iconAboutUs;
     @Value("${icon.previous-orders}")
@@ -130,10 +128,6 @@ public class StringUtils {
 
     public String getIconReserve() {
         return iconReserve;
-    }
-
-    public String getIconCompleteOrder() {
-        return iconCompleteOrder;
     }
 
     public String getIconAboutUs() {
