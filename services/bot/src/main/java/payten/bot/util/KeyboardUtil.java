@@ -131,28 +131,37 @@ public class KeyboardUtil {
     }
 
     public void setMainMenu() {
-        ViberButton buttonMainMenu = new ViberButton("")
-                .setText(stringUtils.getButtonYes())
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getPrimarilyColor())
-                .setColumns(2)
-                .setSilent(true)
-                .setRows(2);
         mainMenu = new ViberKeyboard()
                 .setInputFieldState("hidden")
                 .setType("keyboard")
-                .addButton(buttonMainMenu
-                        .setActionBody(startReservationProcess)
-                        .setText("Rezerviši sto"))
-                .addButton(buttonMainMenu
-                        .setActionBody(startReservationProcess)
-                        .setText("English"))
-                .addButton(buttonMainMenu
-                        .setActionBody(startReservationProcess)
-                        .setText("O nama"))
-                .addButton(buttonMainMenu
-                        .setActionBody(startReservationProcess)
-                        .setText("O nama"));
+                .addButton(new ViberButton(startReservationProcess)
+                        .setText("Rezerviši")
+                        .setTextSize(ViberButton.TextSize.LARGE)
+                        .setBgColor(stringUtils.getPrimarilyColor())
+                        .setColumns(2)
+                        .setSilent(true)
+                        .setRows(2))
+                .addButton(new ViberButton(startReservationProcess)
+                        .setText("English")
+                        .setTextSize(ViberButton.TextSize.LARGE)
+                        .setBgColor(stringUtils.getPrimarilyColor())
+                        .setColumns(2)
+                        .setSilent(true)
+                        .setRows(2))
+                .addButton(new ViberButton(startReservationProcess)
+                        .setText("O nama")
+                        .setTextSize(ViberButton.TextSize.LARGE)
+                        .setBgColor(stringUtils.getPrimarilyColor())
+                        .setColumns(2)
+                        .setSilent(true)
+                        .setRows(2))
+                .addButton(new ViberButton(startReservationProcess)
+                        .setText("Istorija rezervacija")
+                        .setTextSize(ViberButton.TextSize.LARGE)
+                        .setBgColor(stringUtils.getPrimarilyColor())
+                        .setColumns(2)
+                        .setSilent(true)
+                        .setRows(2));
         logger.info("Main Menu has been successfully generated!");
     }
 }
