@@ -134,7 +134,7 @@ public class KeyboardUtil {
         mainMenu.setInputFieldState("hidden");
         mainMenu.setType("keyboard");
         mainMenu.addButton(new ViberButton(selectDayReservation)
-                        .setText("\nRezerviši")
+                        .setText("\n\n*Rezerviši*")
                         .setImage(stringUtils.getIconReserve())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
@@ -142,7 +142,7 @@ public class KeyboardUtil {
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("\nO nama")
+                        .setText("\n\n*O nama*")
                         .setImage(stringUtils.getIconAboutUs())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getSecondarilyColor())
@@ -152,7 +152,7 @@ public class KeyboardUtil {
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("\nIzaberite jezik")
+                        .setText("\n\n*Izaberite jezik*")
                         .setImage(stringUtils.getIconChooseLanguage())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
@@ -163,7 +163,7 @@ public class KeyboardUtil {
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("\nIstorija rezervacija")
+                        .setText("\n\n*Istorija rezervacija*")
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                         .setTextVAlign(ViberButton.TextAlign.MIDDLE)
