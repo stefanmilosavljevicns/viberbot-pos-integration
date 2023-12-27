@@ -138,9 +138,9 @@ public class KeyboardUtil {
                         .setImage(stringUtils.getIconReserve())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
-                        .setColumns(1)
+                        .setColumns(4)
                         .setSilent(true)
-                        .setRows(1));
+                        .setRows(4));
         mainMenu.addButton(new ViberButton(startReservationProcess)
                         .setText("\nO nama")
                         .setImage(stringUtils.getIconAboutUs())
@@ -148,9 +148,9 @@ public class KeyboardUtil {
                         .setBgColor(stringUtils.getSecondarilyColor())
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                         .setTextVAlign(ViberButton.TextAlign.MIDDLE)
-                        .setColumns(1)
+                        .setColumns(4)
                         .setSilent(true)
-                        .setRows(1));
+                        .setRows(4));
         mainMenu.addButton(new ViberButton(startReservationProcess)
                         .setText("\nIzaberite jezik")
                         .setImage(stringUtils.getIconChooseLanguage())
@@ -159,9 +159,9 @@ public class KeyboardUtil {
                         .setTextVAlign(ViberButton.TextAlign.MIDDLE)
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getSecondarilyColor())
-                        .setColumns(1)
+                        .setColumns(4)
                         .setSilent(true)
-                        .setRows(1));
+                        .setRows(4));
         mainMenu.addButton(new ViberButton(startReservationProcess)
                         .setText("\nIstorija rezervacija")
                         .setTextSize(ViberButton.TextSize.LARGE)
@@ -170,9 +170,9 @@ public class KeyboardUtil {
                         .setImage(stringUtils.getIconPreviousOrders())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
-                        .setColumns(1)
+                        .setColumns(4)
                         .setSilent(true)
-                        .setRows(1));
+                        .setRows(4));
         logger.info("Main Menu has been successfully generated!");
     }
 }
