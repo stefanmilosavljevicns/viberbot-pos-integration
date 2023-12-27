@@ -134,7 +134,7 @@ public class KeyboardUtil {
         mainMenu.setInputFieldState("hidden");
         mainMenu.setType("keyboard");
         mainMenu.addButton(new ViberButton(selectDayReservation)
-                        .setText("<font color='#ffffff'><b>Rezerviši</b></font>")
+                        .setText("<font color='#ffffff'><b>REZERVIŠI</b></font>")
                         .setImage(stringUtils.getIconReserve())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
@@ -144,7 +144,7 @@ public class KeyboardUtil {
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("<font color='#ffffff'><b>O nama</b></font>")
+                        .setText("<font color='#ffffff'><b>O NAMA</b></font>")
                         .setImage(stringUtils.getIconAboutUs())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getSecondarilyColor())
@@ -154,7 +154,7 @@ public class KeyboardUtil {
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("<font color='#ffffff'><b>Izaberite jezik</b></font>")
+                        .setText("<font color='#ffffff'><b>IZABERITE JEZIK</b></font>")
                         .setImage(stringUtils.getIconChooseLanguage())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
