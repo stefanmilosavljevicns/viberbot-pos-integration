@@ -165,7 +165,7 @@ public class KeyboardUtil {
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("<font color='#ffffff'><b>Istorija rezervacija</b></font>")
+                        .setText("<font color='#ffffff'><b>ISTORIJA REZERVACIJA</b></font>")
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                         .setTextVAlign(ViberButton.TextAlign.BOTTOM)
