@@ -138,7 +138,7 @@ public class KeyboardUtil {
                         .setImage(stringUtils.getIconReserve())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
-                        .setColumns(3)
+                        .setColumns(6)
                         .setSilent(true)
                         .setRows(1));
         mainMenu.addButton(new ViberButton(startReservationProcess)
@@ -148,7 +148,7 @@ public class KeyboardUtil {
                         .setBgColor(stringUtils.getSecondarilyColor())
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                         .setTextVAlign(ViberButton.TextAlign.MIDDLE)
-                        .setColumns(3)
+                        .setColumns(6)
                         .setSilent(true)
                         .setRows(1));
         mainMenu.addButton(new ViberButton(startReservationProcess)
@@ -159,7 +159,7 @@ public class KeyboardUtil {
                         .setTextVAlign(ViberButton.TextAlign.MIDDLE)
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getSecondarilyColor())
-                        .setColumns(3)
+                        .setColumns(6)
                         .setSilent(true)
                         .setRows(1));
         mainMenu.addButton(new ViberButton(startReservationProcess)
@@ -170,7 +170,7 @@ public class KeyboardUtil {
                         .setImage(stringUtils.getIconPreviousOrders())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
-                        .setColumns(3)
+                        .setColumns(6)
                         .setSilent(true)
                         .setRows(1));
         logger.info("Main Menu has been successfully generated!");
