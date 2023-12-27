@@ -10,7 +10,7 @@ services:
       volumes:
         - ./conf/:/etc/nginx/conf.d/:ro        
         - /etc/letsencrypt:/etc/letsencrypt
-
+        - /var/www/html/images:/usr/share/nginx/html/images
 networks:
   nginx-net:
     external: true     
