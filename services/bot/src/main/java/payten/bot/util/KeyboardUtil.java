@@ -133,8 +133,8 @@ public class KeyboardUtil {
     public void setMainMenu() {
         mainMenu = new ViberKeyboard()
                 .setInputFieldState("hidden")
-                .setType("keyboard")
-                .addButton(new ViberButton(startReservationProcess)
+                .setType("keyboard");
+        mainMenu.addButton(new ViberButton(startReservationProcess)
                         .setText("Rezerviši")
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
