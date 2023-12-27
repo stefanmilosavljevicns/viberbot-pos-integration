@@ -134,37 +134,45 @@ public class KeyboardUtil {
         mainMenu.setInputFieldState("hidden");
         mainMenu.setType("keyboard");
         mainMenu.addButton(new ViberButton(selectDayReservation)
-                        .setText("Rezerviši")
+                        .setText("\nRezerviši")
                         .setImage(stringUtils.getIconReserve())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
-                        .setColumns(2)
+                        .setColumns(1)
                         .setSilent(true)
-                        .setRows(2));
+                        .setRows(1));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("O nama")
+                        .setText("\nO nama")
                         .setImage(stringUtils.getIconAboutUs())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getSecondarilyColor())
-                        .setColumns(2)
+                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                        .setTextVAlign(ViberButton.TextAlign.MIDDLE)
+                        .setColumns(1)
                         .setSilent(true)
-                        .setRows(2));
+                        .setRows(1));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("Izaberite jezik")
+                        .setText("\nIzaberite jezik")
                         .setImage(stringUtils.getIconChooseLanguage())
                         .setTextSize(ViberButton.TextSize.LARGE)
+                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                        .setTextVAlign(ViberButton.TextAlign.MIDDLE)
+                        .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getSecondarilyColor())
-                        .setColumns(2)
+                        .setColumns(1)
                         .setSilent(true)
-                        .setRows(2));
+                        .setRows(1));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("Istorija rezervacija")
+                        .setText("\nIstorija rezervacija")
+                        .setTextSize(ViberButton.TextSize.LARGE)
+                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                        .setTextVAlign(ViberButton.TextAlign.MIDDLE)
                         .setImage(stringUtils.getIconPreviousOrders())
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
-                        .setColumns(2)
+                        .setColumns(1)
                         .setSilent(true)
-                        .setRows(2));
+                        .setRows(1));
         logger.info("Main Menu has been successfully generated!");
     }
 }
