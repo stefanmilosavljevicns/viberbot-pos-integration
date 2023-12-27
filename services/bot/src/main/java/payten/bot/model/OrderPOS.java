@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class OrderPOS {
     private ArrayList<String> description;
-    private Double price;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String state;
