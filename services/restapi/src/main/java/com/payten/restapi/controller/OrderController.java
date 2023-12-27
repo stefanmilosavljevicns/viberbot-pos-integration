@@ -2,11 +2,8 @@ package com.payten.restapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.payten.restapi.model.DTO.AddOrderFromPosDTO;
-import com.payten.restapi.model.Menu;
 import com.payten.restapi.model.Order;
 import com.payten.restapi.model.OrderState;
-import com.payten.restapi.repository.MenuRepository;
 import com.payten.restapi.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +32,7 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
-    @Autowired
-    private MenuRepository menuRepository;
+
 
     @GetMapping("/getOrders")
     public ResponseEntity<List<Order>> findAll() {
@@ -55,34 +51,6 @@ public class OrderController {
         return ResponseEntity.ok(orderRepository.save(order));
     }
 
-    @SendTo("/topic/order")
-    @PostMapping("/addOrderFromPos")
-    public ResponseEntity<Order> saveOrderFromPos(@RequestBody AddOrderFromPosDTO order) throws JsonProcessingException {
-        logger.info(String.format(controllerLogFormat, "addOrderFromPos", order, HttpStatus.OK));
-
-        ArrayList<String> descriptions = order.getDescription();
-
-        Double totalPrice = 0.0;
-        Integer totalTime = 0;
-        for (String description : descriptions) {
-            try {
-                Menu menu = menuRepository.findByName(description);
-                totalPrice += menu.getPrice();
-                totalTime += menu.getTime();
-            } catch (Exception ex) {
-                logger.error(ex.getMessage());
-            }
-        }
-
-        Order newOrder = new Order(descriptions, totalPrice, order.getStartTime(), order.getStartTime().plusMinutes(totalTime), OrderState.IN_PROGRESS, order.getCustomerName(), "");
-
-        Order savedOrder = orderRepository.save(newOrder);
-
-        // Creating a Map of key-value pairs
-        serializeOrderForSending(savedOrder.getId());
-
-        return ResponseEntity.ok(savedOrder);
-    }
 
     @GetMapping("/getAllActiveDates")
     public ResponseEntity<List<Order>> getOrdersWithin24Hours() {
@@ -162,21 +130,6 @@ public class OrderController {
         }
     }
 
-    @PutMapping("/clearCart/{id}")
-    public ResponseEntity<Order> completeOrder(@PathVariable("id") String id) {
-        Optional<Order> existingOrder = orderRepository.findById(id);
-        if (!existingOrder.isPresent()) {
-            logger.info(String.format(controllerLogFormat, "clearCart", "", HttpStatus.NOT_FOUND));
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Order updatedOrder = existingOrder.get();
-        updatedOrder.setState(OrderState.COMPLETED);
-
-        orderRepository.save(updatedOrder);
-        logger.info(String.format(controllerLogFormat, "clearCart", "", HttpStatus.OK));
-        return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
-    }
 
     //Update-ujemo termin tako sto unesemo viberId od korisnikovog termina koji zelimo da promenimo. Na osnovu viberId-a dobijamo instancu Order objekta. U njemu prvo uzimamo ukupnu duzinu termina (od startTime-a do endTime-a) zatim prosledjujemo
     // iz query parametra novi startTime a endTime dobijamo uvecavanjem novog starTtime-a za ukupnu duzinu termina koju smo prethodno izracunali (promenljiva reservationDuration)

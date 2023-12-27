@@ -24,7 +24,7 @@ public class ViberButton {
     private Boolean bgLoop;
     private Boolean silent;
     private BtnActionType actionType;
-    private final String actionBody;
+    private String actionBody;
     private String image;
     private String text;
     private TextAlign textVAlign;
@@ -35,6 +35,8 @@ public class ViberButton {
     private OpenURLType openURLType;
     private InternalBrowser internalBrowser;
     private Integer[] textPaddings;
+
+
 
     public ViberButton(String actionBody) {
         this.actionBody = actionBody;
@@ -49,6 +51,10 @@ public class ViberButton {
         return this;
     }
 
+    public ViberButton setActionBody(String actionBody) {
+        this.actionBody = actionBody;
+        return this;
+    }
     /**
      * @param bgMediaType type of button media (picture or gif)
      * @return current button instance

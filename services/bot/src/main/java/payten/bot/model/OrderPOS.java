@@ -13,9 +13,8 @@ public class OrderPOS {
     private String customerName;
 
 
-    public OrderPOS(ArrayList<String> description, Double price, LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName) {
+    public OrderPOS(ArrayList<String> description, LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName) {
         this.description = description;
-        this.price = price;
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = state;
@@ -40,14 +39,6 @@ public class OrderPOS {
 
     public void setDescription(ArrayList<String> description) {
         this.description = description;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public LocalDateTime getStartTime() {

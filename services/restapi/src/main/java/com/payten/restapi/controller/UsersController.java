@@ -22,7 +22,7 @@ import static com.payten.restapi.util.Constants.controllerLogFormat;
 public class UsersController {
     @Autowired
     private UsersRepository usersRepository;
-    private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 
     @GetMapping("/getAllUsers")
     //@RolesAllowed("admin")

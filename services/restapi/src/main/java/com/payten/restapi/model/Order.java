@@ -16,7 +16,6 @@ public class Order {
     @Id
     private String id;
     private ArrayList<String> description;
-    private Double price;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private OrderState state;
@@ -25,7 +24,6 @@ public class Order {
 
     public Order(ArrayList<String> description, Double price, LocalDateTime startTime, LocalDateTime endTime, OrderState state, String customerName, String viberID) {
         this.description = description;
-        this.price = price;
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = state;

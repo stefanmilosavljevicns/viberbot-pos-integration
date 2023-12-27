@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import payten.bot.model.MenuItem;
 import payten.bot.model.OrderPOS;
 import payten.bot.util.DateUtil;
 import payten.bot.util.HttpUtil;
@@ -66,23 +65,6 @@ public class Controller {
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
                     logger.info(String.format(controlerLogFormat, String.format("Showing category list for %s", messageText.substring(3)), userId));
                     break;
-                case addingItemToCart:
-                    MenuItem addList = httpUtil.getItemByName(messageText.substring(3));
-                    boolean checkCartCapacity = httpUtil.addServiceToCart(userId, addList);
-                    if(checkCartCapacity){
-                        bot.messageForUser(userId).postText("Dodajem na listu: " + messageText.substring(3), keyboardUtil.getMainMenu());
-                        logger.info(String.format(controlerLogFormat, "Adding to cart: " + messageText.substring(3), userId));
-                    }
-                    else{
-                        bot.messageForUser(userId).postText("Greška, izabrali ste previše servisa molimo izbacite jedan od servisa navigacijom na trenutnu korpu", keyboardUtil.getMainMenu());
-                        logger.info(String.format(controlerLogFormat,"User already having too much selected items", userId));
-
-                    }
-                    break;
-                case navigateToCartMenu:
-                        bot.messageForUser(userId).postKeyboard(keyboardUtil.setCartList(userId));
-                        logger.info(String.format(controlerLogFormat, "Showing cart", userId));
-                    break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {
                         StringBuilder finishMsg = new StringBuilder(stringUtils.getMessageCheckCart());
@@ -124,7 +106,7 @@ public class Controller {
                     LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
                     String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
                     if (checkTime.equals("Time slot is available.")) {
-                        OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), httpUtil.getTotalPrice(userId), startTime, endTime, "PENDING", userId, senderName);
+                        OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), startTime, endTime, "PENDING", userId, senderName);
                         httpUtil.sendOrder(sendOrderPOS, userId);
                         bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu());
                         httpUtil.clearCart(userId);
@@ -139,14 +121,7 @@ public class Controller {
                     httpUtil.clearCart(userId);
                     logger.info(String.format(controlerLogFormat, "Session finished, clearing cart.", userId));
                     break;
-                case removingItemFromCart:
-                    int newlineIndex = messageText.indexOf('\n', 3);
-                    MenuItem rmvList = httpUtil.getItemByName(messageText.substring(3, newlineIndex));
-                    httpUtil.removeServiceFromCart(userId, rmvList);
-                    bot.messageForUser(userId).postText("Uklanjam " + messageText.substring(3, newlineIndex), keyboardUtil.setCartList(userId));
-                    logger.info(String.format(controlerLogFormat, "Trying to remove: " + messageText.substring(3), userId));
 
-                    break;
                 case navigateToMainMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
                     logger.info(String.format(controlerLogFormat, "Navigating to main menu." + messageText.substring(3), userId));
