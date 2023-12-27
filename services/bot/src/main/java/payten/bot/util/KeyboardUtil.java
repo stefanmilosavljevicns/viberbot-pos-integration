@@ -140,17 +140,17 @@ public class KeyboardUtil {
                 .setRows(2);
         mainMenu = new ViberKeyboard()
                 .setInputFieldState("hidden")
-                .setType("keyboard");
-                mainMenu.addButton(buttonMainMenu
+                .setType("keyboard")
+                .addButton(buttonMainMenu
                         .setActionBody(startReservationProcess)
-                        .setText("Rezerviši sto"));
-                mainMenu.addButton(buttonMainMenu
+                        .setText("Rezerviši sto"))
+                .addButton(buttonMainMenu
                         .setActionBody(startReservationProcess)
-                        .setText("English"));
-                mainMenu.addButton(buttonMainMenu
+                        .setText("English"))
+                .addButton(buttonMainMenu
                         .setActionBody(startReservationProcess)
-                        .setText("O nama"));
-                mainMenu.addButton(buttonMainMenu
+                        .setText("O nama"))
+                .addButton(buttonMainMenu
                         .setActionBody(startReservationProcess)
                         .setText("O nama"));
         logger.info("Main Menu has been successfully generated!");
