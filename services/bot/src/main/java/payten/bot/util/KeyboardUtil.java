@@ -142,14 +142,14 @@ public class KeyboardUtil {
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("English")
+                        .setText("O nama")
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
                         .setColumns(2)
                         .setSilent(true)
                         .setRows(2));
         mainMenu.addButton(new ViberButton(startReservationProcess)
-                        .setText("O nama")
+                        .setText("Izaberite jezik")
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setBgColor(stringUtils.getPrimarilyColor())
                         .setColumns(2)
