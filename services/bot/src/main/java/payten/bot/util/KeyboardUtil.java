@@ -140,19 +140,19 @@ public class KeyboardUtil {
                 .setRows(2);
         mainMenu = new ViberKeyboard()
                 .setInputFieldState("hidden")
-                .setType("keyboard")
-                .addButton(buttonMainMenu
+                .setType("keyboard");
+                mainMenu.addButton(buttonMainMenu
                         .setActionBody(startReservationProcess)
-                        .setText("Rezerviši sto"))
-                .addButton(buttonMainMenu
+                        .setText("Rezerviši sto"));
+                mainMenu.addButton(buttonMainMenu
                         .setActionBody(startReservationProcess)
-                        .setText("English"))
-                .addButton(buttonMainMenu
+                        .setText("English"));
+                mainMenu.addButton(buttonMainMenu
                         .setActionBody(startReservationProcess)
-                        .setText("O nama"))
-                .addButton(buttonMainMenu
+                        .setText("O nama"));
+                mainMenu.addButton(buttonMainMenu
                         .setActionBody(startReservationProcess)
-                        .setText("Istorija rezervacija"));
+                        .setText("O nama"));
         logger.info("Main Menu has been successfully generated!");
     }
 }
