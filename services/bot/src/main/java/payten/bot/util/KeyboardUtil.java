@@ -136,7 +136,7 @@ public class KeyboardUtil {
                 .setText(stringUtils.getButtonYes())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
-                .setColumns(6)
+                .setColumns(2)
                 .setSilent(true)
                 .setRows(1));
         changeLanguage.addButton(new ViberButton(navigateToMainMenu)
@@ -144,14 +144,14 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())
                 .setSilent(true)
-                .setColumns(6)
+                .setColumns(2)
                 .setRows(1));
         changeLanguage.addButton(new ViberButton(navigateToMainMenu)
                 .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setSilent(true)
-                .setColumns(6)
+                .setColumns(2)
                 .setRows(1));
         return changeLanguage;
     }
