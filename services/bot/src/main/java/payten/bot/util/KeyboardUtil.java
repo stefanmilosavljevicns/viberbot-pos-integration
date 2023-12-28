@@ -132,27 +132,27 @@ public class KeyboardUtil {
         ViberKeyboard changeLanguage = new ViberKeyboard();
         changeLanguage.setInputFieldState("hidden");
         changeLanguage.setType("keyboard");
-        changeLanguage.addButton(new ViberButton(agreeWithCart)
+        changeLanguage.addButton(new ViberButton(navigateToMainMenu)
                 .setText(stringUtils.getButtonYes())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
-                .setColumns(2)
+                .setColumns(6)
                 .setSilent(true)
-                .setRows(2));
+                .setRows(1));
         changeLanguage.addButton(new ViberButton(navigateToMainMenu)
                 .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())
                 .setSilent(true)
-                .setColumns(3)
-                .setRows(2));
+                .setColumns(6)
+                .setRows(1));
         changeLanguage.addButton(new ViberButton(navigateToMainMenu)
                 .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setSilent(true)
-                .setColumns(3)
-                .setRows(2));
+                .setColumns(6)
+                .setRows(1));
         return changeLanguage;
     }
     public void setMainMenu() {
