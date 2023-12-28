@@ -71,9 +71,6 @@ public class Controller {
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {
                         StringBuilder finishMsg = new StringBuilder(stringUtils.getMessageCheckCart());
-                        for (String element : httpUtil.getCartList(userId)) {
-                            finishMsg.append(element).append("\n");
-                        }
                         bot.messageForUser(userId).postText(finishMsg.toString(), keyboardUtil.setYesNo());
                         logger.info(String.format(controlerLogFormat, "User have enough cart items to proceed with reservation.", userId));
 
@@ -109,7 +106,6 @@ public class Controller {
                     LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
                     String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
                     if (checkTime.equals("Time slot is available.")) {
-                        OrderPOS sendOrderPOS = new OrderPOS(httpUtil.getCurrentList(userId), startTime, endTime, "PENDING", userId, senderName);
                         httpUtil.sendOrder(sendOrderPOS, userId);
                         bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu());
                         logger.info(String.format(controlerLogFormat, "Session finished, clearing cart.", userId));

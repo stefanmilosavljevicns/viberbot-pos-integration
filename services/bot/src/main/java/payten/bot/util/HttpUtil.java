@@ -91,7 +91,6 @@ public class HttpUtil {
         URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) +"&startDate="+startDate);
         HttpEntity<String> requestEntity = new HttpEntity<>("", headers);        
         ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
-        logger.info(String.format(httpLogFormat, clearCart, responseEntityPut.getStatusCode(), responseEntityPut.getBody()));
     }
 
     public ArrayList<OrderPOS> get24HOrderPOS () {
