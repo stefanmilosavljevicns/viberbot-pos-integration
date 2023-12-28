@@ -54,10 +54,9 @@ public class StringUtils {
     private String messageReservationUpdate;
     @Value("${message.unknown-command}")
     private String messageUnknownCommand;
-    @Value("${image-about-us-1}")
-    private String imageAboutUs1;
-    @Value("${image-about-us-2}")
-    private String imageAboutUs2;
+    @Value("${image-about-us}")
+    private String imageAboutUs;
+
     @Value("${image-russian-flag}")
 
     private String russianFlag;
@@ -66,9 +65,7 @@ public class StringUtils {
     @Value("${image-serbian-flag}")
     private String serbianFlag;
 
-    public String getRussianFlag() {
-        return russianFlag;
-    }
+    public String getRussianFlag() {return russianFlag;}
 
     public String getUkFlag() {
         return ukFlag;
@@ -78,16 +75,10 @@ public class StringUtils {
         return serbianFlag;
     }
 
-
-
     public String getCoffeMug() {return coffeMug;}
 
-    public String getImageAboutUs1() {
-        return imageAboutUs1;
-    }
-
-    public String getImageAboutUs2() {
-        return imageAboutUs2;
+    public String getImageAboutUs() {
+        return imageAboutUs;
     }
 
     public String getMessageAboutUs() {return messageAboutUs;}

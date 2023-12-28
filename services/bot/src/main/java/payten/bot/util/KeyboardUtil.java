@@ -135,25 +135,28 @@ public class KeyboardUtil {
         ViberKeyboard historyOfReservationKeyboard = new ViberKeyboard();
         historyOfReservationKeyboard.setInputFieldState("hidden");
         historyOfReservationKeyboard.setType("keyboard");
-        for(OrderPOS reservationItem:listOfReservations){
-            String formattingReservations = reservationItem.getStartTime().format(formatter) + "\n" + reservationItem.getState();
-            historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
-                                            .setBgColor(stringUtils.getSecondarilyColor())
-                                            .setText(String.format(stringUtils.getButtonStandard(), formattingReservations))
-                                            .setColumns(4)
-                                            .setRows(2)
-                                            .setSilent(true)
-                                            .setTextSize(ViberButton.TextSize.MEDIUM)
-                                            .setTextHAlign(ViberButton.TextAlign.LEFT));
-            historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
-                                            .setImage(stringUtils.getCoffeMug())
-                                            .setColumns(2)
-                                            .setRows(2)
-                                            .setSilent(true)
-                                            .setTextSize(ViberButton.TextSize.MEDIUM).setSilent(true)
-                                            .setTextHAlign(ViberButton.TextAlign.MIDDLE)
-                                            .setTextVAlign(ViberButton.TextAlign.MIDDLE));
+        if(!listOfReservations.isEmpty()){
+            for(OrderPOS reservationItem:listOfReservations){
+                String formattingReservations = reservationItem.getStartTime().format(formatter) + "\n" + reservationItem.getState();
+                historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
+                        .setBgColor(stringUtils.getSecondarilyColor())
+                        .setText(String.format(stringUtils.getButtonStandard(), formattingReservations))
+                        .setColumns(4)
+                        .setRows(2)
+                        .setSilent(true)
+                        .setTextSize(ViberButton.TextSize.MEDIUM)
+                        .setTextHAlign(ViberButton.TextAlign.LEFT));
+                historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
+                        .setImage(stringUtils.getCoffeMug())
+                        .setColumns(2)
+                        .setRows(2)
+                        .setSilent(true)
+                        .setTextSize(ViberButton.TextSize.MEDIUM).setSilent(true)
+                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                        .setTextVAlign(ViberButton.TextAlign.MIDDLE));
+            }
         }
+
         historyOfReservationKeyboard.addButton(new ViberButton(navigateToMainMenu)
                 .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
                 .setTextSize(ViberButton.TextSize.LARGE)

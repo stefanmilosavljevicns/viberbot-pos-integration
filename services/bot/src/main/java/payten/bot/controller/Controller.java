@@ -61,8 +61,7 @@ public class Controller {
         } else if (messageText.length() >= 3) {
             switch (messageText.substring(0, 3)) {
                 case aboutUs:
-                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs1(),"");
-                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs2(),"");
+                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs(),"");
                     bot.messageForUser(userId).postText(stringUtils.getMessageAboutUs(), keyboardUtil.getMainMenu());
                     break;
                 case changeLanguage:
