@@ -137,9 +137,8 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setText("<font color='#ffffff'><b>Srpski</b></font>")
-                .setImage("https://sputnik-it.rs/images/flag-test.png")
+                .setImage("https://sputnik-it.rs/images/flag-test2.png")
                 .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getSecondarilyColor())
                 .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                 .setTextVAlign(ViberButton.TextAlign.BOTTOM)
                 .setColumns(2)
@@ -150,9 +149,8 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())
                 .setText("<font color='#ffffff'><b>English</b></font>")
-                .setImage("https://sputnik-it.rs/images/flag-test.png")
+                .setImage("https://sputnik-it.rs/images/flag-test2.png")
                 .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getSecondarilyColor())
                 .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                 .setTextVAlign(ViberButton.TextAlign.BOTTOM)
                 .setSilent(true)
@@ -163,14 +161,18 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setText("<font color='#ffffff'><b>Русский</b></font>")
-                .setImage("https://sputnik-it.rs/images/flag-test.png")
+                .setImage("https://sputnik-it.rs/images/flag-test2.png")
                 .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getSecondarilyColor())
                 .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                 .setTextVAlign(ViberButton.TextAlign.BOTTOM)
                 .setSilent(true)
                 .setColumns(2)
                 .setRows(2));
+        changeLanguage.addButton(new ViberButton(navigateToMainMenu)
+                .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setSilent(true)
+                .setBgColor(stringUtils.getPrimarilyColor()));
         return changeLanguage;
     }
     public void setMainMenu() {
