@@ -70,6 +70,7 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, getTotalTime, responseEntity.getStatusCode(), responseEntity.getBody()));
         return orderList;
     }
+
     public List<LocalDateTime> checkFreeTimeSlots(LocalDate time, int totalTime) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + checkFreeTimeSlots + "?localDate=" + URLEncoder.encode(String.valueOf(time), StandardCharsets.UTF_8) + "&totalMinutes=" + URLEncoder.encode(String.valueOf(totalTime), StandardCharsets.UTF_8));
