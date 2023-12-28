@@ -98,7 +98,7 @@ public class HttpUtil {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
         URI uri = new URI(stringUtils.getRestAdress() + changeLocale + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) + "&locale=" + URLEncoder.encode(locale, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(uri,requestEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT,requestEntity,String.class);
         logger.info(String.format(httpLogFormat, changeLocale, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
     //In this endpoint we are sending order to POS and clearing cart for customer
