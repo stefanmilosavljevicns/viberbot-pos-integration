@@ -137,7 +137,7 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setText("<font color='#ffffff'><b>Srpski</b></font>")
-                .setImage("https://sputnik-it.rs/images/flag-test2.png")
+                .setImage("https://sputnik-it.rs/images/flag-test3.png")
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                 .setTextVAlign(ViberButton.TextAlign.BOTTOM)
@@ -149,7 +149,7 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())
                 .setText("<font color='#ffffff'><b>English</b></font>")
-                .setImage("https://sputnik-it.rs/images/flag-test2.png")
+                .setImage("https://sputnik-it.rs/images/flag-test3.png")
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                 .setTextVAlign(ViberButton.TextAlign.BOTTOM)
@@ -161,7 +161,7 @@ public class KeyboardUtil {
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setText("<font color='#ffffff'><b>Русский</b></font>")
-                .setImage("https://sputnik-it.rs/images/flag-test2.png")
+                .setImage("https://sputnik-it.rs/images/flag-test3.png")
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setTextHAlign(ViberButton.TextAlign.MIDDLE)
                 .setTextVAlign(ViberButton.TextAlign.BOTTOM)
@@ -172,7 +172,7 @@ public class KeyboardUtil {
                 .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setSilent(true)
-                .setBgColor(stringUtils.getPrimarilyColor()));
+                .setBgColor(stringUtils.getSecondarilyColor()));
         return changeLanguage;
     }
     public void setMainMenu() {
