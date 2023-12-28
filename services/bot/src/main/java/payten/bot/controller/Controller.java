@@ -49,6 +49,7 @@ public class Controller {
         String userId = incoming.getSenderId();
         String senderName = incoming.getSenderName();
         String messageText = incoming.getMessageText();
+        String userLocale = httpUtil.getUserLocale(userId);
         if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
             return ResponseEntity.ok().build();
         if (StringUtils.equals(incoming.getEvent(), START_MSG_EVENT)) {

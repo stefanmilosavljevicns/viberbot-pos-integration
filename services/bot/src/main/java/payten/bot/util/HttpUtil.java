@@ -2,6 +2,7 @@ package payten.bot.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,10 +68,19 @@ public class HttpUtil {
         URI uri = new URI(stringUtils.getRestAdress() + getHistoryOfReservations + "/" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, responseType);
         ArrayList<OrderPOS> orderList = responseEntity.getBody();
-        logger.info(String.format(httpLogFormat, getTotalTime, responseEntity.getStatusCode(), responseEntity.getBody()));
+        logger.info(String.format(httpLogFormat, getHistoryOfReservations, responseEntity.getStatusCode(), responseEntity.getBody()));
         return orderList;
     }
-
+    public String getUserLocale(String viberId) throws URISyntaxException, JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+        URI uri = new URI(stringUtils.getRestAdress() + userLocale + "/" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri,String.class);
+        String responseBody = responseEntity.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(responseBody);
+        logger.info(String.format(httpLogFormat, userLocale, responseEntity.getStatusCode(), responseEntity.getBody()));
+        return rootNode.path("customerLocale").asText();
+    }
     public List<LocalDateTime> checkFreeTimeSlots(LocalDate time, int totalTime) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + checkFreeTimeSlots + "?localDate=" + URLEncoder.encode(String.valueOf(time), StandardCharsets.UTF_8) + "&totalMinutes=" + URLEncoder.encode(String.valueOf(totalTime), StandardCharsets.UTF_8));
@@ -83,6 +93,8 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, checkFreeTimeSlots, response.getStatusCode(), Arrays.toString(response.getBody())));
         return freeTimeSlots;
     }
+
+
 
     //In this endpoint we are sending order to POS and clearing cart for customer
     public void sendOrder(OrderPOS orderPOS, String viberId) throws URISyntaxException {
