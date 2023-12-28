@@ -106,7 +106,6 @@ public class Controller {
                     LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
                     String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
                     if (checkTime.equals("Time slot is available.")) {
-                        httpUtil.sendOrder(sendOrderPOS, userId);
                         bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu());
                         logger.info(String.format(controlerLogFormat, "Session finished, clearing cart.", userId));
                     } else {
