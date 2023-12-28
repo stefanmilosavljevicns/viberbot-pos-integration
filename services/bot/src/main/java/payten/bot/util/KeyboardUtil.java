@@ -170,7 +170,7 @@ public class KeyboardUtil {
         ViberKeyboard changeLanguage = new ViberKeyboard();
         changeLanguage.setInputFieldState("hidden");
         changeLanguage.setType("keyboard");
-        changeLanguage.addButton(new ViberButton(navigateToMainMenu)
+        changeLanguage.addButton(new ViberButton(changeUserLocaleSrb)
                 .setText(stringUtils.getButtonYes())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
@@ -182,7 +182,7 @@ public class KeyboardUtil {
                 .setColumns(2)
                 .setSilent(true)
                 .setRows(2));
-        changeLanguage.addButton(new ViberButton(navigateToMainMenu)
+        changeLanguage.addButton(new ViberButton(changeUserLocaleEng)
                 .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
@@ -194,7 +194,7 @@ public class KeyboardUtil {
                 .setSilent(true)
                 .setColumns(2)
                 .setRows(2));
-        changeLanguage.addButton(new ViberButton(navigateToMainMenu)
+        changeLanguage.addButton(new ViberButton(changeUserLocaleRus)
                 .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
@@ -237,7 +237,7 @@ public class KeyboardUtil {
                         .setColumns(3)
                         .setSilent(true)
                         .setRows(2));
-        mainMenu.addButton(new ViberButton(changeLanguage)
+        mainMenu.addButton(new ViberButton(changeLanguageMenu)
                         .setText("<font color='#ffffff'><b>Izaberite jezik</b></font>")
                         .setImage(stringUtils.getIconChooseLanguage())
                         .setTextSize(ViberButton.TextSize.LARGE)

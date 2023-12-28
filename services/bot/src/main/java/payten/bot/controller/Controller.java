@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import payten.bot.model.OrderPOS;
 import payten.bot.util.DateUtil;
 import payten.bot.util.HttpUtil;
 import payten.bot.util.KeyboardUtil;
@@ -72,11 +71,28 @@ public class Controller {
                     bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs(),"");
                     bot.messageForUser(userId).postText(stringUtils.getMessageAboutUs(), keyboardUtil.getMainMenu());
                     break;
-                case changeLanguage:
+                case changeLanguageMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.changeLanguage());
+                    break;
+                case changeUserLocaleSrb:
+                    httpUtil.changeUserLocale(userId,"SRB");
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                    logger.info(String.format(controlerLogFormat, "Changing locale to Serbian.", userId));
+                    break;
+                case changeUserLocaleRus:
+                    httpUtil.changeUserLocale(userId,"RUS");
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                    logger.info(String.format(controlerLogFormat, "Changing locale to Russian.", userId));
+                    break;
+                case changeUserLocaleEng:
+                    httpUtil.changeUserLocale(userId,"ENG");
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                    logger.info(String.format(controlerLogFormat, "Changing locale to English.", userId));
                     break;
                 case historyOfReservation:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.historyOfReservationKeyboard(userId));
+                    logger.info(String.format(controlerLogFormat, "Displaying user his history.", userId));
+
                     break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {

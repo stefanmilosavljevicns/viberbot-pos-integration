@@ -149,7 +149,6 @@ public class OrderController {
         Order updatedOrder = existingOrder.get();
         updatedOrder.setStartTime(startDate);
         updatedOrder.setEndTime(startDate.plusMinutes(reservationDuration.toMinutes()));
-        orderRepository.save(updatedOrder);
         logger.info(String.format(controllerLogFormat, "updateStartTime", "updatedOrder", HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }

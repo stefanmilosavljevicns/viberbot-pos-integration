@@ -11,7 +11,11 @@ public class BotConstants {
     public static final String selectDeliveryTime = "TIM";
     public static final String navigateToMainMenu = "BCK";
     public static final String ignoreUserInput = "IGR";
-    public static final String changeLanguage = "LOC";
+    public static final String changeLanguageMenu = "LOC";
+    public static final String changeUserLocaleSrb = "SRB";
+    public static final String changeUserLocaleEng = "ENG";
+    public static final String changeUserLocaleRus = "RUS";
+
     public static final String historyOfReservation = "HST";
 
 
@@ -23,6 +27,8 @@ public class BotConstants {
 
     public static final String getOrdersWithin24Hourse = "/getAllActiveDates";
     public static final String checkIfUserCanOrder = "/checkIfUserCanOrder";
+
+    public static final String changeLocale = "/changeLocale";
     public static final String userLocale = "/getUserLocale";
     public static final String getTotalTime = "/getTotalTime";
     public static final String getHistoryOfReservations = "/historyOfReservation";
