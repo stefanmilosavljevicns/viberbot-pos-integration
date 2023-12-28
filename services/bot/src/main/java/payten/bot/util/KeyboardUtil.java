@@ -142,14 +142,15 @@ public class KeyboardUtil {
                         .setBgColor(stringUtils.getSecondarilyColor())
                         .setText(String.format(stringUtils.getButtonStandard(), formattingReservations))
                         .setColumns(4)
-                        .setRows(2)
+                        .setRows(1)
                         .setSilent(true)
                         .setTextSize(ViberButton.TextSize.MEDIUM)
                         .setTextHAlign(ViberButton.TextAlign.LEFT));
                 historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
                         .setImage(stringUtils.getCoffeMug())
+                        .setBgColor(stringUtils.getPrimarilyColor())
                         .setColumns(2)
-                        .setRows(2)
+                        .setRows(1)
                         .setSilent(true)
                         .setTextSize(ViberButton.TextSize.MEDIUM).setSilent(true)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)
@@ -161,7 +162,7 @@ public class KeyboardUtil {
                 .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setSilent(true)
-                .setBgColor(stringUtils.getSecondarilyColor()));
+                .setBgColor(stringUtils.getPrimarilyColor()));
         return historyOfReservationKeyboard;
     }
     public ViberKeyboard changeLanguage(){
