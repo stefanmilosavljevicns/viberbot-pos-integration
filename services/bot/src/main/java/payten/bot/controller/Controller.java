@@ -65,9 +65,9 @@ public class Controller {
                     logger.info(String.format(controlerLogFormat, String.format("Showing category list for %s", messageText.substring(3)), userId));
                     break;
                 case aboutUs:
+                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs1(),"");
+                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs2(),"");
                     bot.messageForUser(userId).postText(stringUtils.getMessageAboutUs(), keyboardUtil.getMainMenu());
-                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs1(),"about-us");
-                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs1(),"about-us");
                     break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {
