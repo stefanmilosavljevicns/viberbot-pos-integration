@@ -143,7 +143,7 @@ public class KeyboardUtil {
                         .setColumns(3)
                         .setSilent(true)
                         .setRows(2));
-        mainMenu.addButton(new ViberButton(startReservationProcess)
+        mainMenu.addButton(new ViberButton(aboutUs)
                         .setText("<font color='#ffffff' style='text-shadow: 2px 2px 4px #000000;'><b>O NAMA</b></font>")
                         .setImage(stringUtils.getIconAboutUs())
                         .setTextSize(ViberButton.TextSize.LARGE)

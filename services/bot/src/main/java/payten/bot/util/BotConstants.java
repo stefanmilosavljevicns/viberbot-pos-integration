@@ -5,7 +5,8 @@ public class BotConstants {
     public static final String MESSAGE_EVENT = "message";
     public static final String START_MSG_EVENT = "conversation_started";
     public static final String startReservationProcess = "FNH";
-    public static final String clearCartAndFinishSession = "CLR";
+    public static final String aboutUs = "ABT";
+
     public static final String agreeWithCart = "AGR";
     public static final String selectDayReservation = "DAY";
     public static final String selectDeliveryTime = "TIM";

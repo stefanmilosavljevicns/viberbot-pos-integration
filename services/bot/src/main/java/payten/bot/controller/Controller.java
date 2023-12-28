@@ -65,6 +65,9 @@ public class Controller {
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
                     logger.info(String.format(controlerLogFormat, String.format("Showing category list for %s", messageText.substring(3)), userId));
                     break;
+                case aboutUs:
+                    bot.messageForUser(userId).postText(stringUtils.getMessageAboutUs(), keyboardUtil.getMainMenu());
+                    break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {
                         StringBuilder finishMsg = new StringBuilder(stringUtils.getMessageCheckCart());

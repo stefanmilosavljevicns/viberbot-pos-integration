@@ -21,20 +21,6 @@ public class StringUtils {
     private String buttonNo;
     @Value("${text.standard-button}")
     private String buttonStandard;
-    @Value("${text.menu-cart}")
-    private String buttonMenuCart;
-    @Value("${text.menu-categories}")
-    private String buttonMenuCategories;
-    @Value("${text.menu-finish-reservation}")
-    private String buttonMenuFinishReservation;
-    @Value("${text.price-format}")
-    private String buttonPriceFormat;
-    @Value("${text.add-cart-item}")
-    private String buttonAddCartItem;
-    @Value("${text.remove-cart-item}")
-    private String buttonRemoveCartItem;
-    @Value("${text.item-description}")
-    private String buttonDescription;
     @Value("${icon.reserve}")
     private String iconReserve;
     @Value("${icon.about-us}")
@@ -55,6 +41,8 @@ public class StringUtils {
     private String messageCheckCart;
     @Value("${message.check-time}")
     private String messageCheckTime;
+    @Value("${message.about-us}")
+    private String messageAboutUs;
     @Value("${message.reservation-succes}")
     private String messageSuccessReservation;
     @Value("${message.reservation-reminder}")
@@ -64,39 +52,13 @@ public class StringUtils {
     @Value("${message.unknown-command}")
     private String messageUnknownCommand;
 
+    public String getMessageAboutUs() {return messageAboutUs;}
     public String getMessageUnknownCommand() {return messageUnknownCommand;}
 
     public String getMessageReservationUpdate() {return messageReservationUpdate;}
 
     public String getMessageReservationReminder() {return messageReservationReminder;}
 
-    public String getButtonMenuCart() {
-        return buttonMenuCart;
-    }
-
-    public String getButtonMenuCategories() {
-        return buttonMenuCategories;
-    }
-
-    public String getButtonMenuFinishReservation() {
-        return buttonMenuFinishReservation;
-    }
-
-    public String getButtonPriceFormat() {
-        return buttonPriceFormat;
-    }
-
-    public String getButtonAddCartItem() {
-        return buttonAddCartItem;
-    }
-
-    public String getButtonDescription() {
-        return buttonDescription;
-    }
-
-    public String getButtonRemoveCartItem() {
-        return buttonRemoveCartItem;
-    }
 
     public String getMessageError() {
         return messageError;
