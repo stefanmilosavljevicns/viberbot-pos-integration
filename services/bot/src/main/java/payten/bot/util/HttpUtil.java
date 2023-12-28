@@ -34,30 +34,7 @@ public class HttpUtil {
         return categories;
     }
 
-    public ArrayList<String> getCartList(String viberId) throws JsonProcessingException, URISyntaxException {
-        ArrayList<String> cartList;
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + getCart + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
-        String responseBody = responseEntity.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
-        cartList = objectMapper.readValue(responseBody, new TypeReference<ArrayList<String>>() {
-        });
-        logger.info(String.format(httpLogFormat, getCart, responseEntity.getStatusCode(), responseEntity.getBody()));
-        return cartList;
-    }
-    public ArrayList<String> getCurrentList(String viberId) throws JsonProcessingException, URISyntaxException {
-        ArrayList<String> cartList;
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + convertToOrderModel + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
-        String responseBody = responseEntity.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
-        cartList = objectMapper.readValue(responseBody, new TypeReference<>() {
-        });
-        logger.info(String.format(httpLogFormat, convertToOrderModel, responseEntity.getStatusCode(), responseEntity.getBody()));
-        return cartList;
-    }
+
     public Boolean cartChecker(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + checkIfUserCanOrder + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
