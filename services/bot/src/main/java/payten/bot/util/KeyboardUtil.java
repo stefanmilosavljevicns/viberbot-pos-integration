@@ -145,14 +145,14 @@ public class KeyboardUtil {
                                             .setSilent(true)
                                             .setTextSize(ViberButton.TextSize.MEDIUM)
                                             .setTextHAlign(ViberButton.TextAlign.LEFT));
-            historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput))
+            historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
                                             .setImage(stringUtils.getCoffeMug())
                                             .setColumns(2)
                                             .setRows(2)
                                             .setSilent(true)
                                             .setTextSize(ViberButton.TextSize.MEDIUM).setSilent(true)
                                             .setTextHAlign(ViberButton.TextAlign.MIDDLE)
-                                            .setTextVAlign(ViberButton.TextAlign.MIDDLE);
+                                            .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         }
         historyOfReservationKeyboard.addButton(new ViberButton(navigateToMainMenu)
                 .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
