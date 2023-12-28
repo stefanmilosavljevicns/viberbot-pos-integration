@@ -49,17 +49,18 @@ public class Controller {
         String userId = incoming.getSenderId();
         String senderName = incoming.getSenderName();
         String messageText = incoming.getMessageText();
-        String userLocale = httpUtil.getUserLocale(userId);
         if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
             return ResponseEntity.ok().build();
         if (StringUtils.equals(incoming.getEvent(), START_MSG_EVENT)) {
             Gson gson = new Gson();
             Map jsonMap = gson.fromJson(text, Map.class);
             Map<String, String> userMap = (Map<String, String>) jsonMap.get("user");
+            String userLocale = httpUtil.getUserLocale(userId);
             bot.messageForUser(userMap.get("id")).postText(stringUtils.getMessageWelcome(), keyboardUtil.getMainMenu());
             logger.info(String.format(controlerLogFormat, "Showing welcome message.", userId));
             return ResponseEntity.ok().build();
         } else if (messageText.length() >= 3) {
+            String userLocale = httpUtil.getUserLocale(userId);
             switch (messageText.substring(0, 3)) {
                 case aboutUs:
                     bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs(),"");
