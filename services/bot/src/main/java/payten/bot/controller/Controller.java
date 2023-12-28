@@ -57,7 +57,6 @@ public class Controller {
             Map<String, String> userMap = (Map<String, String>) jsonMap.get("user");
             bot.messageForUser(userMap.get("id")).postText(stringUtils.getMessageWelcome(), keyboardUtil.getMainMenu());
             logger.info(String.format(controlerLogFormat, "Showing welcome message.", userId));
-
             return ResponseEntity.ok().build();
         } else if (messageText.length() >= 3) {
             switch (messageText.substring(0, 3)) {
@@ -67,6 +66,8 @@ public class Controller {
                     break;
                 case aboutUs:
                     bot.messageForUser(userId).postText(stringUtils.getMessageAboutUs(), keyboardUtil.getMainMenu());
+                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs1(),"about-us");
+                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs1(),"about-us");
                     break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {
@@ -118,7 +119,6 @@ public class Controller {
                         logger.info(String.format(controlerLogFormat, "Error in reservations.", userId));
                     }
                     break;
-
                 case navigateToMainMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
                     logger.info(String.format(controlerLogFormat, "Navigating to main menu." + messageText.substring(3), userId));

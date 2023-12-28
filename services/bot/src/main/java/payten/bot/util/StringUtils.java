@@ -51,6 +51,18 @@ public class StringUtils {
     private String messageReservationUpdate;
     @Value("${message.unknown-command}")
     private String messageUnknownCommand;
+    @Value("${image-about-us-1}")
+    private String imageAboutUs1;
+    @Value("${image-about-us-2}")
+    private String imageAboutUs2;
+
+    public String getImageAboutUs1() {
+        return imageAboutUs1;
+    }
+
+    public String getImageAboutUs2() {
+        return imageAboutUs2;
+    }
 
     public String getMessageAboutUs() {return messageAboutUs;}
     public String getMessageUnknownCommand() {return messageUnknownCommand;}
