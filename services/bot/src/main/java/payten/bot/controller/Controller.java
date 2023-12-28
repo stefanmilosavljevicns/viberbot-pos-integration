@@ -66,7 +66,7 @@ public class Controller {
                     bot.messageForUser(userId).postText(stringUtils.getMessageAboutUs(), keyboardUtil.getMainMenu());
                     break;
                 case changeLanguage:
-                    bot.messageForUser(userId).postText("Izaberite jezik",keyboardUtil.changeLanguage());
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.changeLanguage());
                     break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {
