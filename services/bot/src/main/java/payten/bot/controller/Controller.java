@@ -60,14 +60,13 @@ public class Controller {
             return ResponseEntity.ok().build();
         } else if (messageText.length() >= 3) {
             switch (messageText.substring(0, 3)) {
-                case selectCategoryFromMainMenu:
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.setListMenu(messageText.substring(3)));
-                    logger.info(String.format(controlerLogFormat, String.format("Showing category list for %s", messageText.substring(3)), userId));
-                    break;
                 case aboutUs:
                     bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs1(),"");
                     bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs2(),"");
                     bot.messageForUser(userId).postText(stringUtils.getMessageAboutUs(), keyboardUtil.getMainMenu());
+                    break;
+                case changeLanguage:
+                    bot.messageForUser(userId).postText("Izaberite jezik",keyboardUtil.changeLanguage());
                     break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {

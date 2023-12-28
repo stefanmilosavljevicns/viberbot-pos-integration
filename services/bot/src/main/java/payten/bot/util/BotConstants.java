@@ -13,6 +13,7 @@ public class BotConstants {
     public static final String selectCategoryFromMainMenu = "LST";
     public static final String navigateToMainMenu = "BCK";
     public static final String ignoreUserInput = "IGR";
+    public static final String changeLanguage = "LOC";
 
     public static final String sendOrderToPOS = "POS";
     public static final String httpLogFormat = "||Calling endpoint: %s ||Response status: %s ||Response body: %s ||";

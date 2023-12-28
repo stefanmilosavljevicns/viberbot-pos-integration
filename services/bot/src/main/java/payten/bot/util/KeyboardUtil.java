@@ -128,7 +128,33 @@ public class KeyboardUtil {
                 .setRows(2));
         return confirmationKeyboard;
     }
-
+    public ViberKeyboard changeLanguage(){
+        ViberKeyboard changeLanguage = new ViberKeyboard();
+        changeLanguage.setInputFieldState("hidden");
+        changeLanguage.setType("keyboard");
+        changeLanguage.addButton(new ViberButton(agreeWithCart)
+                .setText(stringUtils.getButtonYes())
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getSecondarilyColor())
+                .setColumns(2)
+                .setSilent(true)
+                .setRows(2));
+        changeLanguage.addButton(new ViberButton(navigateToMainMenu)
+                .setText(stringUtils.getButtonNo())
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getPrimarilyColor())
+                .setSilent(true)
+                .setColumns(3)
+                .setRows(2));
+        changeLanguage.addButton(new ViberButton(navigateToMainMenu)
+                .setText(stringUtils.getButtonNo())
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getSecondarilyColor())
+                .setSilent(true)
+                .setColumns(3)
+                .setRows(2));
+        return changeLanguage;
+    }
     public void setMainMenu() {
         mainMenu = new ViberKeyboard();
         mainMenu.setInputFieldState("hidden");
@@ -153,7 +179,7 @@ public class KeyboardUtil {
                         .setColumns(3)
                         .setSilent(true)
                         .setRows(2));
-        mainMenu.addButton(new ViberButton(startReservationProcess)
+        mainMenu.addButton(new ViberButton(changeLanguage)
                         .setText("<font color='#ffffff'><b>Izaberite jezik</b></font>")
                         .setImage(stringUtils.getIconChooseLanguage())
                         .setTextSize(ViberButton.TextSize.LARGE)
