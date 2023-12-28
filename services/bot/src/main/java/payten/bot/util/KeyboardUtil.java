@@ -162,7 +162,8 @@ public class KeyboardUtil {
                 .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setSilent(true)
-                .setBgColor(stringUtils.getPrimarilyColor()));
+                .setRows(1)
+                .setBgColor(stringUtils.getSecondarilyColor()));
         return historyOfReservationKeyboard;
     }
     public ViberKeyboard changeLanguage(){
