@@ -55,6 +55,27 @@ public class StringUtils {
     private String imageAboutUs1;
     @Value("${image-about-us-2}")
     private String imageAboutUs2;
+    @Value("${image-russian-flag}")
+
+    private String russianFlag;
+    @Value("${image-uk-flag}")
+    private String ukFlag;
+
+    public String getRussianFlag() {
+        return russianFlag;
+    }
+
+    public String getUkFlag() {
+        return ukFlag;
+    }
+
+    public String getSerbianFlag() {
+        return serbianFlag;
+    }
+
+    @Value("${image-serbian-flag}")
+    private String serbianFlag;
+
 
     public String getImageAboutUs1() {
         return imageAboutUs1;
