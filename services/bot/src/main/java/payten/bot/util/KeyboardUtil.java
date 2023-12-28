@@ -138,21 +138,21 @@ public class KeyboardUtil {
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setColumns(2)
                 .setSilent(true)
-                .setRows(1));
+                .setRows(2));
         changeLanguage.addButton(new ViberButton(navigateToMainMenu)
                 .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())
                 .setSilent(true)
                 .setColumns(2)
-                .setRows(1));
+                .setRows(2));
         changeLanguage.addButton(new ViberButton(navigateToMainMenu)
                 .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setSilent(true)
                 .setColumns(2)
-                .setRows(1));
+                .setRows(2));
         return changeLanguage;
     }
     public void setMainMenu() {
