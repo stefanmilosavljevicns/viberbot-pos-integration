@@ -39,28 +39,34 @@ public class Controller {
     private DateUtil dateUtil;
     @Autowired
     private KeyboardUtil keyboardUtil;
+    String userLocale;
+    String eventType;
+    String userId;
+    String senderName;
+    String messageText;
+    ViberBot bot;
 
     @RequestMapping(method = POST, path = "${viber.bot-path}")
     ResponseEntity<?> callbackHandle(@RequestBody String text) throws IOException, InterruptedException, URISyntaxException {
         logger.info("Received messageForUser {}", text);
-        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
+        bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         Incoming incoming = IncomingImpl.fromString(text);
-        String eventType = incoming.getEvent();
-        String userId = incoming.getSenderId();
-        String senderName = incoming.getSenderName();
-        String messageText = incoming.getMessageText();
+        eventType = incoming.getEvent();
+        userId = incoming.getSenderId();
+        senderName = incoming.getSenderName();
+        messageText = incoming.getMessageText();
         if (!StringUtils.equals(eventType, MESSAGE_EVENT) && !StringUtils.equals(incoming.getEvent(), START_MSG_EVENT))
             return ResponseEntity.ok().build();
         if (StringUtils.equals(incoming.getEvent(), START_MSG_EVENT)) {
             Gson gson = new Gson();
             Map jsonMap = gson.fromJson(text, Map.class);
             Map<String, String> userMap = (Map<String, String>) jsonMap.get("user");
-            String userLocale = httpUtil.getUserLocale(userId);
+            userLocale = httpUtil.getUserLocale(userMap.get("id"));
             bot.messageForUser(userMap.get("id")).postText(stringUtils.getMessageWelcome(), keyboardUtil.getMainMenu());
             logger.info(String.format(controlerLogFormat, "Showing welcome message.", userId));
             return ResponseEntity.ok().build();
         } else if (messageText.length() >= 3) {
-            String userLocale = httpUtil.getUserLocale(userId);
+            userLocale = httpUtil.getUserLocale(userId);
             switch (messageText.substring(0, 3)) {
                 case aboutUs:
                     bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs(),"");
@@ -134,7 +140,7 @@ public class Controller {
 
     @PutMapping("${viber.bot-path}" + "/updateStartTime")
     ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws URISyntaxException {
-        ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
+        bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         httpUtil.updateStartTime(viberId, start);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         LocalDateTime startDate = LocalDateTime.parse(start, formatter);
