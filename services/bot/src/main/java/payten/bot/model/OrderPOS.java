@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class OrderPOS {
-    private ArrayList<String> description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String state;
@@ -12,8 +11,7 @@ public class OrderPOS {
     private String customerName;
 
 
-    public OrderPOS(ArrayList<String> description, LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName) {
-        this.description = description;
+    public OrderPOS(LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = state;
@@ -32,13 +30,7 @@ public class OrderPOS {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
-    public ArrayList<String> getDescription() {
-        return description;
-    }
 
-    public void setDescription(ArrayList<String> description) {
-        this.description = description;
-    }
 
     public LocalDateTime getStartTime() {
         return startTime;

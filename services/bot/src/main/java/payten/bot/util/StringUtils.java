@@ -25,6 +25,9 @@ public class StringUtils {
     private String iconReserve;
     @Value("${icon.about-us}")
     private String iconAboutUs;
+    @Value("${icon.coffe-mug}")
+    private String coffeMug;
+
     @Value("${icon.previous-orders}")
     private String previousOrders;
     @Value("${icon.choose-language}")
@@ -60,6 +63,8 @@ public class StringUtils {
     private String russianFlag;
     @Value("${image-uk-flag}")
     private String ukFlag;
+    @Value("${image-serbian-flag}")
+    private String serbianFlag;
 
     public String getRussianFlag() {
         return russianFlag;
@@ -73,9 +78,9 @@ public class StringUtils {
         return serbianFlag;
     }
 
-    @Value("${image-serbian-flag}")
-    private String serbianFlag;
 
+
+    public String getCoffeMug() {return coffeMug;}
 
     public String getImageAboutUs1() {
         return imageAboutUs1;

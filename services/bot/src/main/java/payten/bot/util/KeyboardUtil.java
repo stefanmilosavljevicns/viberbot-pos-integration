@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.payten.viberutil.keyboard.ViberButton;
 import com.payten.viberutil.keyboard.ViberKeyboard;
+import payten.bot.model.OrderPOS;
 
 
 import java.net.URISyntaxException;
@@ -128,6 +129,38 @@ public class KeyboardUtil {
                 .setRows(2));
         return confirmationKeyboard;
     }
+    public ViberKeyboard historyOfReservationKeyboard(String viberId) throws URISyntaxException {
+        ArrayList<OrderPOS> listOfReservations = httpUtil.getHistoryOfOrders(viberId);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        ViberKeyboard historyOfReservationKeyboard = new ViberKeyboard();
+        historyOfReservationKeyboard.setInputFieldState("hidden");
+        historyOfReservationKeyboard.setType("keyboard");
+        for(OrderPOS reservationItem:listOfReservations){
+            String formattingReservations = reservationItem.getStartTime().format(formatter) + "\n" + reservationItem.getState();
+            historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
+                                            .setBgColor(stringUtils.getSecondarilyColor())
+                                            .setText(String.format(stringUtils.getButtonStandard(), formattingReservations))
+                                            .setColumns(4)
+                                            .setRows(2)
+                                            .setSilent(true)
+                                            .setTextSize(ViberButton.TextSize.MEDIUM)
+                                            .setTextHAlign(ViberButton.TextAlign.LEFT));
+            historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput))
+                                            .setImage(stringUtils.getCoffeMug())
+                                            .setColumns(2)
+                                            .setRows(2)
+                                            .setSilent(true)
+                                            .setTextSize(ViberButton.TextSize.MEDIUM).setSilent(true)
+                                            .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                                            .setTextVAlign(ViberButton.TextAlign.MIDDLE);
+        }
+        historyOfReservationKeyboard.addButton(new ViberButton(navigateToMainMenu)
+                .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setSilent(true)
+                .setBgColor(stringUtils.getSecondarilyColor()));
+        return historyOfReservationKeyboard;
+    }
     public ViberKeyboard changeLanguage(){
         ViberKeyboard changeLanguage = new ViberKeyboard();
         changeLanguage.setInputFieldState("hidden");
@@ -147,7 +180,7 @@ public class KeyboardUtil {
         changeLanguage.addButton(new ViberButton(navigateToMainMenu)
                 .setText(stringUtils.getButtonNo())
                 .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getPrimarilyColor())
+                .setBgColor(stringUtils.getSecondarilyColor())
                 .setText("<font color='#ffffff'><b>English</b></font>")
                 .setImage(stringUtils.getUkFlag())
                 .setTextSize(ViberButton.TextSize.LARGE)
@@ -210,7 +243,7 @@ public class KeyboardUtil {
                         .setColumns(3)
                         .setSilent(true)
                         .setRows(2));
-        mainMenu.addButton(new ViberButton(startReservationProcess)
+        mainMenu.addButton(new ViberButton(historyOfReservation)
                         .setText("<font color='#ffffff'><b>Istorija rezervacija</b></font>")
                         .setTextSize(ViberButton.TextSize.LARGE)
                         .setTextHAlign(ViberButton.TextAlign.MIDDLE)

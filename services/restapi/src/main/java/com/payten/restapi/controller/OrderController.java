@@ -50,7 +50,11 @@ public class OrderController {
         serializeOrderForSending(order.getId());
         return ResponseEntity.ok(orderRepository.save(order));
     }
-
+    @GetMapping("/historyOfReservation/{id}")
+    public ResponseEntity<List<Order>> historyOfReservation(@PathVariable("viberId") String viberId) {
+        List<Order> orders = orderRepository.findByViberId(viberId);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
 
     @GetMapping("/getAllActiveDates")
     public ResponseEntity<List<Order>> getOrdersWithin24Hours() {
@@ -115,7 +119,6 @@ public class OrderController {
         logger.info(String.format(controllerLogFormat, "declineOrder", updatedOrder, HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
-
     @GetMapping("/checkTimeSlotAvailability")
     public ResponseEntity<String> checkAvailability(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
                                                     @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {

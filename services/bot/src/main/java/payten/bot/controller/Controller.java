@@ -68,6 +68,9 @@ public class Controller {
                 case changeLanguage:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.changeLanguage());
                     break;
+                case historyOfReservation:
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.historyOfReservationKeyboard(userId));
+                    break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {
                         StringBuilder finishMsg = new StringBuilder(stringUtils.getMessageCheckCart());

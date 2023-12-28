@@ -34,6 +34,7 @@ public class HttpUtil {
         return categories;
     }
 
+    ParameterizedTypeReference<ArrayList<OrderPOS>> responseType = new ParameterizedTypeReference<ArrayList<OrderPOS>>() {};
 
     public Boolean cartChecker(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
@@ -60,6 +61,14 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, getTotalTime, responseEntity.getStatusCode(), responseEntity.getBody()));
         return time;
 
+    }
+    public ArrayList<OrderPOS> getHistoryOfOrders(String viberId) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+        URI uri = new URI(stringUtils.getRestAdress() + getHistoryOfReservations + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, responseType);
+        ArrayList<OrderPOS> orderList = responseEntity.getBody();
+        logger.info(String.format(httpLogFormat, getTotalTime, responseEntity.getStatusCode(), responseEntity.getBody()));
+        return orderList;
     }
     public List<LocalDateTime> checkFreeTimeSlots(LocalDate time, int totalTime) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
@@ -96,8 +105,7 @@ public class HttpUtil {
     public ArrayList<OrderPOS> get24HOrderPOS () {
         RestTemplate restTemplate = new RestTemplate();
         String endpointUrl = stringUtils.getRestAdress() + getOrdersWithin24Hourse;      
-        ParameterizedTypeReference<ArrayList<OrderPOS>> responseType = new ParameterizedTypeReference<ArrayList<OrderPOS>>() {};                
-        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(endpointUrl, HttpMethod.GET, null, responseType);                
+        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(endpointUrl, HttpMethod.GET, null, responseType);
         ArrayList<OrderPOS> orderList = responseEntity.getBody();
         return orderList;
     }
