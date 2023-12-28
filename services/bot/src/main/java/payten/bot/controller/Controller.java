@@ -139,7 +139,7 @@ public class Controller {
                         logger.info(String.format(controlerLogFormat, "Error in reservations.", userId));
                     }
                     break;
-                default:
+                case navigateToMainMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
                     logger.info(String.format(controlerLogFormat, "Navigating to main menu." + messageText.substring(3), userId));
                     break;
