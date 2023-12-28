@@ -28,7 +28,7 @@ public class CustomerPreferencesController {
         public Optional<CustomerPreferences> getUserLocale(@PathVariable("viberId") String viberId){
             Optional<CustomerPreferences> customerPreferences = customerPreferencesRepository.findById(viberId);
             if(customerPreferences.isEmpty()) {
-                customerPreferences = Optional.of(new CustomerPreferences(viberId, CustomerLocale.SRP));
+                customerPreferences = Optional.of(new CustomerPreferences(viberId, CustomerLocale.SRB));
                 customerPreferencesRepository.save(customerPreferences.get());
             }
             return customerPreferences;
