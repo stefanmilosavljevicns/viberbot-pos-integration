@@ -74,7 +74,7 @@ public class Controller {
                     bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.about-us-description", userLocale), keyboardUtil.getMainMenu());
                     break;
                 case changeLanguageMenu:
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.changeLanguage());
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.changeLanguage(userLocale));
                     break;
                 case changeUserLocaleSrb:
                     httpUtil.changeUserLocale(userId,"SRB");
