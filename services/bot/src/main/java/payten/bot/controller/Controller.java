@@ -14,6 +14,7 @@ import com.payten.viberutil.ViberBot;
 import com.payten.viberutil.ViberBotManager;
 import com.payten.viberutil.incoming.Incoming;
 import com.payten.viberutil.incoming.IncomingImpl;
+import payten.bot.util.LocaleUtil;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -29,7 +30,8 @@ import static payten.bot.util.BotConstants.*;
 @RestController
 public class Controller {
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
-
+    @Autowired
+    private LocaleUtil localeUtil;
     @Autowired
     public payten.bot.util.StringUtils stringUtils;
     @Autowired
@@ -61,7 +63,7 @@ public class Controller {
             Map jsonMap = gson.fromJson(text, Map.class);
             Map<String, String> userMap = (Map<String, String>) jsonMap.get("user");
             userLocale = httpUtil.getUserLocale(userMap.get("id"));
-            bot.messageForUser(userMap.get("id")).postText(stringUtils.getMessageWelcome(), keyboardUtil.getMainMenu());
+            bot.messageForUser(userMap.get("id")).postText(localeUtil.getLocalizedMessage("message.welcome",userLocale), keyboardUtil.getMainMenu());
             logger.info(String.format(controlerLogFormat, "Showing welcome message.", userId));
             return ResponseEntity.ok().build();
         } else if (messageText.length() >= 3) {
@@ -92,7 +94,6 @@ public class Controller {
                 case historyOfReservation:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.historyOfReservationKeyboard(userId));
                     logger.info(String.format(controlerLogFormat, "Displaying user his history.", userId));
-
                     break;
                 case startReservationProcess:
                     if (httpUtil.cartChecker(userId)) {
