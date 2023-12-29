@@ -25,6 +25,8 @@ public class KeyboardUtil {
     private HttpUtil httpUtil;
     private ViberKeyboard mainMenu;
     @Autowired
+    private LocaleUtil localeUtil;
+    @Autowired
     private StringUtils stringUtils;
     @Autowired
     private DateUtil dateUtil;
@@ -32,17 +34,7 @@ public class KeyboardUtil {
     public ViberKeyboard getMainMenu() {
         return mainMenu;
     }
-    public ViberKeyboard setListMenu(String listName) throws JsonProcessingException {
-        ViberKeyboard listMenu = new ViberKeyboard();
-        listMenu.setInputFieldState("hidden");
-        listMenu.setType("keyboard");
-        listMenu.addButton(new ViberButton(navigateToMainMenu)
-                    .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
-                    .setTextSize(ViberButton.TextSize.LARGE)
-                    .setBgColor(stringUtils.getPrimarilyColor())
-                    .setSilent(true));
-        return listMenu;
-    }
+
     public ViberKeyboard setDayPicker(){
         List<LocalDateTime> availableDays = dateUtil.getWorkingWeekDates();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -71,7 +63,7 @@ public class KeyboardUtil {
 
         }
         dayPicker.addButton(new ViberButton(navigateToMainMenu)
-                .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
+                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.return-main-menu", "TEST")))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setSilent(true)
                 .setBgColor(stringUtils.getPrimarilyColor()));
@@ -129,7 +121,7 @@ public class KeyboardUtil {
                 .setRows(2));
         return confirmationKeyboard;
     }
-    public ViberKeyboard historyOfReservationKeyboard(String viberId) throws URISyntaxException {
+    public ViberKeyboard historyOfReservationKeyboard(String viberId,String userLocale) throws URISyntaxException {
         ArrayList<OrderPOS> listOfReservations = httpUtil.getHistoryOfOrders(viberId);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         ViberKeyboard historyOfReservationKeyboard = new ViberKeyboard();
@@ -159,7 +151,7 @@ public class KeyboardUtil {
         }
 
         historyOfReservationKeyboard.addButton(new ViberButton(navigateToMainMenu)
-                .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
+                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.return-main-menu", userLocale)))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setSilent(true)
                 .setRows(1)

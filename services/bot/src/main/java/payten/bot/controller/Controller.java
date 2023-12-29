@@ -71,7 +71,7 @@ public class Controller {
             switch (messageText.substring(0, 3)) {
                 case aboutUs:
                     bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs(),"");
-                    bot.messageForUser(userId).postText(stringUtils.getMessageAboutUs(), keyboardUtil.getMainMenu());
+                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.about-us", userLocale), keyboardUtil.getMainMenu());
                     break;
                 case changeLanguageMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.changeLanguage());
@@ -92,7 +92,7 @@ public class Controller {
                     logger.info(String.format(controlerLogFormat, "Changing locale to English.", userId));
                     break;
                 case historyOfReservation:
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.historyOfReservationKeyboard(userId));
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.historyOfReservationKeyboard(userId,userLocale));
                     logger.info(String.format(controlerLogFormat, "Displaying user his history.", userId));
                     break;
                 case startReservationProcess:
