@@ -71,7 +71,6 @@ public class Controller {
             userLocale = httpUtil.getUserLocale(userId);
             switch (messageText.substring(0, 3)) {
                 case aboutUs:
-                    bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs(),"");
                     bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.about-us-description", userLocale), keyboardUtil.getMainMenu(userLocale));
                     break;
                 case changeLanguageMenu:
