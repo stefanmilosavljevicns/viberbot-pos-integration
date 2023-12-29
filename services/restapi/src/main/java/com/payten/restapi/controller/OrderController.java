@@ -50,8 +50,8 @@ public class OrderController {
         serializeOrderForSending(order.getId());
         return ResponseEntity.ok(orderRepository.save(order));
     }
-    @GetMapping("/historyOfReservation/{viberId}")
-    public ResponseEntity<List<Order>> historyOfReservation(@PathVariable("viberId") String viberId) {
+    @GetMapping("/historyOfReservation")
+    public ResponseEntity<List<Order>> historyOfReservation(@RequestParam("viberId") String viberId) {
         List<Order> orders = orderRepository.findByViberId(viberId);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }

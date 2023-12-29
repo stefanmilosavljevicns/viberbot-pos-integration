@@ -24,8 +24,8 @@ public class CustomerPreferencesController {
     @Autowired
     CustomerPreferencesRepository customerPreferencesRepository;
 
-    @GetMapping("/getUserLocale/{viberId}")
-        public Optional<CustomerPreferences> getUserLocale(@PathVariable("viberId") String viberId){
+    @GetMapping("/getUserLocale/")
+        public Optional<CustomerPreferences> getUserLocale(@RequestParam("viberId") String viberId){
             Optional<CustomerPreferences> customerPreferences = customerPreferencesRepository.findById(viberId);
             if(customerPreferences.isEmpty()) {
                 customerPreferences = Optional.of(new CustomerPreferences(viberId, CustomerLocale.SRB));

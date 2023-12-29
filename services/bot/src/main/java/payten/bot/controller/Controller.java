@@ -120,13 +120,8 @@ public class Controller {
                     }
                     break;
                 case selectDayReservation:
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                    LocalDate localDate = LocalDate.parse(messageText.substring(3), formatter);
-                    List<LocalDateTime> allSlots = httpUtil.checkFreeTimeSlots(localDate, httpUtil.getTotalTime(userId).intValue());
-                    bot.messageForUser(userId).postText("Izaberite termin kako bi nastavili sa rezervacijom: ", keyboardUtil.setHourPicker(allSlots));
-                    logger.info(String.format(controlerLogFormat, "Showing user list of free time slots.", userId));
-
-                    break;
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));
+                break;
                 case selectDeliveryTime:
                     bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
                     logger.info("User selecting time.");
