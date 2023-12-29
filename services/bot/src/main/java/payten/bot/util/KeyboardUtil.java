@@ -31,9 +31,57 @@ public class KeyboardUtil {
     @Autowired
     private DateUtil dateUtil;
     private ViberKeyboard confirmationKeyboard;
-    public ViberKeyboard getMainMenu() {
+    public ViberKeyboard getMainMenu(String locale) {
+        mainMenu = new ViberKeyboard();
+        mainMenu.setInputFieldState("hidden");
+        mainMenu.setType("keyboard");
+        mainMenu.addButton(new ViberButton(selectDayReservation)
+                .setText(String.format("<font color='#ffffff'><b>%s</b></font>",localeUtil.getLocalizedMessage("message.reserve-table",locale)))
+                .setImage(stringUtils.getIconReserve())
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                .setTextVAlign(ViberButton.TextAlign.BOTTOM)
+                .setBgColor(stringUtils.getPrimarilyColor())
+                .setColumns(3)
+                .setSilent(true)
+                .setRows(2));
+        mainMenu.addButton(new ViberButton(aboutUs)
+                .setText(String.format("<font color='#ffffff'><b>%s</b></font>",localeUtil.getLocalizedMessage("message.about-us",locale)))
+                .setImage(stringUtils.getIconAboutUs())
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getSecondarilyColor())
+                .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                .setTextVAlign(ViberButton.TextAlign.BOTTOM)
+                .setColumns(3)
+                .setSilent(true)
+                .setRows(2));
+        mainMenu.addButton(new ViberButton(changeLanguageMenu)
+                .setText(String.format("<font color='#ffffff'><b>%s</b></font>",localeUtil.getLocalizedMessage("message.choose-language",locale)))
+                .setImage(stringUtils.getIconChooseLanguage())
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                .setTextVAlign(ViberButton.TextAlign.BOTTOM)
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getSecondarilyColor())
+                .setColumns(3)
+                .setSilent(true)
+                .setRows(2));
+        mainMenu.addButton(new ViberButton(historyOfReservation)
+                .setText(String.format("<font color='#ffffff'><b>%s</b></font>",localeUtil.getLocalizedMessage("message.reservation-history",locale)))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setTextHAlign(ViberButton.TextAlign.MIDDLE)
+                .setTextVAlign(ViberButton.TextAlign.BOTTOM)
+                .setImage(stringUtils.getIconPreviousOrders())
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getPrimarilyColor())
+                .setColumns(3)
+                .setSilent(true)
+                .setRows(2));
+        logger.info("Main Menu has been successfully generated!");
         return mainMenu;
+
     }
+
 
     public ViberKeyboard setDayPicker(){
         List<LocalDateTime> availableDays = dateUtil.getWorkingWeekDates();
@@ -220,53 +268,5 @@ public class KeyboardUtil {
                 .setSilent(true)
                 .setBgColor(stringUtils.getSecondarilyColor()));
         return changeLanguage;
-    }
-    public void setMainMenu() {
-        mainMenu = new ViberKeyboard();
-        mainMenu.setInputFieldState("hidden");
-        mainMenu.setType("keyboard");
-        mainMenu.addButton(new ViberButton(selectDayReservation)
-                        .setText("<font color='#ffffff'><b>Rezervišite sto</b></font>")
-                        .setImage(stringUtils.getIconReserve())
-                        .setTextSize(ViberButton.TextSize.LARGE)
-                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
-                        .setTextVAlign(ViberButton.TextAlign.BOTTOM)
-                        .setBgColor(stringUtils.getPrimarilyColor())
-                        .setColumns(3)
-                        .setSilent(true)
-                        .setRows(2));
-        mainMenu.addButton(new ViberButton(aboutUs)
-                        .setText("<font color='#ffffff'><b>O nama</b></font>")
-                        .setImage(stringUtils.getIconAboutUs())
-                        .setTextSize(ViberButton.TextSize.LARGE)
-                        .setBgColor(stringUtils.getSecondarilyColor())
-                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
-                        .setTextVAlign(ViberButton.TextAlign.BOTTOM)
-                        .setColumns(3)
-                        .setSilent(true)
-                        .setRows(2));
-        mainMenu.addButton(new ViberButton(changeLanguageMenu)
-                        .setText("<font color='#ffffff'><b>Izaberite jezik</b></font>")
-                        .setImage(stringUtils.getIconChooseLanguage())
-                        .setTextSize(ViberButton.TextSize.LARGE)
-                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
-                        .setTextVAlign(ViberButton.TextAlign.BOTTOM)
-                        .setTextSize(ViberButton.TextSize.LARGE)
-                        .setBgColor(stringUtils.getSecondarilyColor())
-                        .setColumns(3)
-                        .setSilent(true)
-                        .setRows(2));
-        mainMenu.addButton(new ViberButton(historyOfReservation)
-                        .setText("<font color='#ffffff'><b>Istorija rezervacija</b></font>")
-                        .setTextSize(ViberButton.TextSize.LARGE)
-                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
-                        .setTextVAlign(ViberButton.TextAlign.BOTTOM)
-                        .setImage(stringUtils.getIconPreviousOrders())
-                        .setTextSize(ViberButton.TextSize.LARGE)
-                        .setBgColor(stringUtils.getPrimarilyColor())
-                        .setColumns(3)
-                        .setSilent(true)
-                        .setRows(2));
-        logger.info("Main Menu has been successfully generated!");
     }
 }

@@ -1,10 +1,12 @@
 package payten.bot.scheduler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import payten.bot.model.OrderPOS;
@@ -25,13 +27,14 @@ public class OrderReminderScheduler {
     @Autowired
     private KeyboardUtil keyboardUtil;
     @Scheduled(cron = "0 0 14 * * *") // Trigger at 2 pm every day
-    public void remindUserForIncomingReservation() {        
+    public void remindUserForIncomingReservation() throws URISyntaxException, JsonProcessingException {
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         ArrayList<OrderPOS> activeUsers = new ArrayList<>();
         activeUsers = httpUtil.get24HOrderPOS();
         if(activeUsers.size() > 0){
             for(OrderPOS orderPos : activeUsers){
-                bot.messageForUser(orderPos.getViberID()).postText(stringUtils.getMessageReservationReminder() + orderPos.getStartTime().getHour() +":" + orderPos.getStartTime().getMinute(),keyboardUtil.getMainMenu());
+                String userLocale = httpUtil.getUserLocale(orderPos.getViberID());
+                bot.messageForUser(orderPos.getViberID()).postText(stringUtils.getMessageReservationReminder() + orderPos.getStartTime().getHour() +":" + orderPos.getStartTime().getMinute(),keyboardUtil.getMainMenu(userLocale));
                 logger.info(String.format(controlerLogFormat,"Reminding user for his reservation",orderPos.getViberID()));
             }
         }

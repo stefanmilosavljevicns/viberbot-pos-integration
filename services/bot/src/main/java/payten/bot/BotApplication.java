@@ -38,7 +38,6 @@ public class BotApplication implements ApplicationListener<ApplicationReadyEvent
         logger.info("Web-hook registration for {} completed succesfully", domain + stringUtils.getBotPath());
         if (!ViberBotManager.viberBot(stringUtils.getBotToken()).setWebHook(domain + stringUtils.getBotPath()))
             logger.error("Web-hook registration failed!");
-        keyboardUtil.setMainMenu();
     }
 
 }

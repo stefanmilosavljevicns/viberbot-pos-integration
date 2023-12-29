@@ -1,5 +1,6 @@
 package payten.bot.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -63,7 +64,7 @@ public class Controller {
             Map jsonMap = gson.fromJson(text, Map.class);
             Map<String, String> userMap = (Map<String, String>) jsonMap.get("user");
             userLocale = httpUtil.getUserLocale(userMap.get("id"));
-            bot.messageForUser(userMap.get("id")).postText(localeUtil.getLocalizedMessage("message.welcome",userLocale), keyboardUtil.getMainMenu());
+            bot.messageForUser(userMap.get("id")).postText(localeUtil.getLocalizedMessage("message.welcome",userLocale), keyboardUtil.getMainMenu(userLocale));
             logger.info(String.format(controlerLogFormat, "Showing welcome message.", userId));
             return ResponseEntity.ok().build();
         } else if (messageText.length() >= 3) {
@@ -71,24 +72,24 @@ public class Controller {
             switch (messageText.substring(0, 3)) {
                 case aboutUs:
                     bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs(),"");
-                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.about-us-description", userLocale), keyboardUtil.getMainMenu());
+                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.about-us-description", userLocale), keyboardUtil.getMainMenu(userLocale));
                     break;
                 case changeLanguageMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.changeLanguage(userLocale));
                     break;
                 case changeUserLocaleSrb:
                     httpUtil.changeUserLocale(userId,"SRB");
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));
                     logger.info(String.format(controlerLogFormat, "Changing locale to Serbian.", userId));
                     break;
                 case changeUserLocaleRus:
                     httpUtil.changeUserLocale(userId,"RUS");
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));
                     logger.info(String.format(controlerLogFormat, "Changing locale to Russian.", userId));
                     break;
                 case changeUserLocaleEng:
                     httpUtil.changeUserLocale(userId,"ENG");
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));
                     logger.info(String.format(controlerLogFormat, "Changing locale to English.", userId));
                     break;
                 case historyOfReservation:
@@ -102,7 +103,7 @@ public class Controller {
                         logger.info(String.format(controlerLogFormat, "User have enough cart items to proceed with reservation.", userId));
 
                     } else {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu(userLocale));
                         logger.info(String.format(controlerLogFormat, "Unable to show current cart.", userId));
                     }
                     break;
@@ -111,7 +112,7 @@ public class Controller {
                         bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime(), keyboardUtil.setDayPicker());
                         logger.info(String.format(controlerLogFormat, "Asking user if he agrees with his cart.", userId));
                     } else {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu(userLocale));
                         logger.info(String.format(controlerLogFormat, "Unable to show current cart.", userId));
                     }
                     break;
@@ -133,21 +134,21 @@ public class Controller {
                     LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
                     String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
                     if (checkTime.equals("Time slot is available.")) {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu(userLocale));
                         logger.info(String.format(controlerLogFormat, "Session finished, clearing cart.", userId));
                     } else {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageErrorTime(), keyboardUtil.getMainMenu());
+                        bot.messageForUser(userId).postText(stringUtils.getMessageErrorTime(), keyboardUtil.getMainMenu(userLocale));
                         logger.info(String.format(controlerLogFormat, "Error in reservations.", userId));
                     }
                     break;
                 case navigateToMainMenu:
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu());
+                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));
                     logger.info(String.format(controlerLogFormat, "Navigating to main menu." + messageText.substring(3), userId));
                     break;
             }
         } else {
             if (!StringUtils.equals(ignoreUserInput, messageText)) {
-                bot.messageForUser(userId).postText(stringUtils.getMessageUnknownCommand(), keyboardUtil.getMainMenu());
+                bot.messageForUser(userId).postText(stringUtils.getMessageUnknownCommand(), keyboardUtil.getMainMenu(userLocale));
                 logger.info(String.format(controlerLogFormat, "Navigating to main menu.", userId));
 
             }
@@ -156,12 +157,13 @@ public class Controller {
     }
 
     @PutMapping("${viber.bot-path}" + "/updateStartTime")
-    ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws URISyntaxException {
+    ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
         bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         httpUtil.updateStartTime(viberId, start);
+        String locale = httpUtil.getUserLocale(viberId);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         LocalDateTime startDate = LocalDateTime.parse(start, formatter);
-        bot.messageForUser(viberId).postText(stringUtils.getMessageReservationUpdate() + startDate.getDayOfMonth() + "." + startDate.getMonthValue() + ". u " + startDate.getHour() + ":" + startDate.getMinute(), keyboardUtil.getMainMenu());
+        bot.messageForUser(viberId).postText(stringUtils.getMessageReservationUpdate() + startDate.getDayOfMonth() + "." + startDate.getMonthValue() + ". u " + startDate.getHour() + ":" + startDate.getMinute(), keyboardUtil.getMainMenu(locale));
         logger.info(String.format(controlerLogFormat, "We are sending user information that merchant changed his start time", viberId));
 
         return ResponseEntity.ok().build();
