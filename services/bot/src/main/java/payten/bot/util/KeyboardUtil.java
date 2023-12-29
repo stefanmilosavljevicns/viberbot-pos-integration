@@ -174,7 +174,7 @@ public class KeyboardUtil {
                 .setBgColor(stringUtils.getSecondarilyColor()));
         return historyOfReservationKeyboard;
     }
-    public ViberKeyboard changeLanguage(){
+    public ViberKeyboard changeLanguage(String userLocale){
         ViberKeyboard changeLanguage = new ViberKeyboard();
         changeLanguage.setInputFieldState("hidden");
         changeLanguage.setType("keyboard");
@@ -215,7 +215,7 @@ public class KeyboardUtil {
                 .setColumns(2)
                 .setRows(2));
         changeLanguage.addButton(new ViberButton(navigateToMainMenu)
-                .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
+                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.return-main-menu", userLocale)))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setSilent(true)
                 .setBgColor(stringUtils.getSecondarilyColor()));
