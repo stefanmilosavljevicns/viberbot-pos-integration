@@ -71,7 +71,7 @@ public class Controller {
             switch (messageText.substring(0, 3)) {
                 case aboutUs:
                     bot.messageForUser(userId).postPicture(stringUtils.getImageAboutUs(),"");
-                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.about-us", userLocale), keyboardUtil.getMainMenu());
+                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.about-us-description", userLocale), keyboardUtil.getMainMenu());
                     break;
                 case changeLanguageMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.changeLanguage());
