@@ -79,16 +79,19 @@ public class Controller {
                     break;
                 case changeUserLocaleSrb:
                     httpUtil.changeUserLocale(userId,"SRB");
+                    Thread.sleep(1000);
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));
                     logger.info(String.format(controlerLogFormat, "Changing locale to Serbian.", userId));
                     break;
                 case changeUserLocaleRus:
                     httpUtil.changeUserLocale(userId,"RUS");
+                    Thread.sleep(1000);
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));
                     logger.info(String.format(controlerLogFormat, "Changing locale to Russian.", userId));
                     break;
                 case changeUserLocaleEng:
                     httpUtil.changeUserLocale(userId,"ENG");
+                    Thread.sleep(1000);
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));
                     logger.info(String.format(controlerLogFormat, "Changing locale to English.", userId));
                     break;
