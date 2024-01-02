@@ -33,8 +33,7 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
-    @Autowired
-    private ReservationUtil reservationUtil;
+
 
     @GetMapping("/getOrders")
     public ResponseEntity<List<Order>> findAll() {
