@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.payten.restapi.model.Order;
 import com.payten.restapi.model.OrderState;
 import com.payten.restapi.repository.OrderRepository;
+import com.payten.restapi.util.ReservationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,8 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
-
+    @Autowired
+    private ReservationUtil reservationUtil;
 
     @GetMapping("/getOrders")
     public ResponseEntity<List<Order>> findAll() {
@@ -56,38 +58,7 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @GetMapping("/getAllActiveDates")
-    public ResponseEntity<List<Order>> getOrdersWithin24Hours() {
-        LocalDateTime startTime = LocalDateTime.now().plusDays(1)
-                .withHour(0)
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0);
-        LocalDateTime endTime = startTime.plusDays(1);
-        List<Order> orders = orderRepository.findUsersToRemindForReservation(startTime, endTime);
-        logger.info(String.format(controllerLogFormat, "getAllActiveDates", orders, HttpStatus.OK));
-        return ResponseEntity.ok(orders);
-    }
 
-    @GetMapping("/checkFreeTimeSlots")
-    public List<LocalDateTime> getDateTimes(
-            @RequestParam("localDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate,
-            @RequestParam("totalMinutes") int totalMinutes
-    ) {
-        //todo ovo nek vuce iz app properties-a kada setuje radno vreme
-        LocalTime startTime = LocalTime.of(7, 0);  // 7am
-        LocalTime endTime = LocalTime.of(17, 0);   // 5pm
-
-        LocalDateTime dateTime = localDate.atTime(startTime);
-        List<LocalDateTime> result = new ArrayList<>();
-
-        while (dateTime.isBefore(localDate.atTime(endTime))) {
-            result.add(dateTime);
-            dateTime = dateTime.plusMinutes(totalMinutes);
-        }
-        logger.info(String.format(controllerLogFormat, "checkFreeTimeSlots", result, HttpStatus.OK));
-        return result;
-    }
 
 
     @PutMapping("/acceptOrder/{id}")
@@ -119,19 +90,7 @@ public class OrderController {
         logger.info(String.format(controllerLogFormat, "declineOrder", updatedOrder, HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
-    @GetMapping("/checkTimeSlotAvailability")
-    public ResponseEntity<String> checkAvailability(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-                                                    @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        List<Order> conflictingReservations = orderRepository.findByStartTimeLessThanAndEndTimeGreaterThan(end, start);
 
-        if (conflictingReservations.isEmpty()) {
-            logger.info(String.format(controllerLogFormat, "checkTimeSlotAvailability", "Time slot is available.", HttpStatus.OK));
-            return ResponseEntity.ok("Time slot is available.");
-        } else {
-            logger.info(String.format(controllerLogFormat, "checkTimeSlotAvailability", "Time slot is not available.", HttpStatus.OK));
-            return ResponseEntity.ok("Time slot is not available.");
-        }
-    }
 
 
     //Update-ujemo termin tako sto unesemo viberId od korisnikovog termina koji zelimo da promenimo. Na osnovu viberId-a dobijamo instancu Order objekta. U njemu prvo uzimamo ukupnu duzinu termina (od startTime-a do endTime-a) zatim prosledjujemo

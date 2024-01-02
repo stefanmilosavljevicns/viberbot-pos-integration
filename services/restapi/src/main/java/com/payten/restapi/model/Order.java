@@ -19,6 +19,7 @@ public class Order {
     private LocalDateTime endTime;
     private OrderState state;
     private String customerName;
+    private Integer tableNumber;
     private String viberID;
 
     public Order(LocalDateTime startTime, LocalDateTime endTime, OrderState state, String customerName, String viberID) {

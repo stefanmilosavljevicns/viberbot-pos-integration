@@ -8,7 +8,6 @@ public class BotConstants {
     public static final String aboutUs = "ABT";
     public static final String agreeWithCart = "AGR";
     public static final String selectDayReservation = "DAY";
-    public static final String selectDeliveryTime = "TIM";
     public static final String navigateToMainMenu = "BCK";
     public static final String ignoreUserInput = "IGR";
     public static final String changeLanguageMenu = "LOC";
@@ -18,7 +17,7 @@ public class BotConstants {
 
     public static final String historyOfReservation = "HST";
 
-
+public static final String selectDurationOfReservation = "DRT";
 
     public static final String sendOrderToPOS = "POS";
     public static final String httpLogFormat = "||Calling endpoint: %s ||Response status: %s ||Response body: %s ||";

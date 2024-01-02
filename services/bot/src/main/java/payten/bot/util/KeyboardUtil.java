@@ -35,7 +35,7 @@ public class KeyboardUtil {
         mainMenu = new ViberKeyboard();
         mainMenu.setInputFieldState("hidden");
         mainMenu.setType("keyboard");
-        mainMenu.addButton(new ViberButton(selectDayReservation)
+        mainMenu.addButton(new ViberButton(selectDurationOfReservation)
                 .setText(String.format("<font color='#ffffff'><b>%s</b></font>",localeUtil.getLocalizedMessage("message.reserve-table",locale)))
                 .setImage(stringUtils.getIconReserve())
                 .setTextSize(ViberButton.TextSize.LARGE)
@@ -83,40 +83,44 @@ public class KeyboardUtil {
     }
 
 
-    public ViberKeyboard setDayPicker(){
-        List<LocalDateTime> availableDays = dateUtil.getWorkingWeekDates();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        ViberKeyboard dayPicker = new ViberKeyboard();
-        dayPicker.setInputFieldState("hidden");
-        boolean ticker = true;
-        dayPicker.setType("keyboard");
-        for (LocalDateTime availableDay : availableDays) {
-            String formattedDate = availableDay.format(formatter);
-            ViberButton viberButton = new ViberButton((String.format(selectDayReservation + "%s", formattedDate)))
-                    .setText(String.format(stringUtils.getButtonStandard(), dateUtil.translateDayValue(availableDay.getDayOfWeek().getValue()) + " (" + availableDay.getDayOfMonth() + "." + availableDay.getMonthValue() + ")"))
-                    .setColumns(6)
-                    .setRows(1)
-                    .setSilent(true)
-                    .setTextSize(ViberButton.TextSize.MEDIUM)
-                    .setTextHAlign(ViberButton.TextAlign.MIDDLE);
-            if(ticker){
-                viberButton.setBgColor(stringUtils.getPrimarilyColor());
-                ticker = false;
-            }
-            else{
-                viberButton.setBgColor(stringUtils.getSecondarilyColor());
-                ticker = true;
-            }
-            dayPicker.addButton(viberButton);
-
-        }
-        dayPicker.addButton(new ViberButton(navigateToMainMenu)
-                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.return-main-menu", "TEST")))
+    public ViberKeyboard pickReservationDuration(String locale){
+        ViberKeyboard reservationDuration = new ViberKeyboard();
+        reservationDuration.addButton(new ViberButton(selectDayReservation+30)
+                .setText(localeUtil.getLocalizedMessage("message.30-minutes",locale))
                 .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getSecondarilyColor())
                 .setSilent(true)
-                .setBgColor(stringUtils.getPrimarilyColor()));
-        logger.info(availableDays.toString());
-        return dayPicker;
+                .setColumns(6)
+                .setRows(1));
+        reservationDuration.addButton(new ViberButton(selectDayReservation+60)
+                .setText(localeUtil.getLocalizedMessage("message.1-hour",locale))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getPrimarilyColor())
+                .setSilent(true)
+                .setColumns(6)
+                .setRows(1));
+        reservationDuration.addButton(new ViberButton(selectDayReservation+120)
+                .setText(localeUtil.getLocalizedMessage("message.2-hours",locale))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getSecondarilyColor())
+                .setSilent(true)
+                .setColumns(6)
+                .setRows(1));
+        reservationDuration.addButton(new ViberButton(selectDayReservation+180)
+                .setText(localeUtil.getLocalizedMessage("message.3-hours",locale))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getPrimarilyColor())
+                .setSilent(true)
+                .setColumns(6)
+                .setRows(1));
+        reservationDuration.addButton(new ViberButton(navigateToMainMenu)
+                .setText(localeUtil.getLocalizedMessage("message.return-main-menu",locale))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getSecondarilyColor())
+                .setSilent(true)
+                .setColumns(6)
+                .setRows(1));
+        return reservationDuration;
     }
     public ViberKeyboard setHourPicker(List<LocalDateTime> freeTimeSlots){
         ViberKeyboard hourPicker = new ViberKeyboard();

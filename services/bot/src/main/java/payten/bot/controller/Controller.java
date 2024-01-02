@@ -70,6 +70,9 @@ public class Controller {
         } else if (messageText.length() >= 3) {
             userLocale = httpUtil.getUserLocale(userId);
             switch (messageText.substring(0, 3)) {
+                case selectDurationOfReservation:
+                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.choose-reservation-duration", userLocale), keyboardUtil.pickReservationDuration(userLocale));
+                    break;
                 case aboutUs:
                     bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.about-us-description", userLocale), keyboardUtil.getMainMenu(userLocale));
                     break;
@@ -107,35 +110,6 @@ public class Controller {
                     } else {
                         bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu(userLocale));
                         logger.info(String.format(controlerLogFormat, "Unable to show current cart.", userId));
-                    }
-                    break;
-                case agreeWithCart:
-                    if (httpUtil.cartChecker(userId)) {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime(), keyboardUtil.setDayPicker());
-                        logger.info(String.format(controlerLogFormat, "Asking user if he agrees with his cart.", userId));
-                    } else {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu(userLocale));
-                        logger.info(String.format(controlerLogFormat, "Unable to show current cart.", userId));
-                    }
-                    break;
-                case selectDayReservation:
-                    bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));
-                break;
-                case selectDeliveryTime:
-                    bot.messageForUser(userId).postText(stringUtils.getMessageCheckTime());
-                    logger.info("User selecting time.");
-                    break;
-                case sendOrderToPOS:
-                    LocalDateTime startTime = LocalDateTime.parse(messageText.substring(3));
-                    Double totalMinutes = httpUtil.getTotalTime(userId);
-                    LocalDateTime endTime = dateUtil.setEndDate(startTime, totalMinutes);
-                    String checkTime = httpUtil.checkIfTimeIsAvailable(startTime, endTime);
-                    if (checkTime.equals("Time slot is available.")) {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageSuccessReservation(), keyboardUtil.getMainMenu(userLocale));
-                        logger.info(String.format(controlerLogFormat, "Session finished, clearing cart.", userId));
-                    } else {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageErrorTime(), keyboardUtil.getMainMenu(userLocale));
-                        logger.info(String.format(controlerLogFormat, "Error in reservations.", userId));
                     }
                     break;
                 case navigateToMainMenu:
