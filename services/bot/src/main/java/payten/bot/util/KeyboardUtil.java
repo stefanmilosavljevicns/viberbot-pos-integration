@@ -86,28 +86,28 @@ public class KeyboardUtil {
     public ViberKeyboard pickReservationDuration(String locale){
         ViberKeyboard reservationDuration = new ViberKeyboard();
         reservationDuration.addButton(new ViberButton(selectDayReservation+30)
-                .setText(localeUtil.getLocalizedMessage("message.30-minutes",locale))
+                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.30-minutes",locale)))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setSilent(true)
                 .setColumns(6)
                 .setRows(1));
         reservationDuration.addButton(new ViberButton(selectDayReservation+60)
-                .setText(localeUtil.getLocalizedMessage("message.1-hour",locale))
+                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.1-hour",locale)))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())
                 .setSilent(true)
                 .setColumns(6)
                 .setRows(1));
         reservationDuration.addButton(new ViberButton(selectDayReservation+120)
-                .setText(localeUtil.getLocalizedMessage("message.2-hours",locale))
+                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.2-hours",locale)))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getSecondarilyColor())
                 .setSilent(true)
                 .setColumns(6)
                 .setRows(1));
         reservationDuration.addButton(new ViberButton(selectDayReservation+180)
-                .setText(localeUtil.getLocalizedMessage("message.3-hours",locale))
+                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.3-hours",locale)))
                 .setTextSize(ViberButton.TextSize.LARGE)
                 .setBgColor(stringUtils.getPrimarilyColor())
                 .setSilent(true)
