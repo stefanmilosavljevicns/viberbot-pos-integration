@@ -57,6 +57,14 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    @GetMapping("/findAvailableDays")
+    public ResponseEntity<List<LocalDate>> findAvailableDays(@RequestParam("durationMinutes") Integer durationMinutes) {
+        List<Order> orders = orderRepository.findActiveReservations();
+        ArrayList<LocalDate> availableDays = new ArrayList<>();
+
+        return new ResponseEntity<>(availableDays, HttpStatus.OK);
+    }
+
 
 
 

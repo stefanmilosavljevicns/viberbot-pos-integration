@@ -13,4 +13,6 @@ import org.springframework.data.mongodb.repository.Query;
         List<Order> findByStartTimeGreaterThan(LocalDateTime twentyFourHoursAgo);
         @Query(value = "{ 'viberID' : ?0, 'state' : { $in: [ 'COMPLETED', 'DECLINED' ] } }")
         List<Order> findByViberId(String name);
+        @Query(value = "{'state' : { $in: [ 'PENDING', 'IN_PROGRESS' ] } }")
+        List<Order> findActiveReservations();
     }
