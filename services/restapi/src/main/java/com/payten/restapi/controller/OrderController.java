@@ -70,7 +70,7 @@ public class OrderController {
         ArrayList<LocalDate> availableDays = reservationUtil.getAvailableDaysForReservation(orders,durationMinutes);
         return new ResponseEntity<>(availableDays, HttpStatus.OK);
     }
-
+    /*TODO*/
     @GetMapping("/findAvailableTimeSlotsForReservation")
     public ResponseEntity<List<LocalDate>> findAvailableTimeSlotsForReservation(@RequestParam("targetDate") String targetDate) {
         String[] deserializeParameter = targetDate.split(":");
@@ -114,11 +114,18 @@ public class OrderController {
         logger.info(String.format(controllerLogFormat, "declineOrder", updatedOrder, HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
-
-
-
-    //Update-ujemo termin tako sto unesemo viberId od korisnikovog termina koji zelimo da promenimo. Na osnovu viberId-a dobijamo instancu Order objekta. U njemu prvo uzimamo ukupnu duzinu termina (od startTime-a do endTime-a) zatim prosledjujemo
-    // iz query parametra novi startTime a endTime dobijamo uvecavanjem novog starTtime-a za ukupnu duzinu termina koju smo prethodno izracunali (promenljiva reservationDuration)
+    @GetMapping("/getAllActiveDates")
+    public ResponseEntity<List<Order>> getOrdersWithin24Hours() {
+        LocalDateTime startTime = LocalDateTime.now().plusDays(1)
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
+        LocalDateTime endTime = startTime.plusDays(1);
+        List<Order> orders = orderRepository.findUsersToRemindForReservation(startTime, endTime);
+        logger.info(String.format(controllerLogFormat, "getAllActiveDates", orders, HttpStatus.OK));
+        return ResponseEntity.ok(orders);
+    }
     @PutMapping("/updateStartTime")
     public ResponseEntity<Order> updateStartTime(@RequestParam("startDate") String start,
                                                  @RequestParam("orderId") String orderId) throws URISyntaxException, JsonProcessingException {
