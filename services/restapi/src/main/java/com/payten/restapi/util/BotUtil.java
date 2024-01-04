@@ -26,24 +26,18 @@ public class BotUtil {
     private String rootPath;
     public void notifyUserForChangeOfReservation(String viberId,String startDate) throws URISyntaxException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
         URI uri = new URI(rootPath + pathUpdate + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) + "&startDate=" + URLEncoder.encode(startDate, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT,requestEntity,String.class);
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri,String.class);
     }
     public void notifyUserForAcceptingReservation(String viberId) throws URISyntaxException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
         URI uri = new URI(rootPath + pathAccept + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT,requestEntity,String.class);
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri,String.class);
     }
     public void notifyUserForDecliningReservation(String viberId) throws URISyntaxException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
         URI uri = new URI(rootPath + pathDecline + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT,requestEntity,String.class);
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri,String.class);
     }
 
 }
