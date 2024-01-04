@@ -16,13 +16,14 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class BotUtil {
 
-
     @Value("viber.bot-path-accept")
     private String pathAccept;
-    @Value("viber.bot-path-accept")
+    @Value("viber.bot-path-decline")
     private String pathDecline;
+    @Value("viber.bot-path-update")
+
     private String pathUpdate;
-    @Value("viber.bot-adress")
+    @Value("viber.bot-address")
     private String rootPath;
     public void notifyUserForChangeOfReservation(String viberId,String startDate) throws URISyntaxException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
