@@ -21,7 +21,6 @@ public class BotUtil {
     @Value("viber.bot-path-decline")
     private String pathDecline;
     @Value("viber.bot-path-update")
-
     private String pathUpdate;
     @Value("viber.bot-address")
     private String rootPath;
@@ -37,7 +36,7 @@ public class BotUtil {
     }
     public void notifyUserForDecliningReservation(String viberId) throws URISyntaxException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(rootPath + pathDecline + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI("http://viber-bot:9943/distribucija-kafeterija/acceptOrder"+ "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri,String.class);
     }
 
