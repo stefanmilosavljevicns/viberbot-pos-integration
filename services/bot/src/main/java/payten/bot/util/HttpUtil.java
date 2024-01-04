@@ -49,7 +49,7 @@ public class HttpUtil {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + findAvailableDays + "?durationMinutes=" + URLEncoder.encode(String.valueOf(duration), StandardCharsets.UTF_8));
         ResponseEntity<List<LocalDate>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, responseTypeLocalDate);
-        logger.info(String.format(httpLogFormat, checkTimeSlotAvailability, responseEntity.getStatusCode(), responseEntity.getBody()));
+        logger.info(String.format(httpLogFormat, findAvailableDays, responseEntity.getStatusCode(), responseEntity.getBody()));
         return responseEntity.getBody();
     }
 

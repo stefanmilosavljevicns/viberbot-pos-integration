@@ -1,6 +1,9 @@
 package com.payten.restapi.util;
 
+import com.payten.restapi.controller.OrderController;
 import com.payten.restapi.model.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -34,10 +37,13 @@ public class ReservationUtil {
     @Value("${number-of-tables}")
 
     private int numberOfTables;
+    private static final Logger logger = LoggerFactory.getLogger(ReservationUtil.class);
+
     public ArrayList<LocalDate> getAvailableDaysForReservation(ArrayList<Order> orderList, Integer durationOfReservaton){
     ArrayList<LocalDate> availableDays = new ArrayList<>();
     for(int i = 0; i < 4;i++){
         int totalWorkingMinutes = 0;
+        logger.info("TREBA DA BUDE 0"+String.valueOf(totalWorkingMinutes));
         LocalDateTime isDayAvailable = LocalDateTime.now().plusDays(i);
         if(i==0){
             int currentMinutes = isDayAvailable.getHour() * 60 + isDayAvailable.getMinute();
@@ -46,6 +52,7 @@ public class ReservationUtil {
         else{
             totalWorkingMinutes = getTotalWorkingTimeInMinutes(isDayAvailable) * numberOfTables;
         }
+        logger.info("VREDNOST PRE ODUZIMANJA"+String.valueOf(totalWorkingMinutes));
         if(totalWorkingMinutes <= 0){
             continue;
         }
@@ -53,6 +60,7 @@ public class ReservationUtil {
             if(order.getStartTime().getDayOfYear() == isDayAvailable.getDayOfYear()){
                 long minutesToSubtract = Duration.between(order.getStartTime(), order.getEndTime()).toMinutes();
                 totalWorkingMinutes -= (int) minutesToSubtract;
+                logger.info("ODUZIMANJE"+String.valueOf(totalWorkingMinutes));
             }
         }
         if(totalWorkingMinutes - durationOfReservaton >= 0){
