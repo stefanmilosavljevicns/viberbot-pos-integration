@@ -36,7 +36,7 @@ public class BotUtil {
     }
     public void notifyUserForDecliningReservation(String viberId) throws URISyntaxException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI("http://viber-bot:9943/distribucija-kafeterija/acceptOrder"+ "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        String uri = "http://viber-bot:9943/distribucija-kafeterija/acceptOrder"+ "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8);
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri,String.class);
     }
 
