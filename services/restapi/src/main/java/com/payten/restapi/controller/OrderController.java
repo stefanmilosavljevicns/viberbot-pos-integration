@@ -73,6 +73,7 @@ public class OrderController {
         String[] deserializeParameter = targetDate.split(":");
         ArrayList<Order> orders = orderRepository.findOrdersByDate(LocalDate.parse(deserializeParameter[0]));
 
+        List<LocalDate> availableDays = null;
         return new ResponseEntity<>(availableDays, HttpStatus.OK);
     }
 
