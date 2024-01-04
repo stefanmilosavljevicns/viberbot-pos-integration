@@ -122,14 +122,30 @@ public class Controller {
     @PutMapping("${viber.bot-path}" + "/updateStartTime")
     ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
         bot = ViberBotManager.viberBot(stringUtils.getBotToken());
-        httpUtil.updateStartTime(viberId, start);
         String locale = httpUtil.getUserLocale(viberId);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         LocalDateTime startDate = LocalDateTime.parse(start, formatter);
-        bot.messageForUser(viberId).postText(stringUtils.getMessageReservationUpdate() + startDate.getDayOfMonth() + "." + startDate.getMonthValue() + ". u " + startDate.getHour() + ":" + startDate.getMinute(), keyboardUtil.getMainMenu(locale));
-        logger.info(String.format(controlerLogFormat, "We are sending user information that merchant changed his start time", viberId));
+        bot.messageForUser(viberId).postText(localeUtil.getLocalizedMessage("message.update",locale) + startDate.getDayOfMonth() + "." + startDate.getMonthValue() + " " + startDate.getHour() + ":" + startDate.getMinute(), keyboardUtil.getMainMenu(locale));
+        logger.info(String.format(controlerLogFormat, "We are sending user information that merchant changed his start time, viberID:", viberId));
 
         return ResponseEntity.ok().build();
 
+    }
+
+    @PutMapping("${viber.bot-path}" + "/acceptOrder")
+    ResponseEntity<?> updateStartTime(@RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
+        bot = ViberBotManager.viberBot(stringUtils.getBotToken());
+        String locale = httpUtil.getUserLocale(viberId);
+        bot.messageForUser(viberId).postText(localeUtil.getLocalizedMessage("message.accept-order",locale), keyboardUtil.getMainMenu(locale));
+        logger.info(String.format(controlerLogFormat, "We are informing user that his reservation is accepted, viberId: ", viberId));
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("${viber.bot-path}" + "/declineOrder")
+    ResponseEntity<?> updateStartTime(@RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
+        bot = ViberBotManager.viberBot(stringUtils.getBotToken());
+        String locale = httpUtil.getUserLocale(viberId);
+        bot.messageForUser(viberId).postText(localeUtil.getLocalizedMessage("message.decline-order",locale), keyboardUtil.getMainMenu(locale));
+        logger.info(String.format(controlerLogFormat, "We are informing user that his reservation is accepted, viberId: ", viberId));
+        return ResponseEntity.ok().build();
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.payten.restapi.model.Order;
 import com.payten.restapi.model.OrderState;
 import com.payten.restapi.repository.OrderRepository;
+import com.payten.restapi.util.BotUtil;
 import com.payten.restapi.util.ReservationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,7 +46,8 @@ public class OrderController {
     public ResponseEntity<List<Order>> findAll() {
         return ResponseEntity.ok(orderRepository.findAll());
     }
-
+    @Autowired
+    private BotUtil botUtil;
 
 
     @SendTo("/topic/order")
@@ -79,7 +82,7 @@ public class OrderController {
 
 
     @PutMapping("/acceptOrder/{id}")
-    public ResponseEntity<Order> acceptOrder(@PathVariable("id") String id) {
+    public ResponseEntity<Order> acceptOrder(@PathVariable("id") String id) throws URISyntaxException, JsonProcessingException {
         Optional<Order> existingOrder = orderRepository.findById(id);
         if (!existingOrder.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,21 +92,25 @@ public class OrderController {
         updatedOrder.setState(OrderState.IN_PROGRESS);
 
         orderRepository.save(updatedOrder);
+        if(!updatedOrder.getViberID().isBlank()){
+            botUtil.notifyUserForAcceptingReservation(updatedOrder.getViberID());
+        }
         logger.info(String.format(controllerLogFormat, "acceptOrder", updatedOrder, HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
 
     @PutMapping("/declineOrder/{id}")
-    public ResponseEntity<Order> declineOrder(@PathVariable("id") String id) {
+    public ResponseEntity<Order> declineOrder(@PathVariable("id") String id) throws URISyntaxException, JsonProcessingException {
         Optional<Order> existingOrder = orderRepository.findById(id);
         if (!existingOrder.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         Order updatedOrder = existingOrder.get();
         updatedOrder.setState(OrderState.DECLINED);
-
         orderRepository.save(updatedOrder);
+        if(!updatedOrder.getViberID().isBlank()){
+            botUtil.notifyUserForDecliningReservation(updatedOrder.getViberID());
+        }
         logger.info(String.format(controllerLogFormat, "declineOrder", updatedOrder, HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
@@ -114,7 +121,7 @@ public class OrderController {
     // iz query parametra novi startTime a endTime dobijamo uvecavanjem novog starTtime-a za ukupnu duzinu termina koju smo prethodno izracunali (promenljiva reservationDuration)
     @PutMapping("/updateStartTime")
     public ResponseEntity<Order> updateStartTime(@RequestParam("startDate") String start,
-                                                 @RequestParam("orderId") String orderId) {
+                                                 @RequestParam("orderId") String orderId) throws URISyntaxException, JsonProcessingException {
         Optional<Order> existingOrder = orderRepository.findById(orderId);
         if (existingOrder.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -125,6 +132,9 @@ public class OrderController {
         Order updatedOrder = existingOrder.get();
         updatedOrder.setStartTime(startDate);
         updatedOrder.setEndTime(startDate.plusMinutes(reservationDuration.toMinutes()));
+        if(!updatedOrder.getViberID().isBlank()){
+            botUtil.notifyUserForChangeOfReservation(updatedOrder.getViberID(),startDate.toString());
+        }
         logger.info(String.format(controllerLogFormat, "updateStartTime", "updatedOrder", HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
