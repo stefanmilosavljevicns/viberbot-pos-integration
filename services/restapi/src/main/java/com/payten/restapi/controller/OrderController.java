@@ -92,9 +92,9 @@ public class OrderController {
         updatedOrder.setState(OrderState.IN_PROGRESS);
 
         orderRepository.save(updatedOrder);
-        if(!updatedOrder.getViberID().isBlank()){
-            botUtil.notifyUserForAcceptingReservation(updatedOrder.getViberID());
-        }
+        //if(!updatedOrder.getViberID().isBlank()){
+          //  botUtil.notifyUserForAcceptingReservation(updatedOrder.getViberID());
+        //}
         logger.info(String.format(controllerLogFormat, "acceptOrder", updatedOrder, HttpStatus.OK));
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
