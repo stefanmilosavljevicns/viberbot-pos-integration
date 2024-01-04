@@ -84,6 +84,8 @@ public class KeyboardUtil {
     }
     public ViberKeyboard pickReservationDay(Integer duration,String locale) throws URISyntaxException {
         ViberKeyboard reservationDuration = new ViberKeyboard();
+        reservationDuration.setInputFieldState("hidden");
+        reservationDuration.setType("keyboard");
         List<LocalDate> listOfAvailableDays = httpUtil.getAvailableDays(duration);
         for(LocalDate date : listOfAvailableDays){
             reservationDuration.addButton(new ViberButton(navigateToMainMenu)
@@ -106,6 +108,8 @@ public class KeyboardUtil {
 
     public ViberKeyboard pickReservationDuration(String locale){
         ViberKeyboard reservationDuration = new ViberKeyboard();
+        reservationDuration.setInputFieldState("hidden");
+        reservationDuration.setType("keyboard");
         reservationDuration.addButton(new ViberButton(selectDayReservation+30)
                 .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.30-minutes",locale)))
                 .setTextSize(ViberButton.TextSize.LARGE)
@@ -142,37 +146,6 @@ public class KeyboardUtil {
                 .setColumns(6)
                 .setRows(1));
         return reservationDuration;
-    }
-    public ViberKeyboard setHourPicker(List<LocalDateTime> freeTimeSlots){
-        ViberKeyboard hourPicker = new ViberKeyboard();
-        hourPicker.setInputFieldState("hidden");
-        boolean ticker = true;
-        hourPicker.setType("keyboard");
-        for (LocalDateTime availableSlot : freeTimeSlots) {
-            ViberButton viberButton = new ViberButton((String.format(sendOrderToPOS + "%s", availableSlot)))
-                    .setText(String.format(stringUtils.getButtonStandard(), availableSlot.getHour() +":"+availableSlot.getMinute()))
-                    .setColumns(6)
-                    .setRows(1)
-                    .setSilent(true)
-                    .setTextSize(ViberButton.TextSize.MEDIUM)
-                    .setTextHAlign(ViberButton.TextAlign.MIDDLE);
-            if(ticker){
-                viberButton.setBgColor(stringUtils.getPrimarilyColor());
-                ticker = false;
-            }
-            else{
-                viberButton.setBgColor(stringUtils.getSecondarilyColor());
-                ticker = true;
-            }
-            hourPicker.addButton(viberButton);
-
-        }
-        hourPicker.addButton(new ViberButton(navigateToMainMenu)
-                .setText(String.format(stringUtils.getButtonStandard(),stringUtils.getMessageReturnToMenu()))
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setSilent(true)
-                .setBgColor(stringUtils.getPrimarilyColor()));
-        return hourPicker;
     }
     public ViberKeyboard setYesNo(){
         confirmationKeyboard = new ViberKeyboard();
