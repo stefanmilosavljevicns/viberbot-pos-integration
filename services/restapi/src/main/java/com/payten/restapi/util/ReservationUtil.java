@@ -43,7 +43,6 @@ public class ReservationUtil {
     ArrayList<LocalDate> availableDays = new ArrayList<>();
     for(int i = 0; i < 4;i++){
         int totalWorkingMinutes = 0;
-        logger.info("TREBA DA BUDE 0"+String.valueOf(totalWorkingMinutes));
         LocalDateTime isDayAvailable = LocalDateTime.now().plusDays(i);
         if(i==0){
             int currentMinutes = isDayAvailable.getHour() * 60 + isDayAvailable.getMinute();
@@ -52,7 +51,6 @@ public class ReservationUtil {
         else{
             totalWorkingMinutes = getTotalWorkingTimeInMinutes(isDayAvailable) * numberOfTables;
         }
-        logger.info("VREDNOST PRE ODUZIMANJA"+String.valueOf(totalWorkingMinutes));
         if(totalWorkingMinutes <= 0){
             continue;
         }
@@ -60,7 +58,6 @@ public class ReservationUtil {
             if(order.getStartTime().getDayOfYear() == isDayAvailable.getDayOfYear()){
                 long minutesToSubtract = Duration.between(order.getStartTime(), order.getEndTime()).toMinutes();
                 totalWorkingMinutes -= (int) minutesToSubtract;
-                logger.info("ODUZIMANJE"+String.valueOf(totalWorkingMinutes));
             }
         }
         if(totalWorkingMinutes - durationOfReservaton >= 0){
@@ -115,9 +112,6 @@ public class ReservationUtil {
         String[] parts = time.split(":");
         int hours = Integer.parseInt(parts[0]);
         int minutes = Integer.parseInt(parts[1]);
-        logger.info("CASOVI U KONVERTERU"+hours);
-        logger.info("MINUTI U KONVERTERU"+minutes);
-        logger.info("KONVERTER"+hours * 60 + minutes);
         return hours * 60 + minutes;
     }
 }
