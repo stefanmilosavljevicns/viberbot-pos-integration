@@ -119,7 +119,7 @@ public class Controller {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("${viber.bot-path}" + "/updateStartTime")
+    @RequestMapping("${viber.bot-path}" + "/updateStartTime")
     ResponseEntity<?> updateStartTime(@RequestParam("startDate") String start, @RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
         bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         String locale = httpUtil.getUserLocale(viberId);
@@ -132,7 +132,7 @@ public class Controller {
 
     }
 
-    @PutMapping("${viber.bot-path}" + "/acceptOrder")
+    @RequestMapping("${viber.bot-path}" + "/acceptOrder")
     ResponseEntity<?> acceptOrder(@RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
         bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         String locale = httpUtil.getUserLocale(viberId);
@@ -140,7 +140,7 @@ public class Controller {
         logger.info(String.format(controlerLogFormat, "We are informing user that his reservation is accepted, viberId: ", viberId));
         return ResponseEntity.ok().build();
     }
-    @PutMapping("${viber.bot-path}" + "/declineOrder")
+    @RequestMapping("${viber.bot-path}" + "/declineOrder")
     ResponseEntity<?> declineOrder(@RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
         bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         String locale = httpUtil.getUserLocale(viberId);
