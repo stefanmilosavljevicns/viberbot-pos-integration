@@ -16,13 +16,16 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class BotUtil {
 
-    @Value("viber.bot-path-accept")
+    @Value("${viber.bot-path-accept}")
     private String pathAccept;
-    @Value("viber.bot-path-decline")
+
+    @Value("${viber.bot-path-decline}")
     private String pathDecline;
-    @Value("viber.bot-path-update")
+
+    @Value("${viber.bot-path-update}")
     private String pathUpdate;
-    @Value("viber.bot-address")
+
+    @Value("${viber.bot-address}")
     private String rootPath;
     public void notifyUserForChangeOfReservation(String viberId,String startDate) throws URISyntaxException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
@@ -36,7 +39,7 @@ public class BotUtil {
     }
     public void notifyUserForDecliningReservation(String viberId) throws URISyntaxException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
-        String uri = "http://viber-bot:9943/distribucija-kafeterija/acceptOrder"+ "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8);
+        URI uri = new URI(rootPath + pathDecline + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri,String.class);
     }
 
