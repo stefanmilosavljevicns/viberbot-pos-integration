@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import payten.bot.model.OrderPOS;
 import payten.bot.model.ReservationSlot;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -44,6 +45,7 @@ public class HttpUtil {
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
         String responseBody = responseEntity.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         logger.info(String.format(httpLogFormat, listAvailableTimeSlots, responseEntity.getStatusCode(), responseEntity.getBody()));
         return objectMapper.readValue(responseBody, new TypeReference<ArrayList<ReservationSlot>>() {
         });

@@ -13,7 +13,7 @@ public class ReservationSlot {
         this.table = table;
     }
     public ReservationSlot(){
-        
+
     }
 
     public LocalDateTime getStartDate() {
