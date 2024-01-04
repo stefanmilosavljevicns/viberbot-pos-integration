@@ -12,6 +12,9 @@ public class ReservationSlot {
         this.endDate = endDate;
         this.table = table;
     }
+    public ReservationSlot(){
+        
+    }
 
     public LocalDateTime getStartDate() {
         return startDate;
