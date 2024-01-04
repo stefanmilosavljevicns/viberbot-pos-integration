@@ -19,7 +19,7 @@ public class ReservationUtil {
     @Value("${working-hour-mon-fri-start}")
 
     private String workWeekStart;
-    @Value("${working-hour-mon-fri-start}")
+    @Value("${working-hour-mon-fri-end}")
 
     private String workWeekEnd;
     @Value("${working-hour-start-saturday}")
