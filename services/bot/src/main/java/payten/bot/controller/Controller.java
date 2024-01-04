@@ -70,6 +70,9 @@ public class Controller {
         } else if (messageText.length() >= 3) {
             userLocale = httpUtil.getUserLocale(userId);
             switch (messageText.substring(0, 3)) {
+                case selectDayReservation:
+                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.choose-reservation-day", userLocale), keyboardUtil.pickReservationDay(Integer.parseInt(messageText.substring(3)),userLocale));
+                    break;
                 case selectDurationOfReservation:
                     bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.choose-reservation-duration", userLocale), keyboardUtil.pickReservationDuration(userLocale));
                     break;
@@ -100,17 +103,6 @@ public class Controller {
                 case historyOfReservation:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.historyOfReservationKeyboard(userId,userLocale));
                     logger.info(String.format(controlerLogFormat, "Displaying user his history.", userId));
-                    break;
-                case startReservationProcess:
-                    if (httpUtil.cartChecker(userId)) {
-                        StringBuilder finishMsg = new StringBuilder(stringUtils.getMessageCheckCart());
-                        bot.messageForUser(userId).postText(finishMsg.toString(), keyboardUtil.setYesNo());
-                        logger.info(String.format(controlerLogFormat, "User have enough cart items to proceed with reservation.", userId));
-
-                    } else {
-                        bot.messageForUser(userId).postText(stringUtils.getMessageError(), keyboardUtil.getMainMenu(userLocale));
-                        logger.info(String.format(controlerLogFormat, "Unable to show current cart.", userId));
-                    }
                     break;
                 case navigateToMainMenu:
                     bot.messageForUser(userId).postKeyboard(keyboardUtil.getMainMenu(userLocale));

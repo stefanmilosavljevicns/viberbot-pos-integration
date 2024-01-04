@@ -34,14 +34,18 @@ public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private SimpMessagingTemplate msgTemplate;
+
+    @Autowired
+    private ReservationUtil reservationUtil;
 
     @GetMapping("/getOrders")
     public ResponseEntity<List<Order>> findAll() {
         return ResponseEntity.ok(orderRepository.findAll());
     }
 
-    @Autowired
-    private SimpMessagingTemplate msgTemplate;
+
 
     @SendTo("/topic/order")
     @PostMapping("/addOrder")
@@ -59,8 +63,8 @@ public class OrderController {
 
     @GetMapping("/findAvailableDays")
     public ResponseEntity<List<LocalDate>> findAvailableDays(@RequestParam("durationMinutes") Integer durationMinutes) {
-        List<Order> orders = orderRepository.findActiveReservations();
-        ArrayList<LocalDate> availableDays = new ArrayList<>();
+        ArrayList<Order> orders = orderRepository.findActiveReservations();
+        ArrayList<LocalDate> availableDays = reservationUtil.getAvailableDaysForReservation(orders,durationMinutes);
 
         return new ResponseEntity<>(availableDays, HttpStatus.OK);
     }

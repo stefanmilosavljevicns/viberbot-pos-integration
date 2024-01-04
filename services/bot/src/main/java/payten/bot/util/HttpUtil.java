@@ -1,7 +1,6 @@
 package payten.bot.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -13,13 +12,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import payten.bot.model.OrderPOS;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static payten.bot.util.BotConstants.*;
@@ -35,7 +32,9 @@ public class HttpUtil {
         return categories;
     }
 
-    ParameterizedTypeReference<ArrayList<OrderPOS>> responseType = new ParameterizedTypeReference<ArrayList<OrderPOS>>() {};
+    ParameterizedTypeReference<ArrayList<OrderPOS>> responseTypeOrder = new ParameterizedTypeReference<ArrayList<OrderPOS>>() {};
+    ParameterizedTypeReference<List<LocalDate>> responseTypeLocalDate = new ParameterizedTypeReference<List<LocalDate>>() {};
+
 
     public Boolean cartChecker(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
@@ -46,27 +45,18 @@ public class HttpUtil {
         return status;
     }
 
-    public String checkIfTimeIsAvailable(LocalDateTime startDate, LocalDateTime endDate) throws URISyntaxException {
+    public List<LocalDate> getAvailableDays(Integer duration) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + checkTimeSlotAvailability + "?start=" + URLEncoder.encode(String.valueOf(startDate), StandardCharsets.UTF_8) + "&end=" + URLEncoder.encode(String.valueOf(endDate), StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
+        URI uri = new URI(stringUtils.getRestAdress() + findAvailableDays + "?durationMinutes=" + URLEncoder.encode(String.valueOf(duration), StandardCharsets.UTF_8));
+        ResponseEntity<List<LocalDate>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, responseTypeLocalDate);
         logger.info(String.format(httpLogFormat, checkTimeSlotAvailability, responseEntity.getStatusCode(), responseEntity.getBody()));
         return responseEntity.getBody();
     }
 
-    public Double getTotalTime(String viberId) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + getTotalTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
-        Double time = Double.valueOf(Objects.requireNonNull(responseEntity.getBody()));
-        logger.info(String.format(httpLogFormat, getTotalTime, responseEntity.getStatusCode(), responseEntity.getBody()));
-        return time;
-
-    }
     public ArrayList<OrderPOS> getHistoryOfOrders(String viberId) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(stringUtils.getRestAdress() + getHistoryOfReservations + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
-        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, responseType);
+        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, responseTypeOrder);
         ArrayList<OrderPOS> orderList = responseEntity.getBody();
         logger.info(String.format(httpLogFormat, getHistoryOfReservations, responseEntity.getStatusCode(), responseEntity.getBody()));
         return orderList;
@@ -81,18 +71,7 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, userLocale, responseEntity.getStatusCode(), responseEntity.getBody()));
         return rootNode.path("customerLocale").asText();
     }
-    public List<LocalDateTime> checkFreeTimeSlots(LocalDate time, int totalTime) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + checkFreeTimeSlots + "?localDate=" + URLEncoder.encode(String.valueOf(time), StandardCharsets.UTF_8) + "&totalMinutes=" + URLEncoder.encode(String.valueOf(totalTime), StandardCharsets.UTF_8));
-        ResponseEntity<LocalDateTime[]> response = restTemplate.getForEntity(uri, LocalDateTime[].class);
-        LocalDateTime[] dateTimeArray = response.getBody();
-        List<LocalDateTime> freeTimeSlots = new ArrayList<>();
-        if (dateTimeArray != null) {
-            Collections.addAll(freeTimeSlots, dateTimeArray);
-        }
-        logger.info(String.format(httpLogFormat, checkFreeTimeSlots, response.getStatusCode(), Arrays.toString(response.getBody())));
-        return freeTimeSlots;
-    }
+
     public void changeUserLocale(String viberId,String locale) throws URISyntaxException, JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -123,7 +102,7 @@ public class HttpUtil {
     public ArrayList<OrderPOS> get24HOrderPOS () {
         RestTemplate restTemplate = new RestTemplate();
         String endpointUrl = stringUtils.getRestAdress() + getOrdersWithin24Hourse;      
-        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(endpointUrl, HttpMethod.GET, null, responseType);
+        ResponseEntity<ArrayList<OrderPOS>> responseEntity = restTemplate.exchange(endpointUrl, HttpMethod.GET, null, responseTypeOrder);
         ArrayList<OrderPOS> orderList = responseEntity.getBody();
         return orderList;
     }

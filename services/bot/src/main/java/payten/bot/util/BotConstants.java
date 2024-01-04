@@ -36,6 +36,8 @@ public static final String selectDurationOfReservation = "DRT";
     public static final String checkFreeTimeSlots = "/checkFreeTimeSlots";
     public static final String addOrder = "/addOrder";
 
+    public static final String findAvailableDays = "/findAvailableDays";
+
 
 
 }

@@ -11,6 +11,7 @@ import payten.bot.model.OrderPOS;
 
 
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -81,7 +82,27 @@ public class KeyboardUtil {
         return mainMenu;
 
     }
-
+    public ViberKeyboard pickReservationDay(Integer duration,String locale) throws URISyntaxException {
+        ViberKeyboard reservationDuration = new ViberKeyboard();
+        List<LocalDate> listOfAvailableDays = httpUtil.getAvailableDays(duration);
+        for(LocalDate date : listOfAvailableDays){
+            reservationDuration.addButton(new ViberButton(navigateToMainMenu)
+                    .setText(String.format(stringUtils.getButtonStandard(),date.getDayOfMonth()+":"+date.getMonthValue()))
+                    .setTextSize(ViberButton.TextSize.LARGE)
+                    .setBgColor(stringUtils.getSecondarilyColor())
+                    .setSilent(true)
+                    .setColumns(6)
+                    .setRows(1));
+        }
+        reservationDuration.addButton(new ViberButton(navigateToMainMenu)
+                .setText(localeUtil.getLocalizedMessage("message.return-main-menu",locale))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getSecondarilyColor())
+                .setSilent(true)
+                .setColumns(6)
+                .setRows(1));
+        return reservationDuration;
+    }
 
     public ViberKeyboard pickReservationDuration(String locale){
         ViberKeyboard reservationDuration = new ViberKeyboard();

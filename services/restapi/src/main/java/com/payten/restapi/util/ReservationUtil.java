@@ -12,12 +12,7 @@ import java.util.ArrayList;
 
 @Component
 public class ReservationUtil {
-    working-hour-mon-fri-start:07:30
-    working-hour-mon-fri-end:17:00
-    working-hour-start-saturday=00:00
-    working-hour-end-saturday=00:00
-    working-hour-start-sunday=00:00
-    working-hour-end-sunday=00:00
+
     @Value("${working-hour-mon-fri-start}")
 
     private String workWeekStart;
@@ -27,35 +22,91 @@ public class ReservationUtil {
     @Value("${working-hour-start-saturday}")
 
     private String workSaturdayStart;
-    @Value("${working-hour-mon-fri-start}")
+    @Value("${working-hour-end-saturday}")
 
     private String workSaturdayEnd;
-    private ArrayList<LocalDate> getAvailableDaysForReservation(ArrayList<Order> orderList, Integer durationOfReservaton){
+    @Value("${working-hour-start-sunday}")
+
+    private String workSundayStart;
+    @Value("${working-hour-end-sunday}")
+
+    private String workSundayEnd;
+    @Value("${number-of-tables}")
+
+    private int numberOfTables;
+    public ArrayList<LocalDate> getAvailableDaysForReservation(ArrayList<Order> orderList, Integer durationOfReservaton){
     ArrayList<LocalDate> availableDays = new ArrayList<>();
     for(int i = 0; i < 4;i++){
+        int totalWorkingMinutes = 0;
         LocalDateTime isDayAvailable = LocalDateTime.now().plusDays(i);
-
         if(i==0){
-
+            int currentMinutes = isDayAvailable.getHour() * 60 + isDayAvailable.getMinute();
+            totalWorkingMinutes = getTotalWorkingTimeInMinutesForCurrentDay(isDayAvailable,currentMinutes) * numberOfTables;
+        }
+        else{
+            totalWorkingMinutes = getTotalWorkingTimeInMinutes(isDayAvailable) * numberOfTables;
+        }
+        if(totalWorkingMinutes <= 0){
+            continue;
         }
         for(Order order : orderList){
             if(order.getStartTime().getDayOfYear() == isDayAvailable.getDayOfYear()){
                 long minutesToSubtract = Duration.between(order.getStartTime(), order.getEndTime()).toMinutes();
+                totalWorkingMinutes -= (int) minutesToSubtract;
             }
+        }
+        if(totalWorkingMinutes - durationOfReservaton >= 0){
+            availableDays.add(LocalDate.from(isDayAvailable));
         }
     }
     return availableDays;
     }
-    private void getTotalWorkingTimeInMinutes(LocalDateTime checkDay){
-        if(checkDay.getDayOfWeek()== DayOfWeek.SATURDAY){
 
+
+    private int getTotalWorkingTimeInMinutes(LocalDateTime checkDay){
+        if(checkDay.getDayOfWeek()== DayOfWeek.SATURDAY){
+            return convertToMinutes(workSaturdayEnd) - convertToMinutes(workSaturdayStart);
         }
         else if(checkDay.getDayOfWeek() == DayOfWeek.SUNDAY){
-
+            return convertToMinutes(workSundayEnd) - convertToMinutes(workSundayStart);
         }
         else{
-
+            return convertToMinutes(workWeekEnd) - convertToMinutes(workWeekStart);
         }
 
+    }
+
+    private int getTotalWorkingTimeInMinutesForCurrentDay(LocalDateTime checkDay,int currentTimeInMinutes){
+        if(checkDay.getDayOfWeek()== DayOfWeek.SATURDAY){
+            if(currentTimeInMinutes > convertToMinutes(workSaturdayStart)){
+                return convertToMinutes(workSaturdayEnd) - currentTimeInMinutes;
+            }
+            else{
+                return convertToMinutes(workSaturdayEnd) - convertToMinutes(workSaturdayStart);
+            }
+        }
+        else if(checkDay.getDayOfWeek() == DayOfWeek.SUNDAY){
+            if(currentTimeInMinutes > convertToMinutes(workSundayStart)){
+                return convertToMinutes(workSundayEnd) - currentTimeInMinutes;
+            }
+            else{
+                return convertToMinutes(workSundayEnd) - convertToMinutes(workSundayStart);
+            }
+        }
+        else{
+            if(currentTimeInMinutes > convertToMinutes(workWeekStart)){
+                return convertToMinutes(workWeekEnd) - currentTimeInMinutes;
+            }
+            else{
+                return convertToMinutes(workWeekEnd) - convertToMinutes(workWeekStart);
+            }
+        }
+
+    }
+    public static int convertToMinutes(String time) {
+        String[] parts = time.split(":");
+        int hours = Integer.parseInt(parts[0]);
+        int minutes = Integer.parseInt(parts[1]);
+        return hours * 60 + minutes;
     }
 }
