@@ -39,6 +39,12 @@ public class ReservationUtil {
     private int numberOfTables;
     private static final Logger logger = LoggerFactory.getLogger(ReservationUtil.class);
 
+    public ArrayList<LocalDateTime> getAvailableTimeSlotsForReservation(ArrayList<Order> orderList, Integer durationOfReservation){
+        ArrayList<LocalDateTime> availableTimeSlots = new ArrayList<>();
+
+        return  availableTimeSlots;
+    }
+
     public ArrayList<LocalDate> getAvailableDaysForReservation(ArrayList<Order> orderList, Integer durationOfReservaton){
     ArrayList<LocalDate> availableDays = new ArrayList<>();
     for(int i = 0; i < 4;i++){
@@ -83,7 +89,10 @@ public class ReservationUtil {
 
     private int getTotalWorkingTimeInMinutesForCurrentDay(LocalDateTime checkDay,int currentTimeInMinutes){
         if(checkDay.getDayOfWeek()== DayOfWeek.SATURDAY){
-            if(currentTimeInMinutes > convertToMinutes(workSaturdayStart)){
+            if(currentTimeInMinutes > convertToMinutes(workSaturdayEnd)){
+                return 0;
+            }
+            else if(currentTimeInMinutes > convertToMinutes(workSaturdayStart)){
                 return convertToMinutes(workSaturdayEnd) - currentTimeInMinutes;
             }
             else{
@@ -91,7 +100,10 @@ public class ReservationUtil {
             }
         }
         else if(checkDay.getDayOfWeek() == DayOfWeek.SUNDAY){
-            if(currentTimeInMinutes > convertToMinutes(workSundayStart)){
+            if(currentTimeInMinutes > convertToMinutes(workSundayEnd)){
+                return 0;
+            }
+            else if(currentTimeInMinutes > convertToMinutes(workSundayStart)){
                 return convertToMinutes(workSundayEnd) - currentTimeInMinutes;
             }
             else{
@@ -99,7 +111,10 @@ public class ReservationUtil {
             }
         }
         else{
-            if(currentTimeInMinutes > convertToMinutes(workWeekStart)){
+            if(currentTimeInMinutes > convertToMinutes(workWeekEnd)){
+                return 0;
+            }
+            else if(currentTimeInMinutes > convertToMinutes(workWeekStart)){
                 return convertToMinutes(workWeekEnd) - currentTimeInMinutes;
             }
             else{

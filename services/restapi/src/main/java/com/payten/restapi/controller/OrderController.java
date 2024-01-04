@@ -65,11 +65,16 @@ public class OrderController {
     public ResponseEntity<List<LocalDate>> findAvailableDays(@RequestParam("durationMinutes") Integer durationMinutes) {
         ArrayList<Order> orders = orderRepository.findActiveReservations();
         ArrayList<LocalDate> availableDays = reservationUtil.getAvailableDaysForReservation(orders,durationMinutes);
-
         return new ResponseEntity<>(availableDays, HttpStatus.OK);
     }
 
+    @GetMapping("/findAvailableTimeSlotsForReservation")
+    public ResponseEntity<List<LocalDate>> findAvailableTimeSlotsForReservation(@RequestParam("targetDate") String targetDate) {
+        String[] deserializeParameter = targetDate.split(":");
+        ArrayList<Order> orders = orderRepository.findOrdersByDate(LocalDate.parse(deserializeParameter[0]));
 
+        return new ResponseEntity<>(availableDays, HttpStatus.OK);
+    }
 
 
     @PutMapping("/acceptOrder/{id}")
