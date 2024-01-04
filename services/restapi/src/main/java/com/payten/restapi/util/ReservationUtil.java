@@ -115,6 +115,8 @@ public class ReservationUtil {
         String[] parts = time.split(":");
         int hours = Integer.parseInt(parts[0]);
         int minutes = Integer.parseInt(parts[1]);
+        logger.info("CASOVI U KONVERTERU"+hours);
+        logger.info("MINUTI U KONVERTERU"+minutes);
         logger.info("KONVERTER"+hours * 60 + minutes);
         return hours * 60 + minutes;
     }
