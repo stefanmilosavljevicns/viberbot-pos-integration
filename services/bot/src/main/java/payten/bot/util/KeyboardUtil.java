@@ -87,7 +87,7 @@ public class KeyboardUtil {
         List<LocalDate> listOfAvailableDays = httpUtil.getAvailableDays(duration);
         for(LocalDate date : listOfAvailableDays){
             reservationDuration.addButton(new ViberButton(navigateToMainMenu)
-                    .setText(String.format(stringUtils.getButtonStandard(),date.getDayOfMonth()+":"+date.getMonthValue()))
+                    .setText(String.format(dateUtil.translateDayValue(date.getDayOfWeek(),locale),date.getDayOfMonth()+"."+date.getMonthValue()+"."))
                     .setTextSize(ViberButton.TextSize.LARGE)
                     .setBgColor(stringUtils.getSecondarilyColor())
                     .setSilent(true)

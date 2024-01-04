@@ -1,5 +1,6 @@
 package payten.bot.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.*;
@@ -11,6 +12,9 @@ import java.util.ArrayList;
 @Component
 
 public class DateUtil {
+
+    @Autowired
+    private LocaleUtil localeUtil;
 
     //Used for converting user input of time in format 14.02/15:53 into localdatetime
     public LocalDateTime parseUserInput(String userInput) {
@@ -45,20 +49,15 @@ public class DateUtil {
     public LocalDateTime setEndDate(LocalDateTime startDate,double minutes) {
         return startDate.plusMinutes((long) minutes);
     }
-    public String translateDayValue(int value){
-        switch (value) {
-            case 1:
-                return "Ponedeljak";
-            case 2:
-                return "Utorak";
-            case 3:
-                return "Sreda";
-            case 4:
-                return "Četvrtak";
-            case 5:
-                return "Petak";
-            default:
-                return "Greška";
-        }
+    public String translateDayValue(DayOfWeek dayOfWeek,String locale){
+        return switch (dayOfWeek) {
+            case MONDAY -> localeUtil.getLocalizedMessage("day.monday",locale);
+            case TUESDAY -> localeUtil.getLocalizedMessage("day.tuesday",locale);
+            case WEDNESDAY -> localeUtil.getLocalizedMessage("day.wednesday",locale);
+            case THURSDAY -> localeUtil.getLocalizedMessage("day.thursday",locale);
+            case FRIDAY -> localeUtil.getLocalizedMessage("day.friday",locale);
+            case SATURDAY -> localeUtil.getLocalizedMessage("day.saturday",locale);
+            case SUNDAY -> localeUtil.getLocalizedMessage("day.sunday",locale);
+        };
     }
 }
