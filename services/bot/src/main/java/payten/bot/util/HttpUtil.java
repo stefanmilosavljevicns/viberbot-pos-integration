@@ -11,6 +11,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import payten.bot.model.OrderPOS;
+import payten.bot.model.ReservationSlot;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,13 +38,15 @@ public class HttpUtil {
     ParameterizedTypeReference<List<LocalDate>> responseTypeLocalDate = new ParameterizedTypeReference<List<LocalDate>>() {};
 
 
-    public Boolean cartChecker(String viberId) throws URISyntaxException {
+    public ArrayList<ReservationSlot> getAvailableTimeSlots(String paramBody) throws JsonProcessingException, URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(stringUtils.getRestAdress() + checkIfUserCanOrder + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        URI uri = new URI(stringUtils.getRestAdress() + listAvailableTimeSlots + "?targetDate=" + URLEncoder.encode(String.valueOf(paramBody), StandardCharsets.UTF_8));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
-        Boolean status = Boolean.valueOf(responseEntity.getBody());
-        logger.info(String.format(httpLogFormat, checkIfUserCanOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
-        return status;
+        String responseBody = responseEntity.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info(String.format(httpLogFormat, listAvailableTimeSlots, responseEntity.getStatusCode(), responseEntity.getBody()));
+        return objectMapper.readValue(responseBody, new TypeReference<ArrayList<ReservationSlot>>() {
+        });
     }
 
     public List<LocalDate> getAvailableDays(Integer duration) throws URISyntaxException {

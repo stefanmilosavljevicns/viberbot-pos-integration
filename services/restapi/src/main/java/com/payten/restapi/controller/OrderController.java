@@ -2,15 +2,15 @@ package com.payten.restapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.payten.restapi.model.DTO.SuggestedReservationSlot;
 import com.payten.restapi.model.Order;
-import com.payten.restapi.model.OrderState;
+import com.payten.restapi.model.enums.OrderState;
 import com.payten.restapi.repository.OrderRepository;
 import com.payten.restapi.util.BotUtil;
 import com.payten.restapi.util.ReservationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -21,7 +21,6 @@ import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -72,11 +71,10 @@ public class OrderController {
     }
     /*TODO*/
     @GetMapping("/findAvailableTimeSlotsForReservation")
-    public ResponseEntity<List<LocalDate>> findAvailableTimeSlotsForReservation(@RequestParam("targetDate") String targetDate) {
+    public ResponseEntity<List<SuggestedReservationSlot>> findAvailableTimeSlotsForReservation(@RequestParam("targetDate") String targetDate) {
         String[] deserializeParameter = targetDate.split(":");
         ArrayList<Order> orders = orderRepository.findOrdersByDate(LocalDate.parse(deserializeParameter[0]));
-
-        List<LocalDate> availableDays = null;
+        List<SuggestedReservationSlot> availableDays = reservationUtil.getAvailableTimeSlotsForReservation(orders,Integer.valueOf(deserializeParameter[1]),LocalDate.parse(deserializeParameter[0]));
         return new ResponseEntity<>(availableDays, HttpStatus.OK);
     }
 
@@ -92,7 +90,7 @@ public class OrderController {
         updatedOrder.setState(OrderState.IN_PROGRESS);
 
         orderRepository.save(updatedOrder);
-        if(!updatedOrder.getViberID().isBlank()){
+        if(updatedOrder.getViberID() != null && !updatedOrder.getViberID().isBlank()){
           botUtil.notifyUserForAcceptingReservation(updatedOrder.getViberID());
         }
         logger.info(String.format(controllerLogFormat, "acceptOrder", updatedOrder, HttpStatus.OK));
@@ -108,7 +106,7 @@ public class OrderController {
         Order updatedOrder = existingOrder.get();
         updatedOrder.setState(OrderState.DECLINED);
         orderRepository.save(updatedOrder);
-        if(!updatedOrder.getViberID().isBlank()){
+        if(updatedOrder.getViberID() != null && !updatedOrder.getViberID().isBlank()){
             botUtil.notifyUserForDecliningReservation(updatedOrder.getViberID());
         }
         logger.info(String.format(controllerLogFormat, "declineOrder", updatedOrder, HttpStatus.OK));

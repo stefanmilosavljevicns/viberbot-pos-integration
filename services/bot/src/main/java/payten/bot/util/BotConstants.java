@@ -4,7 +4,6 @@ public class BotConstants {
     //KEY NAMES FOR MAPPING ACTION STATES FOR VIBER
     public static final String MESSAGE_EVENT = "message";
     public static final String START_MSG_EVENT = "conversation_started";
-    public static final String startReservationProcess = "FNH";
     public static final String aboutUs = "ABT";
     public static final String agreeWithCart = "AGR";
     public static final String selectDayReservation = "DAY";
@@ -16,8 +15,8 @@ public class BotConstants {
     public static final String changeUserLocaleRus = "RUS";
 
     public static final String historyOfReservation = "HST";
-
-public static final String selectDurationOfReservation = "DRT";
+    public static final String listAvailableTimeSlot = "LST";
+    public static final String selectDurationOfReservation = "DRT";
 
     public static final String sendOrderToPOS = "POS";
     public static final String httpLogFormat = "||Calling endpoint: %s ||Response status: %s ||Response body: %s ||";
@@ -26,7 +25,7 @@ public static final String selectDurationOfReservation = "DRT";
 
     public static final String getOrdersWithin24Hourse = "/getAllActiveDates";
     public static final String checkIfUserCanOrder = "/checkIfUserCanOrder";
-
+    public static final String listAvailableTimeSlots = "/findAvailableTimeSlotsForReservation";
     public static final String changeLocale = "/changeLocale";
     public static final String userLocale = "/getUserLocale";
     public static final String getTotalTime = "/getTotalTime";

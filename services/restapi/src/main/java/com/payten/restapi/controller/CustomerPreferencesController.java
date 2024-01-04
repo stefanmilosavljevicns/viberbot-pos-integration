@@ -1,9 +1,7 @@
 package com.payten.restapi.controller;
 
-import com.payten.restapi.model.CustomerLocale;
+import com.payten.restapi.model.enums.CustomerLocale;
 import com.payten.restapi.model.CustomerPreferences;
-import com.payten.restapi.model.Order;
-import com.payten.restapi.model.OrderState;
 import com.payten.restapi.repository.CustomerPreferencesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

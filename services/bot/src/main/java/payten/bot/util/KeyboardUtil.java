@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.payten.viberutil.keyboard.ViberButton;
 import com.payten.viberutil.keyboard.ViberKeyboard;
 import payten.bot.model.OrderPOS;
+import payten.bot.model.ReservationSlot;
 
 
 import java.net.URISyntaxException;
@@ -82,13 +83,36 @@ public class KeyboardUtil {
         return mainMenu;
 
     }
+    public ViberKeyboard pickTimeSlot(String paramBody,String locale) throws URISyntaxException, JsonProcessingException {
+        ViberKeyboard reservationDuration = new ViberKeyboard();
+        reservationDuration.setInputFieldState("hidden");
+        reservationDuration.setType("keyboard");
+        List<ReservationSlot> listOfAvailableTimeSlots = httpUtil.getAvailableTimeSlots(paramBody);
+        for(ReservationSlot date : listOfAvailableTimeSlots){
+            reservationDuration.addButton(new ViberButton(navigateToMainMenu)
+                    .setText(String.format(stringUtils.getButtonStandard(),date.getStartDate().getHour()+":"+date.getStartDate().getMinute()+"-"+date.getEndDate().getHour()+":"+date.getEndDate().getMinute()))
+                    .setTextSize(ViberButton.TextSize.LARGE)
+                    .setBgColor(stringUtils.getSecondarilyColor())
+                    .setSilent(true)
+                    .setColumns(6)
+                    .setRows(1));
+        }
+        reservationDuration.addButton(new ViberButton(navigateToMainMenu)
+                .setText(localeUtil.getLocalizedMessage("message.return-main-menu",locale))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setBgColor(stringUtils.getSecondarilyColor())
+                .setSilent(true)
+                .setColumns(6)
+                .setRows(1));
+        return reservationDuration;
+    }
     public ViberKeyboard pickReservationDay(Integer duration,String locale) throws URISyntaxException {
         ViberKeyboard reservationDuration = new ViberKeyboard();
         reservationDuration.setInputFieldState("hidden");
         reservationDuration.setType("keyboard");
         List<LocalDate> listOfAvailableDays = httpUtil.getAvailableDays(duration);
         for(LocalDate date : listOfAvailableDays){
-            reservationDuration.addButton(new ViberButton(navigateToMainMenu)
+            reservationDuration.addButton(new ViberButton(listAvailableTimeSlot+date.toString()+":"+duration)
                     .setText(String.format(stringUtils.getButtonStandard(),dateUtil.translateDayValue(date.getDayOfWeek(),locale)+" "+date.getDayOfMonth()+"."+date.getMonthValue()+"."))
                     .setTextSize(ViberButton.TextSize.LARGE)
                     .setBgColor(stringUtils.getSecondarilyColor())

@@ -1,5 +1,6 @@
 package com.payten.restapi.model;
 
+import com.payten.restapi.model.enums.CustomerLocale;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

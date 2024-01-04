@@ -70,6 +70,9 @@ public class Controller {
         } else if (messageText.length() >= 3) {
             userLocale = httpUtil.getUserLocale(userId);
             switch (messageText.substring(0, 3)) {
+                case listAvailableTimeSlot:
+                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.choose-reservation-time", userLocale), keyboardUtil.pickTimeSlot(messageText.substring(3),userLocale));
+                    break;
                 case selectDayReservation:
                     bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.choose-reservation-day", userLocale), keyboardUtil.pickReservationDay(Integer.parseInt(messageText.substring(3)),userLocale));
                     break;
@@ -125,7 +128,7 @@ public class Controller {
         String locale = httpUtil.getUserLocale(viberId);
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         LocalDateTime startDate = LocalDateTime.parse(start, formatter);
-        bot.messageForUser(viberId).postText(localeUtil.getLocalizedMessage("message.update",locale) + startDate.getDayOfMonth() + "." + startDate.getMonthValue() + " " + startDate.getHour() + ":" + startDate.getMinute(), keyboardUtil.getMainMenu(locale));
+        bot.messageForUser(viberId).postText(localeUtil.getLocalizedMessage("message.update",locale) +" "+ startDate.getDayOfMonth() + "." + startDate.getMonthValue() + " " + startDate.getHour() + ":" + startDate.getMinute(), keyboardUtil.getMainMenu(locale));
         logger.info(String.format(controlerLogFormat, "We are sending user information that merchant changed his start time, viberID:", viberId));
 
         return ResponseEntity.ok().build();

@@ -1,6 +1,7 @@
 package com.payten.restapi.util;
 
 import com.payten.restapi.controller.OrderController;
+import com.payten.restapi.model.DTO.SuggestedReservationSlot;
 import com.payten.restapi.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +40,41 @@ public class ReservationUtil {
     private int numberOfTables;
     private static final Logger logger = LoggerFactory.getLogger(ReservationUtil.class);
 
-    public ArrayList<LocalDateTime> getAvailableTimeSlotsForReservation(ArrayList<Order> orderList, Integer durationOfReservation){
-        ArrayList<LocalDateTime> availableTimeSlots = new ArrayList<>();
+    public ArrayList<SuggestedReservationSlot> getAvailableTimeSlotsForReservation(ArrayList<Order> orderList, Integer durationOfReservation,LocalDate targetedDate){
+        ArrayList<SuggestedReservationSlot> availableTimeSlots = new ArrayList<>();
+        ArrayList<SuggestedReservationSlot> reservedSlots = new ArrayList<>();
+        LocalDateTime startWorkingHours;
+        LocalDateTime endWorkingHours;
+        for(Order order: orderList){
+            reservedSlots.add(new SuggestedReservationSlot(order.getStartTime(),order.getEndTime(),order.getTableNumber()));
+        }
+        //TODO Dodaj ovde logiku da raspozna dane sad znamo da vikend nije radan
+        if(targetedDate.getDayOfYear() > LocalDate.now().getDayOfYear()){
+            startWorkingHours = targetedDate.atStartOfDay();
+            startWorkingHours = startWorkingHours.plusMinutes(convertToMinutes(workWeekStart));
+        }
+        else{
+            startWorkingHours = targetedDate.atStartOfDay();
+            startWorkingHours = startWorkingHours.plusMinutes(LocalDateTime.now().getHour() * 60 + 60);
+        }
+        endWorkingHours = targetedDate.atStartOfDay();
+        endWorkingHours = endWorkingHours.plusMinutes(convertToMinutes(workWeekEnd));
+        LocalDateTime currentTime = startWorkingHours;
+        while (currentTime.plusMinutes(durationOfReservation).isBefore(endWorkingHours) || currentTime.plusMinutes(durationOfReservation).isEqual(endWorkingHours)) {
+            boolean slotFound = false;
 
-        return  availableTimeSlots;
+            for (int table = 1; table <= numberOfTables && !slotFound; table++) {
+                LocalDateTime endTime = currentTime.plusMinutes(durationOfReservation);
+                if (isSlotAvailable(currentTime, endTime, table, reservedSlots)) {
+                    availableTimeSlots.add(new SuggestedReservationSlot(currentTime, endTime, table));
+                    slotFound = true; // Stop checking other tables for this time slot
+                }
+            }
+            currentTime = currentTime.plusMinutes(durationOfReservation);
+        }
+
+        return availableTimeSlots;
     }
-
     public ArrayList<LocalDate> getAvailableDaysForReservation(ArrayList<Order> orderList, Integer durationOfReservaton){
     ArrayList<LocalDate> availableDays = new ArrayList<>();
     for(int i = 0; i < 4;i++){
@@ -122,6 +152,16 @@ public class ReservationUtil {
             }
         }
 
+    }
+    private static boolean isSlotAvailable(LocalDateTime startTime, LocalDateTime endTime, int table, ArrayList<SuggestedReservationSlot> reservedSlots) {
+        for (SuggestedReservationSlot reservedSlot : reservedSlots) {
+            if (reservedSlot.getTable().equals(table)
+                    && reservedSlot.getStartDate().isBefore(endTime)
+                    && reservedSlot.getEndDate().isAfter(startTime)) {
+                return false;
+            }
+        }
+        return true;
     }
     public static int convertToMinutes(String time) {
         String[] parts = time.split(":");
