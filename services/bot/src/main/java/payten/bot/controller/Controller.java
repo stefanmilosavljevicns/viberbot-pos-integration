@@ -133,7 +133,7 @@ public class Controller {
     }
 
     @PutMapping("${viber.bot-path}" + "/acceptOrder")
-    ResponseEntity<?> updateStartTime(@RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
+    ResponseEntity<?> acceptOrder(@RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
         bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         String locale = httpUtil.getUserLocale(viberId);
         bot.messageForUser(viberId).postText(localeUtil.getLocalizedMessage("message.accept-order",locale), keyboardUtil.getMainMenu(locale));
@@ -141,7 +141,7 @@ public class Controller {
         return ResponseEntity.ok().build();
     }
     @PutMapping("${viber.bot-path}" + "/declineOrder")
-    ResponseEntity<?> updateStartTime(@RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
+    ResponseEntity<?> declineOrder(@RequestParam("viberId") String viberId) throws URISyntaxException, JsonProcessingException {
         bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         String locale = httpUtil.getUserLocale(viberId);
         bot.messageForUser(viberId).postText(localeUtil.getLocalizedMessage("message.decline-order",locale), keyboardUtil.getMainMenu(locale));
