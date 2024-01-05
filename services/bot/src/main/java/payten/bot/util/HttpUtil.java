@@ -94,14 +94,13 @@ public class HttpUtil {
         LocalDateTime endDate = LocalDateTime.parse(splitResponse[1]);
         int tableNumber = Integer.parseInt(splitResponse[2]);
         RestTemplate restTemplate = new RestTemplate();
-        OrderPOS orderPOS = new OrderPOS(startDate,endDate,"PENDING",viberId,customerName,tableNumber);
+        OrderPOS orderPOS = new OrderPOS(startDate,endDate,"PENDING",customerName,tableNumber,viberId);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<OrderPOS> requestEntity = new HttpEntity<>(orderPOS, headers);
         ResponseEntity<String> responseEntity = restTemplate.exchange(stringUtils.getRestAdress() + addOrder, HttpMethod.POST, requestEntity, String.class);
         logger.info(String.format(httpLogFormat, addOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
-        //Inserting selected service to DB in case User doesn't have field in DB here we create it.
 
 
     public ArrayList<OrderPOS> get24HOrderPOS () {
