@@ -98,7 +98,7 @@ public class HttpUtil {
         orderPOS.setCustomerName(customerName);
         orderPOS.setEndTime(endDate);
         orderPOS.setStartTime(startDate);
-        orderPOS.setState("IN_PROGRESS");
+        orderPOS.setState("PENDING");
         orderPOS.setViberID(viberId);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
