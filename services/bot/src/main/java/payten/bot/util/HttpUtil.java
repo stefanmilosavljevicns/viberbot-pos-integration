@@ -87,7 +87,6 @@ public class HttpUtil {
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT,requestEntity,String.class);
         logger.info(String.format(httpLogFormat, changeLocale, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
-    //In this endpoint we are sending order to POS and clearing cart for customer
     public void sendOrder(String viberId, String responseBody, String customerName) throws URISyntaxException {
         String[] splitResponse = responseBody.split("/");
         LocalDateTime startDate = LocalDateTime.parse(splitResponse[0]);
@@ -95,6 +94,7 @@ public class HttpUtil {
         int tableNumber = Integer.parseInt(splitResponse[2]);
         RestTemplate restTemplate = new RestTemplate();
         OrderPOS orderPOS = new OrderPOS(startDate,endDate,"PENDING",customerName,viberId,tableNumber);
+        logger.info(String.valueOf(orderPOS.getTable()));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<OrderPOS> requestEntity = new HttpEntity<>(orderPOS, headers);
