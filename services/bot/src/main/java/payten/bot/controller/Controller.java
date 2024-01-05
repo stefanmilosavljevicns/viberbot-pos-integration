@@ -71,6 +71,7 @@ public class Controller {
             userLocale = httpUtil.getUserLocale(userId);
             switch (messageText.substring(0, 3)) {
                 case sendOrderToPOS:
+                    logger.info("Gledaj" + messageText.substring(3));
                     httpUtil.sendOrder(userId,messageText.substring(3),senderName);
                     bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.finish-reservation", userLocale), keyboardUtil.getMainMenu(userLocale));
                     break;
