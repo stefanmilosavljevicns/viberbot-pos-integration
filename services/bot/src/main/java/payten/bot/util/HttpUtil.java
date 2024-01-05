@@ -107,7 +107,14 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, addOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
 
-
+    public Boolean checkIfUserCanOrder(String viberId) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+        URI uri = new URI(stringUtils.getRestAdress() + checkIfUserCanOrder + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8));
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
+        Boolean status = Boolean.valueOf(responseEntity.getBody());
+        logger.info(String.format(httpLogFormat, checkIfUserCanOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
+        return status;
+    }
     public ArrayList<OrderPOS> get24HOrderPOS () {
         RestTemplate restTemplate = new RestTemplate();
         String endpointUrl = stringUtils.getRestAdress() + getOrdersWithin24Hourse;      

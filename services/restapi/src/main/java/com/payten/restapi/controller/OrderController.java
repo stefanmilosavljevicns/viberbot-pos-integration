@@ -62,7 +62,16 @@ public class OrderController {
         List<Order> orders = orderRepository.findByViberId(viberId);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
+    @GetMapping("/checkIfUserCanOrder")
+    public ResponseEntity<Boolean> checkIfUserCanOrder(@RequestParam String viberId) {
+        if (!orderRepository.checkIfUserCanOrder(viberId).isEmpty()) {
+            logger.info(String.format(controllerLogFormat, "/checkIfUserCanOrder", false, HttpStatus.OK));
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+        logger.info(String.format(controllerLogFormat, "/checkIfUserCanOrder", true, HttpStatus.OK));
+        return new ResponseEntity<>(true, HttpStatus.OK);
 
+    }
     @GetMapping("/findAvailableDays")
     public ResponseEntity<List<LocalDate>> findAvailableDays(@RequestParam("durationMinutes") Integer durationMinutes) {
         ArrayList<Order> orders = orderRepository.findActiveReservations();

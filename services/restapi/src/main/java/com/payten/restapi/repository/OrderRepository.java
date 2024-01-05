@@ -11,9 +11,9 @@ import org.springframework.data.mongodb.repository.Query;
 
     public interface OrderRepository extends MongoRepository<Order, String> {
         @Query("{ 'startTime': { $gt: ?0, $lt: ?1 } }")
-        List<Order> findUsersToRemindForReservation(LocalDateTime start, LocalDateTime end);          
-        List<Order> findByStartTimeLessThanAndEndTimeGreaterThan(LocalDateTime end, LocalDateTime start);
-        List<Order> findByStartTimeGreaterThan(LocalDateTime twentyFourHoursAgo);
+        List<Order> findUsersToRemindForReservation(LocalDateTime start, LocalDateTime end);
+        @Query(value = "{'viberID' : ?0, 'state' : 'PENDING' }")
+        List<Order> checkIfUserCanOrder(String name);
         @Query(value = "{'viberID' : ?0, 'state' : { $in: [ 'COMPLETED', 'DECLINED' ] } }")
         List<Order> findByViberId(String name);
         @Query(value = "{'state' : { $in: [ 'PENDING', 'IN_PROGRESS' ] } }")

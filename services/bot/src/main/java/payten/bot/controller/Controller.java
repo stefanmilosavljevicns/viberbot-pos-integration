@@ -71,9 +71,13 @@ public class Controller {
             userLocale = httpUtil.getUserLocale(userId);
             switch (messageText.substring(0, 3)) {
                 case sendOrderToPOS:
-                    logger.info("Gledaj" + messageText.substring(3));
-                    httpUtil.sendOrder(userId,messageText.substring(3),senderName);
-                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.finish-reservation", userLocale), keyboardUtil.getMainMenu(userLocale));
+                    if(httpUtil.checkIfUserCanOrder(userId)){
+                        httpUtil.sendOrder(userId,messageText.substring(3),senderName);
+                        bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.finish-reservation", userLocale), keyboardUtil.getMainMenu(userLocale));
+                    }
+                    else{
+                        bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.already-have-reservation", userLocale), keyboardUtil.getMainMenu(userLocale));
+                    }
                     break;
                 case listAvailableTimeSlot:
                     bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.choose-reservation-time", userLocale), keyboardUtil.pickTimeSlot(messageText.substring(3),userLocale));
