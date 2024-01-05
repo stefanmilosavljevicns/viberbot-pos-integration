@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static payten.bot.util.BotConstants.*;
@@ -87,8 +88,13 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, changeLocale, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
     //In this endpoint we are sending order to POS and clearing cart for customer
-    public void sendOrder(OrderPOS orderPOS, String viberId) throws URISyntaxException {
+    public void sendOrder(String viberId, String responseBody, String customerName) throws URISyntaxException {
+        String[] splitResponse = responseBody.split("/");
+        LocalDateTime startDate = LocalDateTime.parse(splitResponse[0]);
+        LocalDateTime endDate = LocalDateTime.parse(splitResponse[1]);
+        Integer table = Integer.valueOf(splitResponse[2]);
         RestTemplate restTemplate = new RestTemplate();
+        OrderPOS orderPOS = new OrderPOS(startDate,endDate,"PENDING",viberId,customerName,table);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<OrderPOS> requestEntity = new HttpEntity<>(orderPOS, headers);
@@ -96,14 +102,7 @@ public class HttpUtil {
         logger.info(String.format(httpLogFormat, addOrder, responseEntity.getStatusCode(), responseEntity.getBody()));
     }
         //Inserting selected service to DB in case User doesn't have field in DB here we create it.
-    public void updateStartTime(String viberId,String startDate) throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = new URI(stringUtils.getRestAdress() + updateStartTime + "?viberId=" + URLEncoder.encode(viberId, StandardCharsets.UTF_8) +"&startDate="+startDate);
-        HttpEntity<String> requestEntity = new HttpEntity<>("", headers);        
-        ResponseEntity<String> responseEntityPut = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
-    }
+
 
     public ArrayList<OrderPOS> get24HOrderPOS () {
         RestTemplate restTemplate = new RestTemplate();

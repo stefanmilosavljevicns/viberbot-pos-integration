@@ -89,7 +89,7 @@ public class KeyboardUtil {
         reservationDuration.setType("keyboard");
         List<ReservationSlot> listOfAvailableTimeSlots = httpUtil.getAvailableTimeSlots(paramBody);
         for(ReservationSlot date : listOfAvailableTimeSlots){
-            reservationDuration.addButton(new ViberButton(navigateToMainMenu)
+            reservationDuration.addButton(new ViberButton(sendOrderToPOS+date.getStartDate().toString()+"/"+date.getEndDate().toString()+"/"+date.getTable())
                     .setText(String.format(stringUtils.getButtonStandard(),date.getStartDate().getHour()+":"+date.getStartDate().getMinute()+"-"+date.getEndDate().getHour()+":"+date.getEndDate().getMinute()))
                     .setTextSize(ViberButton.TextSize.LARGE)
                     .setBgColor(stringUtils.getSecondarilyColor())

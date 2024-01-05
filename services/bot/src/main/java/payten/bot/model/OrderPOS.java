@@ -9,16 +9,25 @@ public class OrderPOS {
     private String state;
     private String viberID;
     private String customerName;
+    private Integer table;
 
 
-    public OrderPOS(LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName) {
+    public OrderPOS(LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName, Integer table) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = state;
         this.viberID = viberID;
         this.customerName = customerName;
+        this.table = table;
     }
 
+    public Integer getTable() {
+        return table;
+    }
+
+    public void setTable(Integer table) {
+        this.table = table;
+    }
 
     public OrderPOS() {
         // Default constructor for JSON deserilization

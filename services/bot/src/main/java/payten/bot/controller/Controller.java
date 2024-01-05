@@ -70,6 +70,10 @@ public class Controller {
         } else if (messageText.length() >= 3) {
             userLocale = httpUtil.getUserLocale(userId);
             switch (messageText.substring(0, 3)) {
+                case sendOrderToPOS:
+                    httpUtil.sendOrder(userId,messageText.substring(3),senderName);
+                    bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.finish-reservation", userLocale), keyboardUtil.getMainMenu(userLocale));
+                    break;
                 case listAvailableTimeSlot:
                     bot.messageForUser(userId).postText(localeUtil.getLocalizedMessage("message.choose-reservation-time", userLocale), keyboardUtil.pickTimeSlot(messageText.substring(3),userLocale));
                     break;
