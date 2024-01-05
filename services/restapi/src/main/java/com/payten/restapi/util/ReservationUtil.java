@@ -70,7 +70,7 @@ public class ReservationUtil {
                     slotFound = true; // Stop checking other tables for this time slot
                 }
             }
-            currentTime = currentTime.plusMinutes(30);
+            currentTime = currentTime.plusMinutes(durationOfReservation);
         }
 
         return availableTimeSlots;
