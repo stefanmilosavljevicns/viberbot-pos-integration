@@ -92,7 +92,7 @@ public class HttpUtil {
         String[] splitResponse = responseBody.split("/");
         LocalDateTime startDate = LocalDateTime.parse(splitResponse[0]);
         LocalDateTime endDate = LocalDateTime.parse(splitResponse[1]);
-        Integer table = Integer.valueOf(splitResponse[2]);
+        int table = Integer.parseInt(splitResponse[2]);
         RestTemplate restTemplate = new RestTemplate();
         OrderPOS orderPOS = new OrderPOS(startDate,endDate,"PENDING",viberId,customerName,table);
         HttpHeaders headers = new HttpHeaders();
