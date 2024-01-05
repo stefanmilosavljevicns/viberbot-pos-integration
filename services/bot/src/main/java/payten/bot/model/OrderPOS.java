@@ -9,10 +9,10 @@ public class OrderPOS {
     private String state;
     private String viberID;
     private String customerName;
-    private Integer tableNumber;
+    private int tableNumber;
 
 
-    public OrderPOS(LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName, Integer tableNumber) {
+    public OrderPOS(LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName, int tableNumber) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = state;
@@ -21,11 +21,11 @@ public class OrderPOS {
         this.tableNumber = tableNumber;
     }
 
-    public Integer getTable() {
+    public int getTable() {
         return tableNumber;
     }
 
-    public void setTable(Integer table) {
+    public void setTable(int table) {
         this.tableNumber = table;
     }
 
