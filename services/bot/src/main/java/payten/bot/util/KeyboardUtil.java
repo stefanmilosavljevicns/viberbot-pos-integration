@@ -87,15 +87,22 @@ public class KeyboardUtil {
         ViberKeyboard reservationDuration = new ViberKeyboard();
         reservationDuration.setInputFieldState("hidden");
         reservationDuration.setType("keyboard");
+        boolean primarColor = true;
         List<ReservationSlot> listOfAvailableTimeSlots = httpUtil.getAvailableTimeSlots(paramBody);
         for(ReservationSlot date : listOfAvailableTimeSlots){
             reservationDuration.addButton(new ViberButton(sendOrderToPOS+date.getStartDate().toString()+"/"+date.getEndDate().toString()+"/"+date.getTable())
                     .setText(String.format(stringUtils.getButtonStandard(),date.getStartDate().getHour()+":"+date.getStartDate().getMinute()+"-"+date.getEndDate().getHour()+":"+date.getEndDate().getMinute()))
                     .setTextSize(ViberButton.TextSize.LARGE)
-                    .setBgColor(stringUtils.getSecondarilyColor())
+                    .setBgColor(primarColor ? stringUtils.getPrimarilyColor():stringUtils.getSecondarilyColor())
                     .setSilent(true)
                     .setColumns(6)
                     .setRows(1));
+            if(primarColor) {
+                primarColor = false;
+            }
+            else {
+                primarColor = true;
+            }
         }
         return reservationDuration;
     }
@@ -103,16 +110,24 @@ public class KeyboardUtil {
         ViberKeyboard reservationDuration = new ViberKeyboard();
         reservationDuration.setInputFieldState("hidden");
         reservationDuration.setType("keyboard");
+        boolean primarColor = true;
         List<LocalDate> listOfAvailableDays = httpUtil.getAvailableDays(duration);
         for(LocalDate date : listOfAvailableDays){
             reservationDuration.addButton(new ViberButton(listAvailableTimeSlot+date.toString()+":"+duration)
                     .setText(String.format(stringUtils.getButtonStandard(),dateUtil.translateDayValue(date.getDayOfWeek(),locale)+" "+date.getDayOfMonth()+"."+date.getMonthValue()+"."))
                     .setTextSize(ViberButton.TextSize.LARGE)
-                    .setBgColor(stringUtils.getSecondarilyColor())
+                    .setBgColor(primarColor ? stringUtils.getPrimarilyColor():stringUtils.getSecondarilyColor())
                     .setSilent(true)
                     .setColumns(6)
                     .setRows(1));
-        }
+                if(primarColor) {
+                    primarColor = false;
+                }
+                else {
+                    primarColor = true;
+                }
+
+            }
         return reservationDuration;
     }
 
@@ -148,34 +163,7 @@ public class KeyboardUtil {
                 .setSilent(true)
                 .setColumns(6)
                 .setRows(1));
-        reservationDuration.addButton(new ViberButton(navigateToMainMenu)
-                .setText(localeUtil.getLocalizedMessage("message.return-main-menu",locale))
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getSecondarilyColor())
-                .setSilent(true)
-                .setColumns(6)
-                .setRows(1));
         return reservationDuration;
-    }
-    public ViberKeyboard setYesNo(){
-        confirmationKeyboard = new ViberKeyboard();
-        confirmationKeyboard.setInputFieldState("hidden");
-        confirmationKeyboard.setType("keyboard");
-        confirmationKeyboard.addButton(new ViberButton(agreeWithCart)
-                .setText(stringUtils.getButtonYes())
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getPrimarilyColor())
-                .setColumns(3)
-                .setSilent(true)
-                .setRows(2));
-        confirmationKeyboard.addButton(new ViberButton(navigateToMainMenu)
-                .setText(stringUtils.getButtonNo())
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getSecondarilyColor())
-                .setSilent(true)
-                .setColumns(3)
-                .setRows(2));
-        return confirmationKeyboard;
     }
     public ViberKeyboard historyOfReservationKeyboard(String viberId,String userLocale) throws URISyntaxException {
         ArrayList<OrderPOS> listOfReservations = httpUtil.getHistoryOfOrders(viberId);
