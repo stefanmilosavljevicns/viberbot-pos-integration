@@ -97,13 +97,6 @@ public class KeyboardUtil {
                     .setColumns(6)
                     .setRows(1));
         }
-        reservationDuration.addButton(new ViberButton(navigateToMainMenu)
-                .setText(localeUtil.getLocalizedMessage("message.return-main-menu",locale))
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getSecondarilyColor())
-                .setSilent(true)
-                .setColumns(6)
-                .setRows(1));
         return reservationDuration;
     }
     public ViberKeyboard pickReservationDay(Integer duration,String locale) throws URISyntaxException {
@@ -120,13 +113,6 @@ public class KeyboardUtil {
                     .setColumns(6)
                     .setRows(1));
         }
-        reservationDuration.addButton(new ViberButton(navigateToMainMenu)
-                .setText(localeUtil.getLocalizedMessage("message.return-main-menu",locale))
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getSecondarilyColor())
-                .setSilent(true)
-                .setColumns(6)
-                .setRows(1));
         return reservationDuration;
     }
 
@@ -219,14 +205,6 @@ public class KeyboardUtil {
                         .setTextVAlign(ViberButton.TextAlign.MIDDLE));
             }
         }
-                historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
-                        .setBgColor(stringUtils.getSecondarilyColor())
-                        .setText(String.format(stringUtils.getButtonStandard(), "Test"))
-                        .setColumns(4)
-                        .setRows(1)
-                        .setSilent(true)
-                        .setTextSize(ViberButton.TextSize.MEDIUM)
-                        .setTextHAlign(ViberButton.TextAlign.LEFT));
                 historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
                         .setImage(stringUtils.getCoffeMug())
                         .setBgColor(stringUtils.getPrimarilyColor())
