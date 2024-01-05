@@ -94,7 +94,9 @@ public class HttpUtil {
         LocalDateTime endDate = LocalDateTime.parse(splitResponse[1]);
         int table = Integer.parseInt(splitResponse[2]);
         RestTemplate restTemplate = new RestTemplate();
+        logger.info(String.valueOf(table));
         OrderPOS orderPOS = new OrderPOS(startDate,endDate,"PENDING",viberId,customerName,table);
+        orderPOS.setTable(table);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<OrderPOS> requestEntity = new HttpEntity<>(orderPOS, headers);
