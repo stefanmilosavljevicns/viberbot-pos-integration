@@ -22,11 +22,12 @@ public class Order {
     private Integer tableNumber;
     private String viberID;
 
-    public Order(LocalDateTime startTime, LocalDateTime endTime, OrderState state, String customerName, String viberID) {
+    public Order(LocalDateTime startTime, LocalDateTime endTime, OrderState state, String customerName, String viberID, Integer tableNumber) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = state;
         this.customerName = customerName;
         this.viberID = viberID;
+        this.tableNumber = tableNumber;
     }
 }
