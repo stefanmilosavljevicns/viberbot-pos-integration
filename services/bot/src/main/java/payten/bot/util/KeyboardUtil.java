@@ -95,7 +95,7 @@ public class KeyboardUtil {
                     date.getStartDate().getHour()+":"+date.getStartDate().getMinute()+"-";
             buttonText+= date.getEndDate().getMinute()==0?
                     date.getEndDate().getHour()+":00":
-                    date.getEndDate().getHour()+":"+date.getStartDate().getMinute();
+                    date.getEndDate().getHour()+":"+date.getEndDate().getMinute();
             reservationDuration.addButton(new ViberButton(sendOrderToPOS+date.getStartDate().toString()+"/"+date.getEndDate().toString()+"/"+date.getTable())
                     .setText(String.format(stringUtils.getButtonStandard(),buttonText))
                     .setTextSize(ViberButton.TextSize.LARGE)
