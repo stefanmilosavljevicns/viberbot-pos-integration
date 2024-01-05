@@ -12,13 +12,13 @@ public class OrderPOS {
     private Integer tableNumber;
 
 
-    public OrderPOS(LocalDateTime startTime, LocalDateTime endTime, String state,String customerName, Integer tableNumber,String viberID) {
+    public OrderPOS(LocalDateTime startTime, LocalDateTime endTime, String state, String customerName, String viberID, Integer tableNumber) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = state;
         this.customerName = customerName;
-        this.tableNumber = tableNumber;
         this.viberID = viberID;
+        this.tableNumber = tableNumber;
     }
 
 
