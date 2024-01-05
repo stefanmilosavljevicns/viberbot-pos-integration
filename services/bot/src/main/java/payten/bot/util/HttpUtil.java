@@ -94,7 +94,7 @@ public class HttpUtil {
         int tableNumber = Integer.parseInt(splitResponse[2]);
         RestTemplate restTemplate = new RestTemplate();
         OrderPOS orderPOS = new OrderPOS();
-        orderPOS.setTable(tableNumber);
+        orderPOS.setTableNumber(tableNumber);
         orderPOS.setCustomerName(customerName);
         orderPOS.setEndTime(endDate);
         orderPOS.setStartTime(startDate);
