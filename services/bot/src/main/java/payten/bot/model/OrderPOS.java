@@ -9,24 +9,24 @@ public class OrderPOS {
     private String state;
     private String viberID;
     private String customerName;
-    private Integer table;
+    private Integer tableNumber;
 
 
-    public OrderPOS(LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName, Integer table) {
+    public OrderPOS(LocalDateTime startTime, LocalDateTime endTime, String state, String viberID,String customerName, Integer tableNumber) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.state = state;
         this.viberID = viberID;
         this.customerName = customerName;
-        this.table = table;
+        this.tableNumber = tableNumber;
     }
 
     public Integer getTable() {
-        return table;
+        return tableNumber;
     }
 
     public void setTable(Integer table) {
-        this.table = table;
+        this.tableNumber = table;
     }
 
     public OrderPOS() {
