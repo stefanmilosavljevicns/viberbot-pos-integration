@@ -205,15 +205,6 @@ public class KeyboardUtil {
                         .setTextVAlign(ViberButton.TextAlign.MIDDLE));
             }
         }
-                historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
-                        .setImage(stringUtils.getCoffeMug())
-                        .setBgColor(stringUtils.getPrimarilyColor())
-                        .setColumns(2)
-                        .setRows(1)
-                        .setSilent(true)
-                        .setTextSize(ViberButton.TextSize.MEDIUM).setSilent(true)
-                        .setTextHAlign(ViberButton.TextAlign.MIDDLE)
-                        .setTextVAlign(ViberButton.TextAlign.MIDDLE));
         historyOfReservationKeyboard.addButton(new ViberButton(navigateToMainMenu)
                 .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.return-main-menu", userLocale)))
                 .setTextSize(ViberButton.TextSize.LARGE)
