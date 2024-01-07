@@ -175,7 +175,7 @@ public class KeyboardUtil {
         historyOfReservationKeyboard.setType("keyboard");
         if(!listOfReservations.isEmpty()){
             for(OrderPOS reservationItem:listOfReservations){
-                String formattingReservations = reservationItem.getStartTime().format(formatter) + "\n" + reservationItem.getState();
+                String formattingReservations = reservationItem.getStartTime().format(formatter) + "\n" + localeUtil.getLocalizedMessage(reservationItem.getState(),userLocale);
                 historyOfReservationKeyboard.addButton(new ViberButton(ignoreUserInput)
                         .setBgColor(stringUtils.getSecondarilyColor())
                         .setText(String.format(stringUtils.getButtonStandard(), formattingReservations))
