@@ -17,7 +17,14 @@ public class DateUtil {
     private LocaleUtil localeUtil;
 
 
-
+    public String formatMinutes(int minutes){
+        if(minutes == 0){
+            return "00";
+        }
+        else {
+            return String.valueOf(minutes);
+        }
+    }
     public LocalDateTime setEndDate(LocalDateTime startDate,double minutes) {
         return startDate.plusMinutes((long) minutes);
     }

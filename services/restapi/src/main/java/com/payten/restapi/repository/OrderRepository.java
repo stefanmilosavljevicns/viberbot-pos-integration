@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.repository.Query;
         List<Order> findUsersToRemindForReservation(LocalDateTime start, LocalDateTime end);
         @Query(value = "{'viberID' : ?0, 'state' : 'PENDING' }")
         List<Order> checkIfUserCanOrder(String name);
-        @Query(value = "{'viberID' : ?0, 'state' : { $in: [ 'COMPLETED', 'DECLINED' ] } }")
+        @Query(value = "{'viberID' : ?0}")
         List<Order> findByViberId(String name);
         @Query(value = "{'state' : { $in: [ 'PENDING', 'IN_PROGRESS' ] } }")
         ArrayList<Order> findActiveReservations();

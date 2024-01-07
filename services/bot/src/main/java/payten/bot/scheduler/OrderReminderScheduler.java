@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import payten.bot.model.OrderPOS;
+import payten.bot.util.DateUtil;
 import payten.bot.util.HttpUtil;
 import payten.bot.util.KeyboardUtil;
 import com.payten.viberutil.ViberBot;
@@ -26,6 +27,8 @@ public class OrderReminderScheduler {
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
+    private DateUtil dateUtil;
+    @Autowired
     private KeyboardUtil keyboardUtil;
     @Autowired
     private LocaleUtil localeUtil;
@@ -37,7 +40,7 @@ public class OrderReminderScheduler {
         if(activeUsers.size() > 0){
             for(OrderPOS orderPos : activeUsers){
                 String userLocale = httpUtil.getUserLocale(orderPos.getViberID());
-                bot.messageForUser(orderPos.getViberID()).postText(localeUtil.getLocalizedMessage("message.reminder-reservation",userLocale) + orderPos.getStartTime().getHour() +":" + orderPos.getStartTime().getMinute(),keyboardUtil.getMainMenu(userLocale));
+                bot.messageForUser(orderPos.getViberID()).postText(localeUtil.getLocalizedMessage("message.reminder-reservation",userLocale) + orderPos.getStartTime().getHour() +":" + dateUtil.formatMinutes(orderPos.getStartTime().getMinute()),keyboardUtil.getMainMenu(userLocale));
                 logger.info(String.format(controlerLogFormat,"Reminding user for his reservation",orderPos.getViberID()));
             }
         }

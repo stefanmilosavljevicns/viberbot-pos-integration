@@ -90,12 +90,8 @@ public class KeyboardUtil {
         boolean primarColor = true;
         List<ReservationSlot> listOfAvailableTimeSlots = httpUtil.getAvailableTimeSlots(paramBody);
         for(ReservationSlot date : listOfAvailableTimeSlots){
-            String buttonText = date.getStartDate().getMinute()==0?
-                    date.getStartDate().getHour()+":00-":
-                    date.getStartDate().getHour()+":"+date.getStartDate().getMinute()+"-";
-            buttonText+= date.getEndDate().getMinute()==0?
-                    date.getEndDate().getHour()+":00":
-                    date.getEndDate().getHour()+":"+date.getEndDate().getMinute();
+            String buttonText = date.getStartDate().getHour()+":"+dateUtil.formatMinutes(date.getStartDate().getMinute())+"-"+
+                    date.getEndDate().getHour()+":"+dateUtil.formatMinutes(date.getEndDate().getMinute());
             reservationDuration.addButton(new ViberButton(sendOrderToPOS+date.getStartDate().toString()+"/"+date.getEndDate().toString()+"/"+date.getTable())
                     .setText(String.format(stringUtils.getButtonStandard(),buttonText))
                     .setTextSize(ViberButton.TextSize.LARGE)
