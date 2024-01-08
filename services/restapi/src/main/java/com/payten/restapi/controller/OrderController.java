@@ -87,7 +87,12 @@ public class OrderController {
         return new ResponseEntity<>(availableDays, HttpStatus.OK);
     }
 
-
+    @GetMapping("/findAvailableTimeSlotsForReservationPOS")
+    public ResponseEntity<List<SuggestedReservationSlot>> findAvailableTimeSlotsForReservationPOS(@RequestParam("durationMin") Integer durationMin,@RequestParam("reservationDay") LocalDate reservationDay) {
+        ArrayList<Order> orders = orderRepository.findOrdersByDate(reservationDay);
+        List<SuggestedReservationSlot> availableDays = reservationUtil.getAvailableTimeSlotsForReservation(orders,durationMin,reservationDay);
+        return new ResponseEntity<>(availableDays, HttpStatus.OK);
+    }
     @PutMapping("/acceptOrder/{id}")
     public ResponseEntity<Order> acceptOrder(@PathVariable("id") String id) throws URISyntaxException, JsonProcessingException {
         Optional<Order> existingOrder = orderRepository.findById(id);
