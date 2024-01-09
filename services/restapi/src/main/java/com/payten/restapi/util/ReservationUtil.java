@@ -82,7 +82,7 @@ public class ReservationUtil {
         LocalDateTime isDayAvailable = LocalDateTime.now().plusDays(i);
         if(i==0){
             int currentMinutes = isDayAvailable.getHour() * 60 + isDayAvailable.getMinute();
-            totalWorkingMinutes = getTotalWorkingTimeInMinutesForCurrentDay(isDayAvailable,currentMinutes) * numberOfTables;
+            totalWorkingMinutes = getTotalWorkingTimeInMinutesForCurrentDay(isDayAvailable,currentMinutes,durationOfReservaton) * numberOfTables;
         }
         else{
             totalWorkingMinutes = getTotalWorkingTimeInMinutes(isDayAvailable) * numberOfTables;
@@ -117,40 +117,45 @@ public class ReservationUtil {
 
     }
 
-    private int getTotalWorkingTimeInMinutesForCurrentDay(LocalDateTime checkDay,int currentTimeInMinutes){
-        if(checkDay.getDayOfWeek()== DayOfWeek.SATURDAY){
-            if(currentTimeInMinutes > convertToMinutes(workSaturdayEnd)){
-                return 0;
-            }
-            else if(currentTimeInMinutes > convertToMinutes(workSaturdayStart)){
-                return convertToMinutes(workSaturdayEnd) - currentTimeInMinutes;
-            }
-            else{
-                return convertToMinutes(workSaturdayEnd) - convertToMinutes(workSaturdayStart);
-            }
+    private int getTotalWorkingTimeInMinutesForCurrentDay(LocalDateTime checkDay,int currentTimeInMinutes,int durationOfReservaton){
+        int workingMinutes = 0;
+        switch(checkDay.getDayOfWeek()) {
+            case SATURDAY:
+                if(currentTimeInMinutes + durationOfReservaton > convertToMinutes(workSaturdayEnd)){
+                    workingMinutes = 0;
+                }
+                else if(currentTimeInMinutes > convertToMinutes(workSaturdayStart)){
+                    workingMinutes = convertToMinutes(workSaturdayEnd) - currentTimeInMinutes;
+                }
+                else{
+                    workingMinutes = convertToMinutes(workSaturdayEnd) - convertToMinutes(workSaturdayStart);
+                }
+                break;
+            case SUNDAY:
+                if(currentTimeInMinutes + durationOfReservaton > convertToMinutes(workSundayEnd)){
+                    workingMinutes = 0;
+                }
+                else if(currentTimeInMinutes > convertToMinutes(workSundayStart)){
+                    workingMinutes = convertToMinutes(workSundayEnd) - currentTimeInMinutes;
+                }
+                else{
+                    workingMinutes = convertToMinutes(workSundayEnd) - convertToMinutes(workSundayStart);
+                }
+                break;
+            default:
+                if(currentTimeInMinutes + durationOfReservaton > convertToMinutes(workWeekEnd)){
+                    workingMinutes = 0;
+                }
+                else if(currentTimeInMinutes > convertToMinutes(workWeekStart)){
+                    workingMinutes = convertToMinutes(workWeekEnd) - currentTimeInMinutes;
+                }
+                else{
+                    workingMinutes = convertToMinutes(workWeekEnd) - convertToMinutes(workWeekStart);
+                }
+                break;
         }
-        else if(checkDay.getDayOfWeek() == DayOfWeek.SUNDAY){
-            if(currentTimeInMinutes > convertToMinutes(workSundayEnd)){
-                return 0;
-            }
-            else if(currentTimeInMinutes > convertToMinutes(workSundayStart)){
-                return convertToMinutes(workSundayEnd) - currentTimeInMinutes;
-            }
-            else{
-                return convertToMinutes(workSundayEnd) - convertToMinutes(workSundayStart);
-            }
-        }
-        else{
-            if(currentTimeInMinutes > convertToMinutes(workWeekEnd)){
-                return 0;
-            }
-            else if(currentTimeInMinutes > convertToMinutes(workWeekStart)){
-                return convertToMinutes(workWeekEnd) - currentTimeInMinutes;
-            }
-            else{
-                return convertToMinutes(workWeekEnd) - convertToMinutes(workWeekStart);
-            }
-        }
+        return workingMinutes;
+
 
     }
     private static boolean isSlotAvailable(LocalDateTime startTime, LocalDateTime endTime, int table, ArrayList<SuggestedReservationSlot> reservedSlots) {

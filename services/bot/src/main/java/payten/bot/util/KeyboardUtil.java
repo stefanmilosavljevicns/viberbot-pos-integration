@@ -130,6 +130,12 @@ public class KeyboardUtil {
                 }
 
             }
+        reservationDuration.addButton(new ViberButton(navigateToMainMenu)
+                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.return-main-menu", userLocale)))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setSilent(true)
+                .setRows(1)
+                .setBgColor(stringUtils.getSecondarilyColor()));
         return reservationDuration;
     }
 
