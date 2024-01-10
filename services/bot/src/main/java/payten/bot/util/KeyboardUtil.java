@@ -1,5 +1,4 @@
 package payten.bot.util;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,6 +105,12 @@ public class KeyboardUtil {
                 primarColor = true;
             }
         }
+        reservationDuration.addButton(new ViberButton(navigateToMainMenu)
+                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.return-main-menu", userLocale)))
+                .setTextSize(ViberButton.TextSize.LARGE)
+                .setSilent(true)
+                .setRows(1)
+                .setBgColor(stringUtils.getSecondarilyColor()));
         return reservationDuration;
     }
     public ViberKeyboard pickReservationDay(Integer duration,String locale) throws URISyntaxException {
