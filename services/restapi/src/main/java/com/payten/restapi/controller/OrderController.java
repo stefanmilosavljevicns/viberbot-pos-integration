@@ -151,7 +151,7 @@ public class OrderController {
         Order updatedOrder = existingOrder.get();
         updatedOrder.setStartTime(startDate);
         updatedOrder.setEndTime(startDate.plusMinutes(reservationDuration.toMinutes()));
-        if(!updatedOrder.getViberID().isBlank()){
+        if(updatedOrder.getViberID() != null && !updatedOrder.getViberID().isBlank()){
             botUtil.notifyUserForChangeOfReservation(updatedOrder.getViberID(),startDate.toString());
         }
         logger.info(String.format(controllerLogFormat, "updateStartTime", "updatedOrder", HttpStatus.OK));
