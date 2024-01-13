@@ -1,15 +1,15 @@
 version: "3.3"
 services:
-    food-bot:
-      container_name: bot
+    viber-bot:      
       image: bot:latest
-      restart: on-failure
       ports:
         - "9943:9943"
       stdin_open: true
       tty: true
       networks:
-        - nginx-net
+        nginx-net:
+          ipv4_address: 10.0.1.10
+
       environment:
         - LANG=C.UTF-8
 

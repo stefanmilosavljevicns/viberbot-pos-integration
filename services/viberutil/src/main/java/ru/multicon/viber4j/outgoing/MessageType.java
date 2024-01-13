@@ -16,7 +16,7 @@ public enum MessageType {
     CAROUSEL("rich_media"),
     URL("url");
 
-    private String keyName;
+    private final String keyName;
 
     MessageType(String keyName) {
         this.keyName = keyName;

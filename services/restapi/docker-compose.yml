@@ -1,30 +1,17 @@
 version: "3.3"
 services:
-    food-rest:
-      image: restapi:latest
-      restart: on-failure
-      container_name: rest
-      environment:
-        - "spring.data.mongodb.uri=mongodb://root:test@food-mongo:27055/test?authSource=admin&authMechanism=SCRAM-SHA-1"
-        - "rest.path=/api/v1"
-      ports:
-        - "9097:9097"
-      stdin_open: true
-      tty: true
-      depends_on:
-        - food-mongo
-      networks:
-        - nginx-net
-    food-mongo:
+    mongo-db:
       image: mongo:4.2.0
-      container_name: food-mongo
       command: mongod --port 27055
       ports:
         - "27055:27055"
       environment:
-        - MONGO_INITDB_ROOT_USERNAME=root
-        - MONGO_INITDB_ROOT_PASSWORD=test
+        - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/db_user
+        - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/db_pw
         - MONGO_INITDB_DATABASE=test
+      secrets:
+        - db_user
+        - db_pw        
       volumes:
         - mongodb_data_container:/data/db
       healthcheck:
@@ -34,8 +21,29 @@ services:
         retries: 3
       networks:
         - nginx-net
+        
+    rest-api:
+      image: restapi:latest
+      ports:
+        - "9097:9097"
+      stdin_open: true
+      tty: true
+      depends_on:
+        - mongo-db
+      networks:
+        - nginx-net
+      secrets:
+        - db_user
+        - db_pw
+     
 volumes:
   mongodb_data_container:
 networks:
   nginx-net:
     external: true
+
+secrets:
+  db_user:
+    external: true
+  db_pw:
+    external: true    
