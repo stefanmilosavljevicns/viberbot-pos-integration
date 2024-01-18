@@ -21,7 +21,7 @@ public class BotConstants {
     public static final String sendOrderToPOS = "POS";
     public static final String httpLogFormat = "||Calling endpoint: %s ||Response status: %s ||Response body: %s ||";
     public static final String controlerLogFormat = "||Action: %s ||UserID: %s ||" ;
-    public static final String domain = "https://sputnik-it.rs";
+    public static final String domain = "https://mestozakafu.com";
 
     public static final String getOrdersWithin24Hourse = "/getAllActiveDates";
     public static final String checkIfUserCanOrder = "/checkIfUserCanOrder";
