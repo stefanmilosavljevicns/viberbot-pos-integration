@@ -1,15 +1,14 @@
 version: "3.3"
 services:
-    food-bot:
-      container_name: bot
-      image: bot:latest
-      restart: on-failure
+    viber-bot-texas:      
+      image: texas-bot:latest
       ports:
-        - "9943:9943"
+        - "8943:8943"
       stdin_open: true
       tty: true
       networks:
-        - nginx-net
+        nginx-net:
+
       environment:
         - LANG=C.UTF-8
 

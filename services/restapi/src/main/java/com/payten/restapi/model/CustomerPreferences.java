@@ -1,21 +1,18 @@
 package com.payten.restapi.model;
+
+import com.payten.restapi.model.enums.CustomerLocale;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "Customers")
-public class Customers {
+@Document(collection = "CustomerPreferences")
+public class CustomerPreferences {
     @Id
     private String id;
-    private ArrayList<Menu> currentOrder;
-    private ArrayList<Menu> archievedOrder;
-    private String token;
-    private Boolean isPaying;
+    private CustomerLocale customerLocale;
 }

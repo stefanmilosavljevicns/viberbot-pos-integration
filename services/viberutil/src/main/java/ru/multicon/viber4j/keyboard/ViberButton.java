@@ -36,6 +36,8 @@ public class ViberButton {
     private InternalBrowser internalBrowser;
     private Integer[] textPaddings;
 
+
+
     public ViberButton(String actionBody) {
         this.actionBody = actionBody;
     }
@@ -49,6 +51,10 @@ public class ViberButton {
         return this;
     }
 
+    public ViberButton setActionBody(String actionBody) {
+        this.actionBody = actionBody;
+        return this;
+    }
     /**
      * @param bgMediaType type of button media (picture or gif)
      * @return current button instance

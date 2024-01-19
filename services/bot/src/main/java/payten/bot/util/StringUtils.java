@@ -21,30 +21,17 @@ public class StringUtils {
     private String buttonNo;
     @Value("${text.standard-button}")
     private String buttonStandard;
-    @Value("${text.menu-cart}")
-    private String buttonMenuCart;
-    @Value("${text.menu-categories}")
-    private String buttonMenuCategories;
-    @Value("${text.menu-finish-reservation}")
-    private String buttonMenuFinishReservation;
-    @Value("${text.price-format}")
-    private String buttonPriceFormat;
-    @Value("${text.add-cart-item}")
-    private String buttonAddCartItem;
-    @Value("${text.remove-cart-item}")
-    private String buttonRemoveCartItem;
-    @Value("${text.item-description}")
-    private String buttonDescription;
-    @Value("${icon.cart}")
-    private String iconCart;
-    @Value("${icon.complete-order}")
-    private String iconCompleteOrder;
-    @Value("${icon.category}")
-    private String iconCategory;
-    @Value("${icon.add-item}")
-    private String iconAddItem;
-    @Value("${icon.remove-item}")
-    private String iconRemoveItem;
+    @Value("${icon.reserve}")
+    private String iconReserve;
+    @Value("${icon.about-us}")
+    private String iconAboutUs;
+    @Value("${icon.coffe-mug}")
+    private String coffeMug;
+
+    @Value("${icon.previous-orders}")
+    private String previousOrders;
+    @Value("${icon.choose-language}")
+    private String iconChooseLanguage;
     @Value("${message.error}")
     private String messageError;
     @Value("${message.error-time}")
@@ -53,42 +40,54 @@ public class StringUtils {
     private String messageWelcome;
     @Value("${message.return-to-menu}")
     private String messageReturnToMenu;
-    @Value("${message.payment-online}")
-    private String messagePaymentOnline;
     @Value("${message.check-cart}")
     private String messageCheckCart;
     @Value("${message.check-time}")
     private String messageCheckTime;
-    @Value("${message.success-reservation}")
+    @Value("${message.about-us}")
+    private String messageAboutUs;
+    @Value("${message.reservation-succes}")
     private String messageSuccessReservation;
+    @Value("${message.reservation-reminder}")
+    private String messageReservationReminder;
+    @Value("${message.reservation-update}")
+    private String messageReservationUpdate;
+    @Value("${message.unknown-command}")
+    private String messageUnknownCommand;
+    @Value("${image-about-us}")
+    private String imageAboutUs;
 
-    public String getButtonMenuCart() {
-        return buttonMenuCart;
+    @Value("${image-russian-flag}")
+
+    private String russianFlag;
+    @Value("${image-uk-flag}")
+    private String ukFlag;
+    @Value("${image-serbian-flag}")
+    private String serbianFlag;
+
+    public String getRussianFlag() {return russianFlag;}
+
+    public String getUkFlag() {
+        return ukFlag;
     }
 
-    public String getButtonMenuCategories() {
-        return buttonMenuCategories;
+    public String getSerbianFlag() {
+        return serbianFlag;
     }
 
-    public String getButtonMenuFinishReservation() {
-        return buttonMenuFinishReservation;
+    public String getCoffeMug() {return coffeMug;}
+
+    public String getImageAboutUs() {
+        return imageAboutUs;
     }
 
-    public String getButtonPriceFormat() {
-        return buttonPriceFormat;
-    }
+    public String getMessageAboutUs() {return messageAboutUs;}
+    public String getMessageUnknownCommand() {return messageUnknownCommand;}
 
-    public String getButtonAddCartItem() {
-        return buttonAddCartItem;
-    }
+    public String getMessageReservationUpdate() {return messageReservationUpdate;}
 
-    public String getButtonDescription() {
-        return buttonDescription;
-    }
+    public String getMessageReservationReminder() {return messageReservationReminder;}
 
-    public String getButtonRemoveCartItem() {
-        return buttonRemoveCartItem;
-    }
 
     public String getMessageError() {
         return messageError;
@@ -106,10 +105,6 @@ public class StringUtils {
         return messageReturnToMenu;
     }
 
-    public String getMessagePaymentOnline() {
-        return messagePaymentOnline;
-    }
-
     public String getMessageCheckCart() {
         return messageCheckCart;
     }
@@ -122,24 +117,20 @@ public class StringUtils {
         return messageSuccessReservation;
     }
 
-    public String getIconCart() {
-        return iconCart;
+    public String getIconReserve() {
+        return iconReserve;
     }
 
-    public String getIconCompleteOrder() {
-        return iconCompleteOrder;
+    public String getIconAboutUs() {
+        return iconAboutUs;
     }
 
-    public String getIconCategory() {
-        return iconCategory;
+    public String getIconPreviousOrders() {
+        return previousOrders;
     }
 
-    public String getIconAddItem() {
-        return iconAddItem;
-    }
-
-    public String getIconRemoveItem() {
-        return iconRemoveItem;
+    public String getIconChooseLanguage() {
+        return iconChooseLanguage;
     }
 
     public String getButtonStandard() {
