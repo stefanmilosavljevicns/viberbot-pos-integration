@@ -24,8 +24,6 @@ sleep 15
 echo '~~~~~~ STARTING DOCKER SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-echo '~~~~~~ 1. STARTING NGINX ~~~~~~'
-docker stack deploy --compose-file ./nginx/docker-compose.yml nginx
 sleep 5
 echo '~~~~~~ 2. STARTING REST ~~~~~~'
 docker stack deploy --compose-file ./restapi/docker-compose.yml texas-rest
