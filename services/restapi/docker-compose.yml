@@ -1,10 +1,10 @@
 version: "3.3"
 services:
-    mongo-db:
+    mongo-db-texas:
       image: mongo:4.2.0
-      command: mongod --port 27055
+      command: mongod --port 27056
       ports:
-        - "27055:27055"
+        - "27056:27056"
       environment:
         - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/db_user
         - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/db_pw
@@ -15,17 +15,17 @@ services:
       volumes:
         - mongodb_data_container:/data/db
       healthcheck:
-        test: echo 'db.runCommand("ping").ok' | mongo localhost:27055/test --quiet
+        test: echo 'db.runCommand("ping").ok' | mongo localhost:27056/test --quiet
         interval: 10s
         timeout: 10s
         retries: 3
       networks:
         - nginx-net
         
-    rest-api:
-      image: restapi:latest
+    rest-api-texas:
+      image: texas-restapi:latest
       ports:
-        - "9097:9097"
+        - "8097:8097"
       stdin_open: true
       tty: true
       depends_on:

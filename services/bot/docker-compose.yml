@@ -1,14 +1,13 @@
 version: "3.3"
 services:
-    viber-bot:      
+    viber-bot-texas:      
       image: bot:latest
       ports:
-        - "9943:9943"
+        - "8943:8943"
       stdin_open: true
       tty: true
       networks:
         nginx-net:
-          ipv4_address: 10.0.1.10
 
       environment:
         - LANG=C.UTF-8

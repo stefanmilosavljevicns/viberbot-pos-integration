@@ -155,27 +155,6 @@ public class KeyboardUtil {
                 .setSilent(true)
                 .setColumns(6)
                 .setRows(1));
-        reservationDuration.addButton(new ViberButton(selectDayReservation+60)
-                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.1-hour",locale)))
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getPrimarilyColor())
-                .setSilent(true)
-                .setColumns(6)
-                .setRows(1));
-        reservationDuration.addButton(new ViberButton(selectDayReservation+120)
-                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.2-hours",locale)))
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getSecondarilyColor())
-                .setSilent(true)
-                .setColumns(6)
-                .setRows(1));
-        reservationDuration.addButton(new ViberButton(selectDayReservation+180)
-                .setText(String.format(stringUtils.getButtonStandard(),localeUtil.getLocalizedMessage("message.3-hours",locale)))
-                .setTextSize(ViberButton.TextSize.LARGE)
-                .setBgColor(stringUtils.getPrimarilyColor())
-                .setSilent(true)
-                .setColumns(6)
-                .setRows(1));
         return reservationDuration;
     }
     public ViberKeyboard historyOfReservationKeyboard(String viberId,String userLocale) throws URISyntaxException {
