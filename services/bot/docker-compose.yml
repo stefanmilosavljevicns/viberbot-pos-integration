@@ -1,7 +1,7 @@
 version: "3.3"
 services:
     viber-bot-texas:      
-      image: bot:latest
+      image: texas-bot:latest
       ports:
         - "8943:8943"
       stdin_open: true
