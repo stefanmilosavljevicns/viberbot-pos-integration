@@ -18,6 +18,9 @@ echo '~~~~~~ CREATING DOCKER NETWORK ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 docker network create --subnet=10.0.1.0/16 -d overlay nginx-net
+docker stack rm texas-bot
+docker stack rm texas-rest
+docker stack rm nginx
 sleep 15
 echo '~~~~~~ STARTING DOCKER SERVICES ~~~~~~'
 echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
