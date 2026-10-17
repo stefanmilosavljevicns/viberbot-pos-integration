@@ -10,3 +10,18 @@
 
 /.vs
 /.idea
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+**/target/
+**/.m2/
+**/.idea/
+**/.vscode/
+*.iml
+**/certbot/**/privkey*.pem
+**/certbot/**/private_key.json
+**/certbot/**/0000_key-certbot.pem
+**/mongodb_data_container/

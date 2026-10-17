@@ -1,0 +1,44 @@
+name: viberbot-local
+
+services:
+  mongo:
+    image: mongo:6.0
+    command: ["mongod", "--bind_ip_all"]
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  restapi:
+    build:
+      context: ./restapi
+    environment:
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017/viberbot}
+      SERVER_PORT: 9097
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:9097:9097"
+
+  bot:
+    profiles: ["viber"]
+    build:
+      context: ./bot
+    environment:
+      REST_API_URL: http://restapi:9097/api/v1
+      VIBER_BOT_TOKEN: ${VIBER_BOT_TOKEN:-}
+      VIBER_BOT_PATH: ${VIBER_BOT_PATH:-/dentalcare-bot}
+      VIBER_WEBHOOK_BASE_URL: ${VIBER_WEBHOOK_BASE_URL:-}
+      VIBER_REGISTER_WEBHOOK: ${VIBER_REGISTER_WEBHOOK:-false}
+      REMINDERS_ENABLED: ${REMINDERS_ENABLED:-false}
+    depends_on:
+      - restapi
+    ports:
+      - "127.0.0.1:9943:9943"
+
+volumes:
+  mongo-data:

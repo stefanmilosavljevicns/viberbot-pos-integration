@@ -43,7 +43,7 @@ public class Controller {
 
     @RequestMapping(method = POST, path = "${viber.bot-path}")
     ResponseEntity<?> callbackHandle(@RequestBody String text) throws IOException, InterruptedException, URISyntaxException {
-        logger.info("Received messageForUser {}", text);
+        logger.info("Received Viber webhook event.");
         ViberBot bot = ViberBotManager.viberBot(stringUtils.getBotToken());
         Incoming incoming = IncomingImpl.fromString(text);
         String eventType = incoming.getEvent();

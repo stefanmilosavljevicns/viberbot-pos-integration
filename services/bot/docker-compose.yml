@@ -12,6 +12,10 @@ services:
         - nginx-net
       environment:
         - LANG=C.UTF-8
+        - REST_API_URL=http://rest:9097/api/v1
+        - VIBER_BOT_TOKEN=${VIBER_BOT_TOKEN:?Set VIBER_BOT_TOKEN}
+        - VIBER_WEBHOOK_BASE_URL=${VIBER_WEBHOOK_BASE_URL:-}
+        - VIBER_REGISTER_WEBHOOK=${VIBER_REGISTER_WEBHOOK:-false}
 
 networks:
   nginx-net:

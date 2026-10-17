@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.util.ArrayList;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import com.payten.viberutil.ViberBot;
 import com.payten.viberutil.ViberBotManager;
 
 @Component
+@ConditionalOnProperty(name = "reminders.enabled", havingValue = "true", matchIfMissing = true)
 public class OrderReminderScheduler {
     private static final Logger logger = LoggerFactory.getLogger(OrderReminderScheduler.class);
 
@@ -31,7 +33,7 @@ public class OrderReminderScheduler {
         if(activeUsers.size() > 0){
             for(OrderPOS orderPos : activeUsers){
                 bot.messageForUser(orderPos.getViberID()).postText("Podsećamo Vas da sutra imate zakazan termin u " + orderPos.getStartTime().getHour() +":" + orderPos.getStartTime().getMinute(),keyboardUtil.getMainMenu());
-                logger.info("Reminding user " + orderPos.getViberID() + " for his reservation");
+                logger.info("Sent reservation reminder.");
             }
         }
     }

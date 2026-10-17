@@ -24,6 +24,9 @@ public class CustomersController {
         if (doc.isEmpty()) {
             doc = Optional.of(new Customers(viberId, new ArrayList<>(),new ArrayList<>(), null,false));
         }
+        if (doc.get().getCurrentOrder() == null) {
+            doc.get().setCurrentOrder(new ArrayList<>());
+        }
         doc.get().getCurrentOrder().add(newItem);
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
     }
@@ -31,6 +34,12 @@ public class CustomersController {
     @DeleteMapping("/removeItemFromCart")
     public ResponseEntity<Customers> removeItemFromCart(@RequestParam String viberId, @RequestBody Menu removeItem) {
         Optional<Customers> doc = customersRepository.findById(viberId);
+        if (doc.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (doc.get().getCurrentOrder() == null) {
+            doc.get().setCurrentOrder(new ArrayList<>());
+        }
         if(doc.get().getCurrentOrder().contains(removeItem)){
             doc.get().getCurrentOrder().remove(removeItem);
             return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
@@ -40,6 +49,15 @@ public class CustomersController {
     @PutMapping("/clearCart")
     public ResponseEntity<Customers> clearCart(@RequestParam String viberId){
         Optional<Customers> doc = customersRepository.findById(viberId);
+        if (doc.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (doc.get().getCurrentOrder() == null) {
+            doc.get().setCurrentOrder(new ArrayList<>());
+        }
+        if (doc.get().getArchievedOrder() == null) {
+            doc.get().setArchievedOrder(new ArrayList<>());
+        }
         doc.get().getArchievedOrder().addAll(doc.get().getCurrentOrder());
         doc.get().setCurrentOrder(new ArrayList<>());
         return new ResponseEntity<>(customersRepository.save(doc.get()), HttpStatus.OK);
@@ -47,7 +65,11 @@ public class CustomersController {
     @GetMapping("/getTotalTime")
     public ResponseEntity<Integer> getTotalTime(@RequestParam String viberId) {
             Integer totalTime = 0;
-            for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
+            Optional<Customers> customer = customersRepository.findById(viberId);
+            if (customer.isEmpty() || customer.get().getCurrentOrder() == null) {
+                return ResponseEntity.ok(totalTime);
+            }
+            for (Menu menu : customer.get().getCurrentOrder()){
                 totalTime += menu.getTime();
             }
             return new ResponseEntity<>(totalTime, HttpStatus.OK);
@@ -55,7 +77,11 @@ public class CustomersController {
     @GetMapping("/getTotalPrice")
     public ResponseEntity<Double> getTotalPrice(@RequestParam String viberId) {
         Double totalPrice = 0.0;
-        for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
+        Optional<Customers> customer = customersRepository.findById(viberId);
+        if (customer.isEmpty() || customer.get().getCurrentOrder() == null) {
+            return ResponseEntity.ok(totalPrice);
+        }
+        for (Menu menu : customer.get().getCurrentOrder()){
             totalPrice += menu.getPrice();
         }
         return new ResponseEntity<>(totalPrice, HttpStatus.OK);
@@ -64,7 +90,10 @@ public class CustomersController {
     public ResponseEntity<List<String>> convertToOrderModel(@RequestParam String viberId) {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
-        for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
+        if (customers.isEmpty() || customers.get().getCurrentOrder() == null) {
+            return ResponseEntity.ok(response);
+        }
+        for (Menu menu : customers.get().getCurrentOrder()){
             response.add(menu.getName());
         }
         return new ResponseEntity<>(response,HttpStatus.OK);
@@ -76,7 +105,10 @@ public class CustomersController {
         Optional<Customers> customers = customersRepository.findById(viberId);
         ArrayList<String> response = new ArrayList<>();
         Double totalPrice = 0.0;
-        for (Menu menu : customersRepository.findById(viberId).get().getCurrentOrder()){
+        if (customers.isEmpty() || customers.get().getCurrentOrder() == null) {
+            return ResponseEntity.ok(response);
+        }
+        for (Menu menu : customers.get().getCurrentOrder()){
             response.add(menu.getName()+"\n"+"CENA: "+ menu.getPrice()+"RSD");
             totalPrice += menu.getPrice();
         }
@@ -87,7 +119,8 @@ public class CustomersController {
     //Used for checking if user added some of services to cart
     @GetMapping("/checkIfCartIsEmpty")
     public ResponseEntity<Boolean> checkIfCartIsEmpty(@RequestParam String viberId) {
-        if(customersRepository.existsById(viberId) && customersRepository.findById(viberId).get().getCurrentOrder().size() > 0){
+        Optional<Customers> customer = customersRepository.findById(viberId);
+        if (customer.isPresent() && customer.get().getCurrentOrder() != null && !customer.get().getCurrentOrder().isEmpty()) {
             return new ResponseEntity<>(true,HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.OK);

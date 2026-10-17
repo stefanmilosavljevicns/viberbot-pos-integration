@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.time.Duration;
@@ -54,14 +55,26 @@ public class OrderController {
             @RequestParam("localDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate,
             @RequestParam("totalMinutes") int totalMinutes
     ) {
-        LocalTime startTime = LocalTime.of(7, 0);  // 7am
-        LocalTime endTime = LocalTime.of(17, 0);   // 5pm
-
-        LocalDateTime dateTime = localDate.atTime(startTime);
+        if (totalMinutes <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "totalMinutes must be greater than zero");
+        }
+        LocalTime startTime = LocalTime.of(7, 0);
+        LocalTime endTime = LocalTime.of(17, 0);
+        LocalDateTime opening = localDate.atTime(startTime);
+        LocalDateTime closing = localDate.atTime(endTime);
+        List<Order> existingOrders = orderRepository.findByStartTimeLessThanAndEndTimeGreaterThanAndStateNotIn(
+                closing, opening, List.of(OrderState.COMPLETED, OrderState.DECLINED));
+        LocalDateTime dateTime = opening;
         List<LocalDateTime> result = new ArrayList<>();
 
-        while (dateTime.isBefore(localDate.atTime(endTime))) {
-            result.add(dateTime);
+        while (!dateTime.plusMinutes(totalMinutes).isAfter(closing)) {
+            LocalDateTime candidateStart = dateTime;
+            LocalDateTime candidateEnd = dateTime.plusMinutes(totalMinutes);
+            boolean overlaps = existingOrders.stream().anyMatch(order ->
+                    order.getStartTime().isBefore(candidateEnd) && order.getEndTime().isAfter(candidateStart));
+            if (!overlaps) {
+                result.add(dateTime);
+            }
             dateTime = dateTime.plusMinutes(totalMinutes);
         }
 
@@ -79,8 +92,6 @@ public class OrderController {
         Order updatedOrder = existingOrder.get();
         updatedOrder.setState(OrderState.IN_PROGRESS);
 
-        orderRepository.save(updatedOrder);
-
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
 
@@ -94,14 +105,13 @@ public class OrderController {
         Order updatedOrder = existingOrder.get();
         updatedOrder.setState(OrderState.DECLINED);
 
-        orderRepository.save(updatedOrder);
-
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
     @GetMapping("/checkTimeSlotAvailability")
     public ResponseEntity<String> checkAvailability(@RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
                                                     @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        List<Order> conflictingReservations = orderRepository.findByStartTimeLessThanAndEndTimeGreaterThan(end, start);
+        List<Order> conflictingReservations = orderRepository.findByStartTimeLessThanAndEndTimeGreaterThanAndStateNotIn(
+                end, start, List.of(OrderState.COMPLETED, OrderState.DECLINED));
 
         if (conflictingReservations.isEmpty()) {
             return ResponseEntity.ok("Time slot is available.");
@@ -118,8 +128,6 @@ public class OrderController {
 
         Order updatedOrder = existingOrder.get();
         updatedOrder.setState(OrderState.COMPLETED);
-
-        orderRepository.save(updatedOrder);
 
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
@@ -139,7 +147,6 @@ public class OrderController {
         Order updatedOrder = existingOrder.get();
         updatedOrder.setStartTime(startDate);
         updatedOrder.setEndTime(startDate.plusMinutes(reservationDuration.toMinutes()));
-        orderRepository.save(updatedOrder);
         return new ResponseEntity<>(orderRepository.save(updatedOrder), HttpStatus.OK);
     }
 
